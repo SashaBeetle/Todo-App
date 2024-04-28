@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace todo_backend.Controllers
+namespace todo_backend.WEB.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -27,7 +27,6 @@ namespace todo_backend.Controllers
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
-
             .ToArray();
         }
     }
