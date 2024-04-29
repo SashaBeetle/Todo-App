@@ -4,9 +4,9 @@ using todo_backend.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<TodoDbContext>(options =>
-    options.UseLazyLoadingProxies().UseNpgsql(builder.Configuration.GetConnectionString("TodoDatabase"))
-);
+
+// DI Configuration
+builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.AddControllers();
 
