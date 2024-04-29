@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace todo_backend.Domain.Models
 {
-    public class Card : Dbitem
+    public class Catalog : Dbitem
     {
         public string Title { get; set; }
-        public string Description { get; set; }
-        public string Priority { get; set; }
-        public DateTime DueDate { get; set; }
+        public List<int> CardsId { get; set; }
+        public virtual List<Card> Cards { get; set; }
+        
     }
 }
