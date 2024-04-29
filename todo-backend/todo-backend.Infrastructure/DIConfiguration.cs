@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using todo_backend.Infrastructure.Interfaces;
+using todo_backend.Infrastructure.Services;
 
 namespace todo_backend.Infrastructure
 {
@@ -21,8 +18,7 @@ namespace todo_backend.Infrastructure
 
         private static void RegisterServiceDependencies(this IServiceCollection services)
         {
-            //services.AddScoped<ICatalogService, CatalogService>();
-            //services.AddScoped<ICardService, CardService>();
+            services.AddScoped(typeof(IDbEntityService<>), typeof(DbEntityService<>));
         }
         public static void RegisterDependencies(this IServiceCollection services, IConfigurationRoot configuration)
         {
