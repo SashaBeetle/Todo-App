@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './card-component.component.scss'
 })
 export class CardComponentComponent {
-
+  items = ['1','2','3','4'];
 }
