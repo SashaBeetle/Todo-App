@@ -1,3 +1,18 @@
+
+.border-title{
+    display: flex;
+    flex-direction: column;
+    border-top: 2px gainsboro;
+    border-bottom: 2px gainsboro;
+}
+.border-card{
+    border: 2px gainsboro;
+}
+.border-button{
+    border: 1px gainsboro;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
