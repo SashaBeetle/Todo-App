@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './list-component.component.scss'
 })
 export class ListComponentComponent {
-
+  items = ['1','2','3','4'];
 }
