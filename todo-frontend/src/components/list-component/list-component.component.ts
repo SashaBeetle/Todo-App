@@ -11,5 +11,5 @@ import { CardComponentComponent } from '../card-component/card-component.compone
   styleUrl: './list-component.component.scss'
 })
 export class ListComponentComponent {
-  items = ['1','2','3','4'];
+  items = ['1','2','3','4','6'];
 }
