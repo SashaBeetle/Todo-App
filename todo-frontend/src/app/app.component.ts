@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CardComponentComponent } from '../components/card-component/card-component.component';
 import { ListComponentComponent } from '../components/list-component/list-component.component';
 import { HeaderComponentComponent } from '../components/header-component/header-component.component';
+import { HistoryComponentComponent } from '../components/history-component/history-component.component';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { HeaderComponentComponent } from '../components/header-component/header-
     CardComponentComponent,
     ListComponentComponent,
     HeaderComponentComponent,
+    HistoryComponentComponent,
     RouterOutlet
   ], 
   templateUrl: './app.component.html',
