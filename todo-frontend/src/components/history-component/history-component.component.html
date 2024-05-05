@@ -1,12 +1,12 @@
 @if(isVisible){<div>
-    <div class="fixed bg-black opacity-25 w-full h-full z-1"></div>
+    <div (click)="onClick()" class="fixed bg-black opacity-25 w-full h-full z-10"></div>
 
     <div class="fixed history_page" >
         <div class="flex justify-between items-center history_header">
             <span class="ml-5 text-xl font-bold text-white">History</span>
             <a (click)="onClick()" ><svg class="mr-5" fill="#FFFFFF" width="30px" height="30px" viewBox="0 0 24 24" id="cross" data-name="Flat Line" xmlns="http://www.w3.org/2000/svg"><path id="primary" d="M19,19,5,5M19,5,5,19" style="fill: white; stroke: rgb(255, 255, 255); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg></a>
         </div>
-        
+
         <div class="flex mt-5 items-baseline ml-5">
             <div>
                 <svg class="mr-2" width="10px" height="10px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" ><path fill="#4C1D95" d="M8 3a5 5 0 100 10A5 5 0 008 3z"/></svg>
