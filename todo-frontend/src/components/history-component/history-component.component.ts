@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { HeaderComponentComponent } from '../header-component/header-component.component';
+import { Component,Input} from '@angular/core';
 import { SharedServiceService } from '../../services/shared-service.service';
 
 
 @Component({
   selector: 'app-history-component',
   standalone: true,
-  imports: [HeaderComponentComponent],
+  imports: [],
   templateUrl: './history-component.component.html',
   styleUrl: './history-component.component.scss'
 })
