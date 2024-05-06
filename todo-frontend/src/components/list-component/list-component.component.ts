@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CardComponentComponent } from '../card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
 import { SharedServiceService } from '../../services/shared-service.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-list-component',
@@ -14,7 +15,11 @@ import { SharedServiceService } from '../../services/shared-service.service';
   styleUrl: './list-component.component.scss'
 })
 export class ListComponentComponent {
-  constructor(private sharedService: SharedServiceService){}
+
+  constructor(
+    private sharedService: SharedServiceService,
+    private apiService: ApiService
+  ){}
 
   @Input() isVisible: boolean = false;
 
@@ -26,10 +31,18 @@ export class ListComponentComponent {
     this.sharedService.toggleIsVisibleEditCard();
   }
   
-  ngOnInit() {
+  async ngOnInit(){
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
-}
+
+    this.apiService.GetData().subscribe(res => console.log(res));
+  }
+
+
+
+
   items = ['1','2','3','4'];
 }
+
+

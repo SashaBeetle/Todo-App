@@ -1,16 +1,20 @@
-using Microsoft.EntityFrameworkCore;
 using todo_backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 // DI Configuration
 builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.AddControllers();
-
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
