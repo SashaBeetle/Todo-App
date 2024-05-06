@@ -17,11 +17,11 @@ export class HistoryComponentComponent {
 
   
   onClick() {
-    this.sharedService.toggleIsVisible();
+    this.sharedService.toggleIsVisibleHistory();
   }
   
   ngOnInit() {
-    this.sharedService.isVisible$.subscribe(value => {
+    this.sharedService.isVisibleHistory$.subscribe(value => {
       this.isVisible = value; 
     });
   }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SharedServiceService } from '../../services/shared-service.service';
 
 @Component({
   selector: 'app-add-list',
@@ -8,5 +9,9 @@ import { Component } from '@angular/core';
   styleUrl: './add-list.component.scss'
 })
 export class AddListComponent {
+  constructor(private sharedService: SharedServiceService){}
 
+  onClick() {
+    this.sharedService.toggleIsVisibleCreateList();
+  }
 }

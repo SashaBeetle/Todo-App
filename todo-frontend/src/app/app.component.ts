@@ -5,6 +5,7 @@ import { ListComponentComponent } from '../components/list-component/list-compon
 import { HeaderComponentComponent } from '../components/header-component/header-component.component';
 import { HistoryComponentComponent } from '../components/history-component/history-component.component';
 import { AddCardComponent } from '../components/add-card/add-card.component';
+import { OpenCardComponent } from '../components/open-card/open-card.component';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ import { AddCardComponent } from '../components/add-card/add-card.component';
     HeaderComponentComponent,
     HistoryComponentComponent,
     AddCardComponent,
+    OpenCardComponent,
     RouterOutlet
   ], 
   templateUrl: './app.component.html',

@@ -6,12 +6,31 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SharedServiceService {
   
-  private isVisible  = new BehaviorSubject<boolean>(false);
+  private isVisibleHistory  = new BehaviorSubject<boolean>(false);
+  private isVisibleCard = new BehaviorSubject<boolean>(false);
+  private isVisibleCreateList = new BehaviorSubject<boolean>(false);
+  private isVisibleEditCard = new BehaviorSubject<boolean>(false);
 
-  isVisible$ = this.isVisible.asObservable();
+  isVisibleHistory$ = this.isVisibleHistory.asObservable();
+  isVisibleCard$ = this.isVisibleCard.asObservable();
+  isVisibleCreateList$ = this.isVisibleCreateList.asObservable();
+  isVisibleEditCard$ = this.isVisibleEditCard.asObservable();
 
-  toggleIsVisible() {
-    this.isVisible.next(!this.isVisible.value);
+  toggleIsVisibleHistory() {
+    this.isVisibleHistory.next(!this.isVisibleHistory.value);
   }
+
+  toggleIsVisibleCard(){
+    this.isVisibleCard.next(!this.isVisibleCard.value);
+  }
+
+  toggleIsVisibleCreateList(){
+    this.isVisibleCreateList.next(!this.isVisibleCreateList.value);
+  }
+
+  toggleIsVisibleEditCard(){
+    this.isVisibleEditCard.next(!this.isVisibleEditCard.value);
+  }
+  
   constructor() { }
 }

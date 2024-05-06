@@ -13,7 +13,7 @@ export class HeaderComponentComponent {
   constructor(private sharedService: SharedServiceService){}
   
   onClick() {
-    this.sharedService.toggleIsVisible();
+    this.sharedService.toggleIsVisibleHistory();
   }
   
 }
