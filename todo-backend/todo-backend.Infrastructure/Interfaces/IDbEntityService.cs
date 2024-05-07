@@ -18,6 +18,8 @@ namespace todo_backend.Infrastructure.Interfaces
 
         Task Delete(T entity);
 
+        Task DeleteCardFromCatalogs(int id);
+        Task AddCardToCatalog(Catalog catalog, int cardId);
         IQueryable<T> GetAll();
     }
 }

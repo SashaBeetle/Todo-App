@@ -1,46 +1,55 @@
 {
-  "hash": "a3cc52f9",
-  "configHash": "d1a18f6b",
+  "hash": "92153cc5",
+  "configHash": "2065322f",
   "lockfileHash": "6b17746f",
-  "browserHash": "077a79f8",
+  "browserHash": "53ff5608",
   "optimized": {
     "@angular/common/http": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "15f8f72c",
+      "fileHash": "aa3d9aae",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "c9433ebe",
+      "fileHash": "95387b19",
+      "needsInterop": false
+    },
+    "@angular/forms": {
+      "src": "../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
+      "file": "@angular_forms.js",
+      "fileHash": "51af030f",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "47fb2d0a",
+      "fileHash": "10c95923",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "b32a56fe",
+      "fileHash": "e946623d",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../node_modules/rxjs/dist/esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "d8f1ad2d",
+      "fileHash": "fad5ebf1",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-6FFT5B22": {
-      "file": "chunk-6FFT5B22.js"
+    "chunk-6H45F3LY": {
+      "file": "chunk-6H45F3LY.js"
     },
-    "chunk-LZSSHBKK": {
-      "file": "chunk-LZSSHBKK.js"
+    "chunk-BE5ABQNF": {
+      "file": "chunk-BE5ABQNF.js"
+    },
+    "chunk-2G7YI4XD": {
+      "file": "chunk-2G7YI4XD.js"
     },
     "chunk-KM33SJBQ": {
       "file": "chunk-KM33SJBQ.js"

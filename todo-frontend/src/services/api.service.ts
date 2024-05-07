@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
 export interface Post {
@@ -27,7 +27,10 @@ export class ApiService {
 
 
   postData(url: string, data: any) {
-    return this.http.post(url, data);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  const options = { headers };
+
+  return this.http.post<any>(url, data, options);
   }
 
   deleteDataById(url: string, id:number) {

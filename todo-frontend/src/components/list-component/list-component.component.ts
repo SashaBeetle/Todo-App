@@ -15,6 +15,8 @@ import { ApiService } from '../../services/api.service';
   styleUrl: './list-component.component.scss'
 })
 export class ListComponentComponent {
+  
+  data: any;
 
   constructor(
     private sharedService: SharedServiceService,
@@ -27,8 +29,9 @@ export class ListComponentComponent {
     this.sharedService.toggleIsVisibleCreateList();
   }
 
-  onClickAddCard() {
+  onClickAddCard(listId: number) {
     this.sharedService.toggleIsVisibleEditCard();
+    this.sharedService.setListId(listId);
   }
   
   async ngOnInit(){
@@ -36,13 +39,20 @@ export class ListComponentComponent {
       this.isVisible = value; 
     });
 
-    this.apiService.GetData().subscribe(res => console.log(res));
+    this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
+      console.log(res); 
+      this.data = res;
+      
+    });
+
+
+    
   }
 
 
 
 
-  items = ['1','2','3','4'];
+
 }
 
 

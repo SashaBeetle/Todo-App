@@ -4,12 +4,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins("http://localhost:4200")
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
+    options.AddPolicy(name: "CorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                      });
 });
 // DI Configuration
 builder.Services.RegisterDependencies(builder.Configuration);
@@ -30,6 +31,9 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
     });
 }
+
+app.UseCors("CorsPolicy");
+
 
 app.UseHttpsRedirection();
 

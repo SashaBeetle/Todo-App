@@ -10,7 +10,5 @@ namespace todo_backend.Domain.Models
     {
         public string Title { get; set; }
         public List<int> CardsId { get; set; }
-        public virtual List<Card> Cards { get; set; }
-        
     }
 }
