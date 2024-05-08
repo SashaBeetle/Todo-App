@@ -22,21 +22,24 @@ export class AddCardComponent {
 
 
   @Input() isVisible: boolean = false;
-  
-  listId: any;
+ 
+  list: any;
 
   cardForm: FormGroup;
 
   onSubmit(){
     const formData = this.cardForm.value;
     const jsonData = JSON.stringify(formData);
-
-    this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${this.sharedService.getListId()}`, jsonData) 
+    this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${this.sharedService.getList().id}`, jsonData) 
       .subscribe(response => {
+        this.cardForm.value.id = response.id;
+        this.sharedService.getList().cardsId.push(response.id)
         console.log('Form submitted successfully!', jsonData);
       }, error => {
         console.error('Error submitting form:', error, jsonData);
       });
+
+    this.onClick();
   }
 
   onClick() {

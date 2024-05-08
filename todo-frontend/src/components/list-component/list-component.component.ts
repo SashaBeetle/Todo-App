@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CardComponentComponent } from '../card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
 import { SharedServiceService } from '../../services/shared-service.service';
 import { ApiService } from '../../services/api.service';
+import { AddCardComponent } from '../add-card/add-card.component';
+import { OpenCardComponent } from '../open-card/open-card.component';
 
 @Component({
   selector: 'app-list-component',
@@ -10,28 +12,54 @@ import { ApiService } from '../../services/api.service';
   imports: [
     CardComponentComponent,
     AddListComponent,
+    OpenCardComponent,
+    AddCardComponent
   ],
   templateUrl: './list-component.component.html',
   styleUrl: './list-component.component.scss'
 })
-export class ListComponentComponent {
-  
-  data: any;
+export class ListComponentComponent implements OnChanges {
+
+  @Input() isVisible: boolean = false;
+
+  @Output() data: any;
+
+  @Output() dataChanged = new EventEmitter<any>();
 
   constructor(
     private sharedService: SharedServiceService,
     private apiService: ApiService
   ){}
 
-  @Input() isVisible: boolean = false;
+
 
   onClick() {
     this.sharedService.toggleIsVisibleCreateList();
   }
 
-  onClickAddCard(listId: number) {
+  onClickAddCard(list: any) {
     this.sharedService.toggleIsVisibleEditCard();
-    this.sharedService.setListId(listId);
+    this.sharedService.setList(list);
+  }
+
+  onClickDeleteList(listId: number){
+    this.apiService.deleteDataById("https://localhost:7247/api/catalog",listId).subscribe(res=>{
+      console.log('ListN:', listId);
+
+      const index = this.data.findIndex((item: { id: number; }) => item.id === listId);
+        if (index !== -1) {
+          this.data.splice(index, 1);
+          console.log(this.data);
+        }
+    })
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data']) {
+      console.log('Data updated:', this.data);
+    }
+    console.log('Works');
+
   }
   
   async ngOnInit(){
@@ -43,16 +71,8 @@ export class ListComponentComponent {
       console.log(res); 
       this.data = res;
       
-    });
-
-
-    
+    }); 
   }
-
-
-
-
-
 }
 
 

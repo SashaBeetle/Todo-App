@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 
 export interface Post {
  id: number,
@@ -14,14 +14,20 @@ export interface Post {
   providedIn: 'root'
 })
 export class ApiService {
+  private readonly apiUrl = 'https://localhost:7247/api/catalog';
 
   constructor(private http: HttpClient) { 
     
   }
 
 
-  public GetData(): Observable<Post[]>{
-    return this.http.get<Post[]>('https://localhost:7247/api/cards')
+  getDataConstantly(): Observable<any> {
+    return this.http.get<any>(this.apiUrl).pipe(
+      catchError(error => {
+        console.error('Error fetching data:', error);
+        return throwError(error); 
+      })
+    );
   }
 
 
@@ -49,3 +55,5 @@ export class ApiService {
     return this.http.get(`${url}/${id}`);
   }
 }
+
+

@@ -11,8 +11,8 @@ export class SharedServiceService {
   private isVisibleCreateList = new BehaviorSubject<boolean>(false);
   private isVisibleEditCard = new BehaviorSubject<boolean>(false);
   
-  private listId = new BehaviorSubject<number | null>(null);
-  listId$ = this.listId.asObservable();
+  private list = new BehaviorSubject<number | null>(null);
+  list$ = this.list.asObservable();
   
 
   isVisibleHistory$ = this.isVisibleHistory.asObservable();
@@ -37,12 +37,12 @@ export class SharedServiceService {
   }
 
 
-  setListId(id: number) {
-    this.listId.next(id);
+  setList(data: any) {
+    this.list.next(data);
   }
 
-  getListId(): number | null {
-    return this.listId.getValue();
+  getList(): any | null {
+    return this.list.getValue();
   }
   constructor() { }
 }
