@@ -28,6 +28,20 @@ In `To Do\todo-backend\todo-backend.WEB\appsettings.json` in `"ConnectionStrings
     "TodoDatabase": "ConnectionString"
   }
 ```
+It is Necessary to add the CORS for project.
+In `To Do\todo-backend\todo-backend.WEB\program.cs` in `builder.Services.AddCors` add CORS `policy.WithOrigins("http://localhost:0000", "http://google.com")` CORS should look like this:
+```sh
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                      });
+});
+```
 ## How to run Frontend
 Open your system terminal and run commands:
 ```sh
