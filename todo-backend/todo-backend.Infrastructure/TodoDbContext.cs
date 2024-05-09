@@ -14,5 +14,9 @@ namespace todo_backend.Infrastructure
         public TodoDbContext(DbContextOptions<TodoDbContext> options) : base(options) { }
 
         public DbSet<Card> Cards { get; set; }
+        public DbSet<Catalog> Catalogs { get; set; }
+        public DbSet<HistoryItem> HistoryItems { get; set; }
+
+      
     }
 }

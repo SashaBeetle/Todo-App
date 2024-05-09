@@ -1,16 +1,21 @@
-using Microsoft.EntityFrameworkCore;
 using todo_backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<TodoDbContext>(options =>
-    options.UseLazyLoadingProxies().UseNpgsql(builder.Configuration.GetConnectionString("TodoDatabase"))
-);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                      });
+});
+// DI Configuration
+builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.AddControllers();
-
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,8 +26,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
+
+app.UseCors("CorsPolicy");
+
 
 app.UseHttpsRedirection();
 
