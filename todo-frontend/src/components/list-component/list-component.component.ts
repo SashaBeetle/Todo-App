@@ -6,6 +6,7 @@ import { ApiService } from '../../services/api.service';
 import { AddCardComponent } from '../add-card/add-card.component';
 import { OpenCardComponent } from '../open-card/open-card.component';
 
+
 @Component({
   selector: 'app-list-component',
   standalone: true,
@@ -58,6 +59,18 @@ export class ListComponentComponent implements OnChanges {
     })
   }
 
+  sortDataByTitle(data: any[]): any[] {
+    return data.sort((a, b) => {
+      if (a.title.toLowerCase() < b.title.toLowerCase()) {
+        return -1;
+      } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data']) {
       console.log('Data updated:', this.data);
@@ -74,6 +87,8 @@ export class ListComponentComponent implements OnChanges {
     this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
       console.log(res); 
       this.data = res;
+      this.sortDataByTitle(this.data);
+      
     }); 
   }
 }
