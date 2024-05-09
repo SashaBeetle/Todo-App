@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CardComponentComponent } from '../card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
 import { SharedServiceService } from '../../services/shared-service.service';
@@ -21,10 +21,9 @@ import { OpenCardComponent } from '../open-card/open-card.component';
 export class ListComponentComponent implements OnChanges {
 
   @Input() isVisible: boolean = false;
-
+  
   @Output() data: any;
 
-  @Output() dataChanged = new EventEmitter<any>();
 
   constructor(
     private sharedService: SharedServiceService,
@@ -33,7 +32,13 @@ export class ListComponentComponent implements OnChanges {
 
 
 
-  onClick() {
+  onClickEdit(list: any) {
+    this.sharedService.toggleIsVisibleCreateList();
+    this.sharedService.toggleisEditableList();
+    this.sharedService.setList(list);
+  }
+
+  onClickAddList(){
     this.sharedService.toggleIsVisibleCreateList();
   }
 
@@ -45,7 +50,6 @@ export class ListComponentComponent implements OnChanges {
   onClickDeleteList(listId: number){
     this.apiService.deleteDataById("https://localhost:7247/api/catalog",listId).subscribe(res=>{
       console.log('ListN:', listId);
-
       const index = this.data.findIndex((item: { id: number; }) => item.id === listId);
         if (index !== -1) {
           this.data.splice(index, 1);
@@ -70,7 +74,6 @@ export class ListComponentComponent implements OnChanges {
     this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
       console.log(res); 
       this.data = res;
-      
     }); 
   }
 }

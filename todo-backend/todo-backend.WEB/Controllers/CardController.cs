@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+using System.Globalization;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 
@@ -11,23 +13,29 @@ namespace todo_backend.WEB.Controllers
     {
         private readonly IDbEntityService<Card> _cardService;
         private readonly IDbEntityService<Catalog> _catalogService;
+        private readonly IDbEntityService<HistoryItem> _historyItemService;
 
-        public CardController(IDbEntityService<Card> cardService, IDbEntityService<Catalog> catalogService)
+        public CardController(IDbEntityService<Card> cardService, IDbEntityService<Catalog> catalogService, IDbEntityService<HistoryItem> historyItemService)
         {
             _cardService = cardService;
             _catalogService = catalogService;
+            _historyItemService = historyItemService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateCard(Card card, int listId)
         {
+            card.DueDate = card.DueDate.ToUniversalTime();
+            card.History = new List<HistoryItem>();
+
+            card.History.Add(new HistoryItem { EventDescription = $"Card {card.Title} created" });
+            
+           
+
             Card createdCard = await _cardService.Create(card);
             Catalog existedCatalog = await _catalogService.GetById(listId);
 
             await _cardService.AddCardToCatalog(existedCatalog, createdCard.Id);
-
-
-
 
             return CreatedAtAction(nameof(GetCardById), new { id = createdCard.Id }, createdCard);
         }
@@ -46,15 +54,14 @@ namespace todo_backend.WEB.Controllers
             return NoContent();
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateCard(int id, Card card)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateCard(Card card)
         {
-            if (id != card.Id)
-                return BadRequest();
+            card.DueDate = card.DueDate.ToUniversalTime();
 
-            Card updatedCard = await _cardService.Update(card);
+            await _cardService.Update(card);
 
-            return Ok(updatedCard);
+            return Ok(card);
         }
 
         [HttpGet]
@@ -73,6 +80,7 @@ namespace todo_backend.WEB.Controllers
             if (card == null)
                 return NotFound();
 
+            card.DueDate = card.DueDate.ToLocalTime();
             return Ok(card);
         }
         

@@ -10,6 +10,9 @@ export interface Post {
  dueDate: Date
 
 }
+
+export class Patch{
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -55,5 +58,3 @@ export class ApiService {
     return this.http.get(`${url}/${id}`);
   }
 }
-
-

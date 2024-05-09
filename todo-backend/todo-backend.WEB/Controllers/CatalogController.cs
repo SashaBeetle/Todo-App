@@ -10,10 +10,14 @@ namespace todo_backend.WEB.Controllers
     public class CatalogController : ControllerBase
     {
         private readonly IDbEntityService<Catalog> _catalogService;
+        private readonly IDbEntityService<Card> _cardService;
+        private readonly IMoveCardService _moveCardService;
 
-        public CatalogController(IDbEntityService<Catalog> catalogService)
+        public CatalogController(IDbEntityService<Catalog> catalogService, IMoveCardService moveCardService, IDbEntityService<Card> cardService)
         {
+            _moveCardService = moveCardService;
             _catalogService = catalogService;
+            _cardService = cardService;
         }
         [HttpPost]
         public async Task<IActionResult> CreateCatalog(Catalog catalog)
@@ -26,12 +30,20 @@ namespace todo_backend.WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCatalog(int id)
         {
-            Catalog? catalogs = await _catalogService.GetById(id);
+            Catalog? catalog = await _catalogService.GetById(id);
 
-            if (catalogs == null)
+            if (catalog == null)
                 return NotFound();
 
-            await _catalogService.Delete(catalogs);
+
+            foreach (var cardId in catalog.CardsId)
+            {
+                Card? card = await _cardService.GetById(cardId);
+                if (card != null)
+                    await _cardService.Delete(card);
+            }
+
+            await _catalogService.Delete(catalog);
 
             return NoContent();
         }
@@ -54,5 +66,28 @@ namespace todo_backend.WEB.Controllers
 
             return Ok(catalog);
         }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateCatalog(int id, string title)
+        {
+            Catalog? catalog = await _catalogService.GetById(id);
+            
+            if (catalog == null)
+                return NotFound();
+
+            catalog.Title = title;
+
+            Catalog updatedCatalog = await _catalogService.Update(catalog);
+
+            return Ok(updatedCatalog);
+        }
+
+        [HttpPatch("MoveCard")]
+        public async Task<IActionResult> UpdateCatalog(int catalogId_1, int catalogId_2, int cardId)
+        {
+            await _moveCardService.MoveCard(cardId, catalogId_1, catalogId_2);
+
+            return Ok();
+        }
+
     }
 }

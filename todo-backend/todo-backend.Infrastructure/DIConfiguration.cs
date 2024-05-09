@@ -10,15 +10,16 @@ namespace todo_backend.Infrastructure
     {
         private static void RegisterDatabaseDependencies(this IServiceCollection services, IConfigurationRoot configuration)
         {
-            services.AddDbContext<TodoDbContext>(options => 
-                options
-                    .UseNpgsql(configuration.GetConnectionString("TodoDatabase"))
-            );
+            services.AddDbContext<TodoDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("TodoDatabase")));
+
+
         }
 
         private static void RegisterServiceDependencies(this IServiceCollection services)
         {
             services.AddScoped(typeof(IDbEntityService<>), typeof(DbEntityService<>));
+            services.AddScoped<IMoveCardService, MoveCardService>();
         }
         public static void RegisterDependencies(this IServiceCollection services, IConfigurationRoot configuration)
         {

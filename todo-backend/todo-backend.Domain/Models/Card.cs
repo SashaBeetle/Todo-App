@@ -12,5 +12,6 @@ namespace todo_backend.Domain.Models
         public string Description { get; set; }
         public string Priority { get; set; }
         public DateTime DueDate { get; set; }
+        public virtual ICollection<HistoryItem>? History { get; set; }
     }
 }

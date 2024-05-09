@@ -7,26 +7,23 @@
             <a (click)="onClick()" ><svg class="mr-5" fill="#FFFFFF" width="30px" height="30px" viewBox="0 0 24 24" id="cross" data-name="Flat Line" xmlns="http://www.w3.org/2000/svg"><path id="primary" d="M19,19,5,5M19,5,5,19" style="fill: white; stroke: rgb(255, 255, 255); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg></a>
         </div>
 
-        <div class="flex mt-5 items-baseline ml-5">
-            <div>
-                <svg class="mr-2" width="10px" height="10px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" ><path fill="#4C1D95" d="M8 3a5 5 0 100 10A5 5 0 008 3z"/></svg>
+        @for(item of history; track history.id){
+            <div class="flex-row ml-5 mt-5 items-baseline">
+                    <div class="flex items-center">
+                        <div>
+                            <svg class="mr-2" width="10px" height="10px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" ><path fill="#4C1D95" d="M8 3a5 5 0 100 10A5 5 0 008 3z"/></svg>
+                        </div>
+                        <div class=" ml-1 w-72 items-center justify-between">
+                            <span class="flex text-violet-900 history_span"> 
+                                {{item.eventDescription}}
+                            </span>  
+                        </div>
+                    </div>
+                    <span class="roboto-light-italic ml-5 text-sm text-violet-900 ">
+                       {{item.timesetup | date:'MMM d'}} at {{item.timesetup | date:'h:mm a' | lowercase }}
+                    </span>
             </div>
-            <div class="ml-1 fixed-row items-center">
-                
-                <span class="flex text-violet-900 ">
-                    
-                    You added 
-                    <span class="flex ml-1 font-bold items-center mr-1 text-black">
-                        <svg class="mr-1" fill="#000000" width="11px" height="11" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg"><path d="M960 0c529.36 0 960 430.645 960 960 0 529.36-430.64 960-960 960-529.355 0-960-430.64-960-960C0 430.645 430.645 0 960 0Zm0 112.941c-467.125 0-847.059 379.934-847.059 847.059 0 467.12 379.934 847.06 847.059 847.06 467.12 0 847.06-379.94 847.06-847.06 0-467.125-379.94-847.059-847.06-847.059Zm0 313.726c294.55 0 533.33 238.781 533.33 533.333 0 294.55-238.78 533.33-533.33 533.33-294.552 0-533.333-238.78-533.333-533.33 0-294.552 238.781-533.333 533.333-533.333Z" fill-rule="evenodd"/></svg>
-                        'Card'
-                    </span> 
-                    to 'list'
-                </span>
-                <span class="roboto-light-italic  text-violet-900 ">
-                    Mar 15 at 6:10 pm
-                </span>
-            </div>
-        </div>
+        }
 
         
         

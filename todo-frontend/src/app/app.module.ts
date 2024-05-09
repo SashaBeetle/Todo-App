@@ -6,7 +6,7 @@ import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/
     HttpClientModule
   ],
   providers: [
-    provideHttpClient(withFetch()) // Enable fetch
+    provideHttpClient(withFetch()),
   ]
 })
 export class AppModule { }

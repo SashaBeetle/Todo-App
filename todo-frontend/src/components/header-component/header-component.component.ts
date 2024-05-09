@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HistoryComponentComponent } from '../history-component/history-component.component';
 import { SharedServiceService } from '../../services/shared-service.service';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-header-component',
@@ -10,10 +11,21 @@ import { SharedServiceService } from '../../services/shared-service.service';
   styleUrl: './header-component.component.scss'
 })
 export class HeaderComponentComponent {
-  constructor(private sharedService: SharedServiceService){}
+  constructor(private sharedService: SharedServiceService, private apiService: ApiService){}
+  @Input() history: any;
   
   onClick() {
     this.sharedService.toggleIsVisibleHistory();
+    this.sharedService.setHistory(this.history);
+    
+    this.apiService.getData(`https://localhost:7247/api/HistoryItem`)
+    .subscribe(response => {
+      this.history = response;
+      this.sharedService.setHistory(response);
+      console.log('Get request successful!', this.history);
+    }, error => {
+      console.error('Error Getting data:', error);
+    });
   }
   
 }

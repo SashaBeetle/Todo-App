@@ -2,6 +2,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { SharedServiceService } from '../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
+import { PriorityConstants } from '../../Constants/priorityConstants';
 
 @Component({
   selector: 'app-add-card',
@@ -16,21 +17,23 @@ export class AddCardComponent {
       title: new FormControl("New Card", [Validators.required, Validators.maxLength(12)]),
       description: new FormControl(""),
       priority: new FormControl(""),
-      dateDue: new FormControl("")
+      DueDate: new FormControl(""),
+      listId: new FormControl('')
     })
   }
 
-
   @Input() isVisible: boolean = false;
- 
+  priority: any = PriorityConstants.priority;
   list: any;
-
+  lists: any;
+  card: any;
   cardForm: FormGroup;
 
   onSubmit(){
     const formData = this.cardForm.value;
     const jsonData = JSON.stringify(formData);
-    this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${this.sharedService.getList().id}`, jsonData) 
+    
+    this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${formData.listId}`, jsonData) //
       .subscribe(response => {
         this.cardForm.value.id = response.id;
         this.sharedService.getList().cardsId.push(response.id)
@@ -38,8 +41,25 @@ export class AddCardComponent {
       }, error => {
         console.error('Error submitting form:', error, jsonData);
       });
+      
 
     this.onClick();
+  }
+
+  onUpdate(){
+    this.card.title = this.cardForm.get('title')?.value;
+    this.card.description = this.cardForm.get('description')?.value;
+    this.card.dueDate = this.cardForm.get('DueDate')?.value;
+    this.card.priority = this.cardForm.get('priority')?.value;
+
+
+    this.apiService.patchData(`https://localhost:7247/api/cards`, this.card)
+      .subscribe(response => {
+        console.log('Form submitted successfully!');
+      }, error => {
+        console.error('Error submitting form:', error);
+      });
+      console.log('Data',this.card);
   }
 
   onClick() {
@@ -50,11 +70,22 @@ export class AddCardComponent {
     this.sharedService.isVisibleEditCard$.subscribe(value => {
       this.isVisible = value; 
     });
-  
+
+    this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
+      this.lists = res;  
+    })  
   }
 
-  ngOnChanges(changes: SimpleChanges): void {  
+  ngDoCheck(): void {
+   if(this.isVisible){
+    this.card = this.sharedService.getCard();
+   }
   }
-
-
 }
+  
+
+  
+
+
+
+
