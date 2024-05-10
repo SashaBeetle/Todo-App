@@ -26,13 +26,15 @@ namespace todo_backend.WEB.Controllers
         public async Task<IActionResult> CreateCard(Card card, int listId)
         {
             card.DueDate = card.DueDate.ToUniversalTime();
-            card.History = new List<HistoryItem>();
-
-            card.History.Add(new HistoryItem { EventDescription = $"Card ◉ {card.Title} created" });
             
-           
-
             Card createdCard = await _cardService.Create(card);
+
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Card ◉ {card.Title} created",
+                CardId = createdCard.Id
+            });
+
             Catalog existedCatalog = await _catalogService.GetById(listId);
 
             await _cardService.AddCardToCatalog(existedCatalog, createdCard.Id);
@@ -51,11 +53,11 @@ namespace todo_backend.WEB.Controllers
             await _cardService.DeleteCardFromCatalogs(id);
             await _cardService.Delete(card);
 
-            HistoryItem history = new HistoryItem {
-                CardId=card.Id,
-                EventDescription = $"Card ◉ {card.Title} Deleted" 
-            };
-            await _historyItemService.Create(history);
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Card ◉ {card.Title} deleted",
+                CardId = card.Id
+            });
 
             return NoContent();
         }
@@ -67,7 +69,11 @@ namespace todo_backend.WEB.Controllers
 
             await _cardService.Update(card);
 
-            card.History.Add(new HistoryItem { EventDescription = $"Card ◉ {card.Title} Updated" });
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Card ◉ {card.Title} updated",
+                CardId = card.Id
+            });
 
             return Ok(card);
         }

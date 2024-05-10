@@ -12,11 +12,16 @@ namespace todo_backend.Infrastructure.Services
     {
         private readonly IDbEntityService<Catalog> _catalogService;
         private readonly IDbEntityService<Card> _cardService;
+        private readonly IDbEntityService<HistoryItem> _historyItemService;
 
-        public MoveCardService(IDbEntityService<Catalog> catalogService, IDbEntityService<Card> cardService)
+        public MoveCardService(
+            IDbEntityService<Catalog> catalogService, 
+            IDbEntityService<Card> cardService, 
+            IDbEntityService<HistoryItem> historyItemService)
         {
             _catalogService = catalogService;
             _cardService = cardService;
+            _historyItemService = historyItemService;
         }
         public async Task MoveCard(int cardId, int catalogId_1, int catalogId_2)
         {
@@ -31,8 +36,12 @@ namespace todo_backend.Infrastructure.Services
                 Catalog1.CardsId.Remove(cardId);
                 Catalog2.CardsId.Add(cardId);
                 Card card = await _cardService.GetById(cardId);
-                card.History.Add(new HistoryItem { EventDescription = $"Card ◉ {card.Title} moved from ◉ {Catalog1.Title} to ◉ {Catalog2.Title}" });
-                await _cardService.Update(card);
+                await _historyItemService.Create(new HistoryItem()
+                {
+                    EventDescription = $"Card ◉ {card.Title} moved from ◉ {Catalog1.Title} to ◉ {Catalog2.Title}",
+                    CardId = card.Id
+                });
+
 
             }
             else
