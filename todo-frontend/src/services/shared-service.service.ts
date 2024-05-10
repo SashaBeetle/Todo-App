@@ -12,6 +12,7 @@ export class SharedServiceService {
   private isVisibleEditCard = new BehaviorSubject<boolean>(false);
   private isChooseCardHistory = new BehaviorSubject<boolean>(false)
   private isEditableList = new BehaviorSubject<boolean>(false);
+  private isEditableCard = new BehaviorSubject<boolean>(false);
   
   private list = new BehaviorSubject<number | null>(null);
   list$ = this.list.asObservable();
@@ -32,6 +33,11 @@ export class SharedServiceService {
   isVisibleEditCard$ = this.isVisibleEditCard.asObservable();
   isChooseCardHistory$ = this.isChooseCardHistory.asObservable();
   isEditableList$ = this.isEditableList.asObservable();
+  isEditableCard$ = this.isEditableCard.asObservable();
+
+toggleisEditableCard(){
+  this.isEditableCard.next(!this.isEditableCard.value)
+}
 
   toggleisEditableList(){
     this.isEditableList.next(!this.isEditableList.value)

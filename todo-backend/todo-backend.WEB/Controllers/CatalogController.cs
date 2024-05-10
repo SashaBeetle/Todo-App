@@ -82,7 +82,7 @@ namespace todo_backend.WEB.Controllers
         }
 
         [HttpPatch("MoveCard")]
-        public async Task<IActionResult> UpdateCatalog(int catalogId_1, int catalogId_2, int cardId)
+        public async Task<IActionResult> MoveCardBetweenCatalogs(int catalogId_1, int catalogId_2, int cardId)
         {
             await _moveCardService.MoveCard(cardId, catalogId_1, catalogId_2);
 

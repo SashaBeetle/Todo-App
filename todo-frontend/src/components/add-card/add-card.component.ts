@@ -23,13 +23,15 @@ export class AddCardComponent {
   }
 
   @Input() isVisible: boolean = false;
+  @Input() isEditable: boolean = false;
+
   priority: any = PriorityConstants.priority;
   list: any;
   lists: any;
   card: any;
   cardForm: FormGroup;
 
-  onSubmit(){
+  onCreate(){
     const formData = this.cardForm.value;
     const jsonData = JSON.stringify(formData);
     
@@ -60,6 +62,9 @@ export class AddCardComponent {
         console.error('Error submitting form:', error);
       });
       console.log('Data',this.card);
+
+      this.sharedService.toggleisEditableCard();
+      this.onClick();
   }
 
   onClick() {
@@ -69,6 +74,10 @@ export class AddCardComponent {
   ngOnInit() {
     this.sharedService.isVisibleEditCard$.subscribe(value => {
       this.isVisible = value; 
+    });
+
+    this.sharedService.isEditableCard$.subscribe(value => {
+      this.isEditable = value; 
     });
 
     this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
