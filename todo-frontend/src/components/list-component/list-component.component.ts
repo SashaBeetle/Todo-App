@@ -22,8 +22,9 @@ import { OpenCardComponent } from '../open-card/open-card.component';
 export class ListComponentComponent implements OnChanges {
 
   @Input() isVisible: boolean = false;
-  
   @Output() data: any;
+
+  isAddListVisible: boolean = true;
 
 
   constructor(
@@ -90,6 +91,17 @@ export class ListComponentComponent implements OnChanges {
       this.sortDataByTitle(this.data);
       
     }); 
+  }
+
+  ngDoCheck(): void {
+    if(this.data.length == 4){
+      this.isAddListVisible = false;
+      console.log('List',this.isAddListVisible)
+    }else{      
+      this.isAddListVisible = true;
+    }
+    
+    
   }
 }
 
