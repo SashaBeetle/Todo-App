@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System.Globalization;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
+using todo_backend.WEB.Mapping.DTOs;
 
 namespace todo_backend.WEB.Controllers
 {
@@ -14,19 +16,28 @@ namespace todo_backend.WEB.Controllers
         private readonly IDbEntityService<Card> _cardService;
         private readonly IDbEntityService<Catalog> _catalogService;
         private readonly IDbEntityService<HistoryItem> _historyItemService;
+        private readonly IMapper _mapper;
 
-        public CardController(IDbEntityService<Card> cardService, IDbEntityService<Catalog> catalogService, IDbEntityService<HistoryItem> historyItemService)
+        public CardController(
+            IDbEntityService<Card> cardService, 
+            IDbEntityService<Catalog> catalogService,
+            IDbEntityService<HistoryItem> historyItemService, 
+            IMapper mapper
+            )
         {
             _cardService = cardService;
             _catalogService = catalogService;
             _historyItemService = historyItemService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCard(Card card, int listId)
+        public async Task<IActionResult> CreateCard(CardDTO cardDto, int listId)
         {
+            Card card = _mapper.Map<Card>(cardDto);
             card.DueDate = card.DueDate.ToUniversalTime();
-            
+
+
             Card createdCard = await _cardService.Create(card);
 
             await _historyItemService.Create(new HistoryItem()
@@ -39,7 +50,10 @@ namespace todo_backend.WEB.Controllers
 
             await _cardService.AddCardToCatalog(existedCatalog, createdCard.Id);
 
-            return CreatedAtAction(nameof(GetCardById), new { id = createdCard.Id }, createdCard);
+
+            CardDTO createdCardDto = _mapper.Map<CardDTO>(createdCard);
+
+            return CreatedAtAction(nameof(GetCardById), new { id = createdCardDto.Id }, createdCardDto);
         }
         
         [HttpDelete("{id}")]
@@ -63,8 +77,9 @@ namespace todo_backend.WEB.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateCard(Card card)
+        public async Task<IActionResult> UpdateCard(CardDTO cardDto)
         {
+            Card card = _mapper.Map<Card>(cardDto);
             card.DueDate = card.DueDate.ToUniversalTime();
 
             await _cardService.Update(card);
@@ -75,7 +90,7 @@ namespace todo_backend.WEB.Controllers
                 CardId = card.Id
             });
 
-            return Ok(card);
+            return Ok(_mapper.Map<CardDTO>(card));
         }
 
         [HttpGet]
@@ -83,7 +98,8 @@ namespace todo_backend.WEB.Controllers
         {
             List<Card> cards = await _cardService.GetAll().ToListAsync();
 
-            return Ok(cards);
+
+            return Ok(_mapper.Map<List<CardDTO>>(cards));
         }
 
         [HttpGet("{id}")]
@@ -95,7 +111,9 @@ namespace todo_backend.WEB.Controllers
                 return NotFound();
 
             card.DueDate = card.DueDate.ToLocalTime();
-            return Ok(card);
+
+            
+            return Ok(_mapper.Map<CardDTO>(card));
         }
         
     }
