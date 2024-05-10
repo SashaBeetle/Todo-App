@@ -35,7 +35,7 @@ export class OpenCardComponent {
   }
   
   onClickPatch(anotherList: any){
-    this.apiService.patchData(`https://localhost:7247/api/catalog/MoveCard?catalogId_1=${this.list.id}&catalogId_2=${anotherList.id}&cardId=${this.card.id}`, 1)//json into(cardId, catalogId, catalogId)
+    this.apiService.patchData(`https://localhost:7247/api/catalog/MoveCard?catalogId_1=${this.list.id}&catalogId_2=${anotherList.id}&cardId=${this.card.id}`, 1)
       .subscribe(response => {
         this.swapCard(this.card.id, anotherList);
         console.log('Patch request successful!', response);
@@ -74,7 +74,7 @@ ngDoCheck(): void {
     this.card = this.sharedService.getCard();
     this.data = this.sharedService.getData();
     this.list = this.sharedService.getList();
-    this.history = this.sharedService.getHistory();
+    this.history = this.sharedService.getHistory().slice().reverse();
   }
 }
 

@@ -10,7 +10,7 @@ namespace todo_backend.Domain.Models
     {
         public DateTime Timesetup { get; set; }
         public string EventDescription { get; set; }
-        public int CardId { get; set; }
+        public int? CardId { get; set; }
         
         public HistoryItem() {
             Timesetup = DateTime.UtcNow;

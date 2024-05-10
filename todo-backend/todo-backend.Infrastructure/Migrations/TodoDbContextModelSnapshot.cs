@@ -80,7 +80,7 @@ namespace todo_backend.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CardId")
+                    b.Property<int?>("CardId")
                         .HasColumnType("integer");
 
                     b.Property<string>("EventDescription")
@@ -92,23 +92,7 @@ namespace todo_backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CardId");
-
                     b.ToTable("HistoryItems");
-                });
-
-            modelBuilder.Entity("todo_backend.Domain.Models.HistoryItem", b =>
-                {
-                    b.HasOne("todo_backend.Domain.Models.Card", null)
-                        .WithMany("History")
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("todo_backend.Domain.Models.Card", b =>
-                {
-                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }

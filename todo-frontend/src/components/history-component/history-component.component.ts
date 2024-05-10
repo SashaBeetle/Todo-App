@@ -1,12 +1,14 @@
 import { Component,Input, Output} from '@angular/core';
 import { SharedServiceService } from '../../services/shared-service.service';
 import { CommonModule } from '@angular/common';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+
 
 
 @Component({
   selector: 'app-history-component',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ScrollPanelModule],
   templateUrl: './history-component.component.html',
   styleUrl: './history-component.component.scss'
 })
@@ -16,10 +18,16 @@ export class HistoryComponentComponent {
 
   @Input() isVisible: boolean = false;
   @Output() history: any;
+  showMore: boolean = false;
 
   
   onClick() {
     this.sharedService.toggleIsVisibleHistory();
+    this.showMore = false;
+  }
+
+  onClickShowMore(){
+    this.showMore = true;
   }
   
   ngOnInit() {
