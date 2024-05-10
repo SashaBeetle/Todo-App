@@ -11,10 +11,12 @@ namespace todo_backend.Infrastructure.Services
     public class MoveCardService : IMoveCardService
     {
         private readonly IDbEntityService<Catalog> _catalogService;
+        private readonly IDbEntityService<Card> _cardService;
 
-        public MoveCardService(IDbEntityService<Catalog> catalogService)
+        public MoveCardService(IDbEntityService<Catalog> catalogService, IDbEntityService<Card> cardService)
         {
             _catalogService = catalogService;
+            _cardService = cardService;
         }
         public async Task MoveCard(int cardId, int catalogId_1, int catalogId_2)
         {
@@ -28,12 +30,15 @@ namespace todo_backend.Infrastructure.Services
             {
                 Catalog1.CardsId.Remove(cardId);
                 Catalog2.CardsId.Add(cardId);
+                Card card = await _cardService.GetById(cardId);
+                card.History.Add(new HistoryItem { EventDescription = $"Card ◉ {card.Title} moved from ◉ {Catalog1.Title} to ◉ {Catalog2.Title}" });
+                await _cardService.Update(card);
+
             }
             else
             {
                 throw new Exception("Card not found in catalog");
             }
-
             await _catalogService.Update(Catalog1);
             await _catalogService.Update(Catalog2);
         }

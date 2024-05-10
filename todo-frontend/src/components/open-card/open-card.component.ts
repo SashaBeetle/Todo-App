@@ -29,6 +29,7 @@ export class OpenCardComponent {
   onClickEditCard(){
     this.sharedService.toggleIsVisibleEditCard();
     this.sharedService.toggleIsVisibleCard();
+    this.sharedService.toggleisEditableCard();
     this.sharedService.setCard(this.card);
     this.sharedService.setList(this.list);
   }

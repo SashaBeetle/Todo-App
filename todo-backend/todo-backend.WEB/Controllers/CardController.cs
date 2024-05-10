@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System.Globalization;
@@ -28,7 +28,7 @@ namespace todo_backend.WEB.Controllers
             card.DueDate = card.DueDate.ToUniversalTime();
             card.History = new List<HistoryItem>();
 
-            card.History.Add(new HistoryItem { EventDescription = $"Card {card.Title} created" });
+            card.History.Add(new HistoryItem { EventDescription = $"Card ◉ {card.Title} created" });
             
            
 
@@ -51,6 +51,12 @@ namespace todo_backend.WEB.Controllers
             await _cardService.DeleteCardFromCatalogs(id);
             await _cardService.Delete(card);
 
+            HistoryItem history = new HistoryItem {
+                CardId=card.Id,
+                EventDescription = $"Card ◉ {card.Title} Deleted" 
+            };
+            await _historyItemService.Create(history);
+
             return NoContent();
         }
 
@@ -60,6 +66,8 @@ namespace todo_backend.WEB.Controllers
             card.DueDate = card.DueDate.ToUniversalTime();
 
             await _cardService.Update(card);
+
+            card.History.Add(new HistoryItem { EventDescription = $"Card ◉ {card.Title} Updated" });
 
             return Ok(card);
         }
