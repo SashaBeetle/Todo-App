@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
@@ -11,11 +12,16 @@ namespace todo_backend.WEB.Controllers
     {
         private readonly IDbEntityService<HistoryItem> _historyItemService;
         private readonly IDbEntityService<Card> _cardService;
+        private readonly IMapper _mapper;
 
-        public HistoryItemController(IDbEntityService<HistoryItem> historyItemService, IDbEntityService<Card> cardService)
+        public HistoryItemController(
+            IDbEntityService<HistoryItem> historyItemService,
+            IDbEntityService<Card> cardService,
+            IMapper mapper)
         {
             _historyItemService = historyItemService;
             _cardService = cardService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,7 +29,8 @@ namespace todo_backend.WEB.Controllers
         {
             List<HistoryItem> historyItems = await _historyItemService.GetAll().ToListAsync();
 
-            return Ok(historyItems);
+           
+            return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
         }
 
         [HttpGet("ForCard{id}")]
@@ -36,61 +43,7 @@ namespace todo_backend.WEB.Controllers
 
             List<HistoryItem> historyItems = await _historyItemService.GetAll().Where(h => h.CardId == id).ToListAsync();
 
-            return Ok(historyItems);
-        }
-
-        [HttpPatch]
-        public async Task<IActionResult> AddHistoryItem( HistoryItem historyItem)
-        {
-            HistoryItem createdHistoryItem = await _historyItemService.Create(historyItem);
-
-            return CreatedAtAction(nameof(GetHistoryItemById), new { id = createdHistoryItem.Id }, createdHistoryItem);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetHistoryItemById(int id)
-        {
-            HistoryItem? historyItem = await _historyItemService.GetById(id);
-
-            if (historyItem == null)
-                return NotFound();
-
-            return Ok(historyItem);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateHistoryItem(HistoryItem historyItem)
-        {
-            HistoryItem createdHistoryItem = await _historyItemService.Create(historyItem);
-
-            return CreatedAtAction(nameof(GetHistoryItemById), new { id = createdHistoryItem.Id }, createdHistoryItem);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHistoryItem(int id)
-        {
-            HistoryItem? historyItem = await _historyItemService.GetById(id);
-
-            if (historyItem == null)
-                return NotFound();
-
-            await _historyItemService.Delete(historyItem);
-
-            return NoContent();
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> AddToHistoryItem(int id, string message )
-        {
-            HistoryItem? historyItem = await _historyItemService.GetById(id);
-
-            if (historyItem == null)
-                return NotFound();
-
-
-            HistoryItem updatedHistoryItem = await _historyItemService.Update(historyItem);
-
-            return Ok(updatedHistoryItem);
-        }
+            return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
+        } 
     }
 }

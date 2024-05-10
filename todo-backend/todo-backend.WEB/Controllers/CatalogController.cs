@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
+using todo_backend.WEB.Mapping.DTOs;
 
 namespace todo_backend.WEB.Controllers
 {
@@ -11,20 +13,36 @@ namespace todo_backend.WEB.Controllers
     {
         private readonly IDbEntityService<Catalog> _catalogService;
         private readonly IDbEntityService<Card> _cardService;
+        private readonly IDbEntityService<HistoryItem> _historyItemService;
         private readonly IMoveCardService _moveCardService;
+        private readonly IMapper _mapper;
 
-        public CatalogController(IDbEntityService<Catalog> catalogService, IMoveCardService moveCardService, IDbEntityService<Card> cardService)
+        public CatalogController(
+            IDbEntityService<Catalog> catalogService, 
+            IMoveCardService moveCardService, 
+            IDbEntityService<Card> cardService,
+            IDbEntityService<HistoryItem> historyItemService,
+            IMapper mapper
+            )
         {
             _moveCardService = moveCardService;
             _catalogService = catalogService;
             _cardService = cardService;
+            _historyItemService = historyItemService;
+            _mapper = mapper;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCatalog(Catalog catalog)
+        public async Task<IActionResult> CreateCatalog(CatalogDTO catalogDto)
         {
-            Catalog createdCatalog = await _catalogService.Create(catalog);
+            Catalog createdCatalog = await _catalogService.Create(_mapper.Map<Catalog>(catalogDto));
 
-            return CreatedAtAction(nameof(GetCatalogsById), new { id = createdCatalog.Id }, createdCatalog);
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Catalog ◉ {createdCatalog.Title} created",
+            });
+
+            CatalogDTO createdCatalogDto = _mapper.Map<CatalogDTO>(createdCatalog);
+            return CreatedAtAction(nameof(GetCatalogsById), new { id = createdCatalogDto.Id }, createdCatalogDto);
         }
 
         [HttpDelete("{id}")]
@@ -43,7 +61,14 @@ namespace todo_backend.WEB.Controllers
                     await _cardService.Delete(card);
             }
 
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Catalog ◉ {catalog.Title} deleted",
+            });
+
             await _catalogService.Delete(catalog);
+
+            
 
             return NoContent();
         }
@@ -53,7 +78,8 @@ namespace todo_backend.WEB.Controllers
         {
             List<Catalog> catalogs = await _catalogService.GetAll().ToListAsync();
 
-            return Ok(catalogs);
+            
+            return Ok(_mapper.Map<List<CatalogDTO>>(catalogs));
         }
 
         [HttpGet("{id}")]
@@ -64,7 +90,7 @@ namespace todo_backend.WEB.Controllers
             if (catalog == null)
                 return NotFound();
 
-            return Ok(catalog);
+            return Ok(_mapper.Map<CatalogDTO>(catalog));
         }
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateCatalog(int id, string title)
@@ -74,11 +100,21 @@ namespace todo_backend.WEB.Controllers
             if (catalog == null)
                 return NotFound();
 
-            catalog.Title = title;
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Catalog ◉ {catalog.Title} renamed to ◉ {title}",
+            });
 
+
+            catalog.Title = title;
             Catalog updatedCatalog = await _catalogService.Update(catalog);
 
-            return Ok(updatedCatalog);
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Catalog ◉ {catalog.Title} renamed to ◉ {updatedCatalog.Title}",
+            });
+
+            return Ok(_mapper.Map<CatalogDTO>(updatedCatalog));
         }
 
         [HttpPatch("MoveCard")]

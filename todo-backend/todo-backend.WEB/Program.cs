@@ -1,4 +1,5 @@
 using todo_backend.Infrastructure;
+using todo_backend.WEB.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services.AddCors(options =>
 builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.AddControllers();
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
