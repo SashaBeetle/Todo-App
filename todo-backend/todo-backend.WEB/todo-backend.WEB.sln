@@ -6,10 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "todo-backend.WEB", "todo-backend.WEB.csproj", "{B1D210F9-FC49-4AE0-A93F-BD3C6D62261D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A0129869-FF8B-4A15-A1A6-AC92E70F71EB} = {A0129869-FF8B-4A15-A1A6-AC92E70F71EB}
-		{C04FE270-BAB9-40FB-A5C2-43D933FB015C} = {C04FE270-BAB9-40FB-A5C2-43D933FB015C}
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "todo-backend.Application", "..\todo-backend.Application\todo-backend.Application.csproj", "{C04FE270-BAB9-40FB-A5C2-43D933FB015C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "todo-backend.Infrastructure", "..\todo-backend.Infrastructure\todo-backend.Infrastructure.csproj", "{A0129869-FF8B-4A15-A1A6-AC92E70F71EB}"
 EndProject
@@ -25,10 +22,6 @@ Global
 		{B1D210F9-FC49-4AE0-A93F-BD3C6D62261D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1D210F9-FC49-4AE0-A93F-BD3C6D62261D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1D210F9-FC49-4AE0-A93F-BD3C6D62261D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C04FE270-BAB9-40FB-A5C2-43D933FB015C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C04FE270-BAB9-40FB-A5C2-43D933FB015C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C04FE270-BAB9-40FB-A5C2-43D933FB015C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C04FE270-BAB9-40FB-A5C2-43D933FB015C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A0129869-FF8B-4A15-A1A6-AC92E70F71EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0129869-FF8B-4A15-A1A6-AC92E70F71EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0129869-FF8B-4A15-A1A6-AC92E70F71EB}.Release|Any CPU.ActiveCfg = Release|Any CPU

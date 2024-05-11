@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using todo_backend.Infrastructure;
 using todo_backend.WEB.Mapping;
 
@@ -16,7 +17,14 @@ builder.Services.AddCors(options =>
 // DI Configuration
 builder.Services.RegisterDependencies(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(x => { 
+
+    x.ImplicitlyValidateChildProperties = true;
+    x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+    });
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

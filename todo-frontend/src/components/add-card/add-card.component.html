@@ -9,17 +9,22 @@
         </div>
 
         <div class="flex-row card_container mt-7 items-baseline ml-5">
-            <div class="mb-4 font-bold text-2xl">
+            <div class="text-red-400 font-normal text-sm" *ngIf="cardForm.controls['title'].invalid && (cardForm.invalid || cardForm.controls['title'].touched || cardForm.controls['title'].dirty)">
+                <span *ngIf="cardForm.controls['title'].errors?.['required']"> * Required</span>
+                <span *ngIf="cardForm.controls['title'].errors?.['maxlength']">* Card name is too long</span>
+            </div>
+            <div class="flex mb-4 font-bold text-2xl">
                 <input class="bg-inherit focus:outline-none focus:border-none" value="New Card" formControlName="title">
             </div>
+            
             <div class="flex mb-4 justify-between items-center text-violet-900">
                 <div class="flex items-center">
                     <svg class="mr-2" width="20px" height="20px" viewBox="0 0 24 24" fill="#4C1D95" xmlns="http://www.w3.org/2000/svg"><path d="M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z"/></svg>
                     List
                 </div>
                 
-                <div class="sm:col-span-3 w-2/3">
-                    <div class="mt-2 mr-64">
+                <div class="flex items-center sm:col-span-3 w-2/3">
+                    <div class="mt-2">
                       <select id="country" name="country" autocomplete="country-name" formControlName="listId" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
                         
                         @for(item of lists; track lists.title){
@@ -27,7 +32,11 @@
                         }                     
                       </select>
                     </div>
+                    <div class="text-red-400 ml-2" *ngIf="cardForm.controls['listId'].invalid && (cardForm.invalid || cardForm.controls['listId'].touched || cardForm.controls['listId'].dirty)">
+                        <span *ngIf="cardForm.controls['listId'].errors?.['required']"> * Required</span>
+                    </div>
                 </div>
+                
             </div>
 
             <div class="flex mb-4 justify-between items-center text-violet-900">
@@ -36,12 +45,15 @@
                     <div>Date due</div>
                 </div>
                 
-
                 <div class="sm:col-span-3 w-2/3">
-                    <div class="mt-2 mr-64" >
+                    <div class="flex mt-2 items-center" >
                         <input formControlName="DueDate" class="block w-32 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" type="date">
+                        <div class="text-red-400 ml-2" *ngIf="cardForm.controls['DueDate'].invalid && (cardForm.invalid || cardForm.controls['DueDate'].touched || cardForm.controls['DueDate'].dirty)">
+                            <span *ngIf="cardForm.controls['DueDate'].errors?.['required']"> * Required</span>
+                        </div>
                     </div>
                 </div>
+                
             </div>
 
             <div class="flex mb-4 justify-between items-center text-violet-900">
@@ -51,19 +63,28 @@
                 </div>
                 
 
-                <div class="sm:col-span-3 w-2/3">
-                    <div class="mt-2 mr-64">
+                <div class="flex items-center sm:col-span-3 w-2/3">
+                    <div class="mt-2">
                       <select id="country" place name="country" autocomplete="country-name" class="block w-34 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" formControlName="priority">
                         @for(item of priority; track item){
                             <option [value]="item">{{item}}</option>
                         }  
                       </select>
                     </div>
+                    <div class="text-red-400 ml-2" *ngIf="cardForm.controls['priority'].invalid && (cardForm.invalid || cardForm.controls['priority'].touched || cardForm.controls['priority'].dirty)">
+                        <span *ngIf="cardForm.controls['priority'].errors?.['required']"> * Required</span>
+                    </div>
                 </div>
             </div>
             
             <div class="flex-row">
-                <div class="font-bold">Description</div>
+                <div class="font-bold flex">
+                    Description
+                    <div class="text-red-400 ml-2 font-normal" *ngIf="cardForm.controls['description'].invalid && (cardForm.invalid || cardForm.controls['description'].touched || cardForm.controls['description'].dirty)">
+                        <span *ngIf="cardForm.controls['description'].errors?.['required']"> * Required</span>
+                        <span *ngIf="cardForm.controls['description'].errors?.['maxlength']">* Description is too long</span>
+                    </div>
+                </div>
                 <div class="col-span-full mr-10">
                     <div class="mt-2">
                       <textarea  placeholder="Write some information..."  name="about" rows="3" class="custom_area w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" formControlName="description"></textarea>

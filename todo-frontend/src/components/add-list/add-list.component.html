@@ -1,6 +1,10 @@
 <form [formGroup]="listForm">
     <div class="flex-row">
-        <input type="text" placeholder="Enter list title..." name="first-name" id="first-name" autocomplete="given-name" class="block w-48 rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset bg-gray-200 ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6" formControlName="title">
+        <input type="text" placeholder="Enter list title..." name="first-name" id="first-name" autocomplete="given-name" class="block w-48 rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset bg-gray-200 ring-gray-300 placeholder:text-black focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6" formControlName="title" >
+        <div class="text-red-400" *ngIf="listForm.controls['title'].invalid && (listForm.controls['title'].touched || listForm.controls['title'].dirty)">
+            <span *ngIf="listForm.controls['title'].errors?.['required']"> * Required</span>
+            <span *ngIf="listForm.controls['title'].errors?.['maxlength']">* List name too long</span>
+        </div>
         
             <div class="flex mt-3 w-48 gap-3 justify-between ">
                 @if(editable){
