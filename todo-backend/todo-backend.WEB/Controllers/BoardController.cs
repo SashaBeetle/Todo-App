@@ -54,5 +54,18 @@ namespace todo_backend.WEB.Controllers
 
             return NoContent();
         }
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateBoard(int id, string title)
+        {
+            Board board = await _boardService.GetById(id);
+            
+            if (board == null)
+                return NotFound();
+
+            board.Title = title;
+            await _boardService.Update(board);
+
+            return NoContent();
+        }
     }
 }

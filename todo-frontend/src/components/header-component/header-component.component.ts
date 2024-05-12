@@ -13,6 +13,7 @@ import { ApiService } from '../../services/api.service';
 export class HeaderComponentComponent {
   constructor(private sharedService: SharedService, private apiService: ApiService){}
   @Input() history: any;
+  currentBoard: any;
   
   onClick() {
     this.sharedService.toggleIsVisibleHistory();
@@ -26,6 +27,15 @@ export class HeaderComponentComponent {
     }, error => {
       console.error('Error Getting data:', error);
     });
+  }
+
+  onClickReturn(){
+    this.sharedService.toggleisVisibleBoard();
+  }
+
+  ngOnInit() {
+    this.currentBoard = this.sharedService.getBoard()
+    
   }
   
 }

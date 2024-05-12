@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 using todo_backend.WEB.Mapping.DTOs;
@@ -14,6 +15,7 @@ namespace todo_backend.WEB.Controllers
         private readonly IDbEntityService<Catalog> _catalogService;
         private readonly IDbEntityService<Card> _cardService;
         private readonly IDbEntityService<HistoryItem> _historyItemService;
+        private readonly IDbEntityService<Board> _boardService;
         private readonly IMoveCardService _moveCardService;
         private readonly IMapper _mapper;
 
@@ -22,6 +24,7 @@ namespace todo_backend.WEB.Controllers
             IMoveCardService moveCardService, 
             IDbEntityService<Card> cardService,
             IDbEntityService<HistoryItem> historyItemService,
+            IDbEntityService<Board> boardService,
             IMapper mapper
             )
         {
@@ -30,11 +33,16 @@ namespace todo_backend.WEB.Controllers
             _cardService = cardService;
             _historyItemService = historyItemService;
             _mapper = mapper;
+            _boardService = boardService;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCatalog(CatalogDTO catalogDto)
+        public async Task<IActionResult> CreateCatalog(CatalogDTO catalogDto, [Required] int BoardId)
         {
             Catalog createdCatalog = await _catalogService.Create(_mapper.Map<Catalog>(catalogDto));
+
+            Board board = await _boardService.GetById(BoardId);
+            board.CatalogsId.Add(createdCatalog.Id);
+            await _boardService.Update(board);
 
             await _historyItemService.Create(new HistoryItem()
             {
@@ -91,6 +99,24 @@ namespace todo_backend.WEB.Controllers
                 return NotFound();
 
             return Ok(_mapper.Map<CatalogDTO>(catalog));
+        }
+        [HttpGet("ForBoard/{id}")]
+        public async Task<IActionResult> GetCatalogsByBoardId(int id)
+        {
+            Board board = await _boardService.GetById(id);
+
+            if (board == null)
+                return NotFound();
+
+            List<Catalog> catalogs = new List<Catalog>();
+
+            foreach (var catalogId in board.CatalogsId)
+            {
+                Catalog catalog =  await _catalogService.GetById(catalogId);
+                catalogs.Add(catalog);
+            }
+
+            return Ok(_mapper.Map<List<CatalogDTO>>(catalogs));
         }
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateCatalog(int id, string title)

@@ -73,11 +73,11 @@ export class CardComponentComponent {
 
 
 
-  async ngOnInit(){
-    this.apiService.getData(`https://localhost:7247/api/cards/${this.cardId}`).subscribe(res =>{
-      this.card = res;
-    });
-}
+  ngOnInit(){
+      this.apiService.getData(`https://localhost:7247/api/cards/${this.cardId}`).subscribe(res =>{
+        this.card = res;
+      });
+    }
 
 removeFromList(cardId: number) {
   const index = this.list.cardsId.findIndex((item: number) => item === cardId);

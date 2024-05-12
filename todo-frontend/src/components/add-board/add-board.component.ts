@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SharedService } from '../../services/shared-service.service';
@@ -22,6 +22,8 @@ export class AddBoardComponent {
     })
   }
   @Input() boards : any;
+  @Input() isEditable = false;
+  @Input() board: any;
   boardForm: FormGroup;
 
 
@@ -40,7 +42,36 @@ export class AddBoardComponent {
     }    
   }
 
+  onSubmitEditBoard(){
+    if(this.boardForm.valid){ 
+      
+      this.apiService.patchData(`https://localhost:7247/api/Boards/${this.sharedService.getBoard().id}?title=${this.boardForm.get('title')?.value}`, 1) 
+        .subscribe(response => {
+          this.board = this.sharedService.getBoard();
+          this.board.title = this.boardForm.get('title')?.value;
+          console.log('Form submitted successfully!', response);
+        }, error => {
+          console.error('Error submitting form:', error);
+        });
+        
+        this.sharedService.toggleisVisibleCreateBoard();
+        this.sharedService.toggleisEditableBoard();
+    }    
+  }
+
   onClick(){
     this.sharedService.toggleisVisibleCreateBoard();
+    if(this.isEditable){
+      this.sharedService.toggleisEditableBoard();
+    }
+  }
+
+  ngOnInit(){
+    this.sharedService.isEditableBoard$.subscribe(value => {
+      this.isEditable = value;
+    })
+
+
+    
   }
 }

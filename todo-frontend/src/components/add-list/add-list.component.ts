@@ -16,6 +16,7 @@ export class AddListComponent {
   @Input() data: any;
   @Input() editable: boolean = false;
   @Input() list: any;
+  @Input() board: any;
   listForm: FormGroup;
 
   constructor(private sharedService: SharedService, private apiService: ApiService){
@@ -35,7 +36,7 @@ export class AddListComponent {
   onSubmitCreateList(){
     if(this.listForm.valid){
       const jsonData = JSON.stringify(this.listForm.value);
-      this.apiService.postData('https://localhost:7247/api/catalog', jsonData) 
+      this.apiService.postData(`https://localhost:7247/api/catalog?BoardId=${this.sharedService.getBoard().id}`, jsonData) 
         .subscribe(response => {
           this.listForm.value.id = response.id;
           this.data.push(this.listForm.value)

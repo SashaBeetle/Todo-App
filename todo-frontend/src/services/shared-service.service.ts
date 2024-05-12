@@ -15,6 +15,7 @@ export class SharedService {
   private isChooseCardHistory = new BehaviorSubject<boolean>(false)
   private isEditableList = new BehaviorSubject<boolean>(false);
   private isEditableCard = new BehaviorSubject<boolean>(false);
+  private isEditableBoard = new BehaviorSubject<boolean>(false);
   
   
   private list = new BehaviorSubject<number | null>(null);
@@ -31,6 +32,9 @@ export class SharedService {
 
   private board = new BehaviorSubject<any | null>(null);
   board$ = this.board.asObservable();
+
+  private lists = new BehaviorSubject<any | null>(null);
+  lists$ = this.lists.asObservable();
   
   isVisibleBoard$ = this.isVisibleBoard.asObservable()
   isVisibleCreateBoard$ = this.isVisibleCreateBoard.asObservable();
@@ -41,8 +45,13 @@ export class SharedService {
   isChooseCardHistory$ = this.isChooseCardHistory.asObservable();
   isEditableList$ = this.isEditableList.asObservable();
   isEditableCard$ = this.isEditableCard.asObservable();
+  isEditableBoard$ = this.isEditableBoard.asObservable();
 
-toggleisisVisibleBoard(){
+toggleisEditableBoard(){
+  this.isEditableBoard.next(!this.isEditableBoard.value)
+}
+
+toggleisVisibleBoard(){
   this.isVisibleBoard.next(!this.isVisibleBoard.value)
 }
 
@@ -116,6 +125,14 @@ toggleisEditableCard(){
   }
 
   getBoard(){
+    return this.board.getValue();
+  }
+
+  setLists(data:any){
+    this.lists.next(data);
+  }
+
+  getLists(){
     return this.board.getValue();
   }
 
