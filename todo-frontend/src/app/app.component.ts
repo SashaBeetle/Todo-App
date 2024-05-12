@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CardComponentComponent } from '../components/card-component/card-component.component';
 import { ListComponentComponent } from '../components/list-component/list-component.component';
@@ -6,6 +6,8 @@ import { HeaderComponentComponent } from '../components/header-component/header-
 import { HistoryComponentComponent } from '../components/history-component/history-component.component';
 import { AddCardComponent } from '../components/add-card/add-card.component';
 import { OpenCardComponent } from '../components/open-card/open-card.component';
+import { MenuComponent } from '../components/menu/menu.component';
+import { BoardComponent } from '../components/board/board.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +19,8 @@ import { OpenCardComponent } from '../components/open-card/open-card.component';
     HistoryComponentComponent,
     AddCardComponent,
     OpenCardComponent,
+    MenuComponent,
+    BoardComponent,
     RouterOutlet
   ], 
   templateUrl: './app.component.html',
@@ -24,4 +28,6 @@ import { OpenCardComponent } from '../components/open-card/open-card.component';
 })
 export class AppComponent {
   title = 'To Do';
+
+  @Input() isVisible: boolean = false;
 }

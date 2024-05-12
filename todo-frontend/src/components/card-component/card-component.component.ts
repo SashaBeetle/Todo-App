@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { SharedServiceService } from '../../services/shared-service.service';
+import { Component, Input, Output } from '@angular/core';
+import { SharedService } from '../../services/shared-service.service';
 import { OpenCardComponent } from '../open-card/open-card.component';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -23,7 +23,7 @@ export class CardComponentComponent {
 
 
   constructor(
-    private sharedService: SharedServiceService, 
+    private sharedService: SharedService, 
     private apiService: ApiService,
   ){}
 

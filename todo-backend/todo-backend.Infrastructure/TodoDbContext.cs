@@ -16,6 +16,7 @@ namespace todo_backend.Infrastructure
         public DbSet<Card> Cards { get; set; }
         public DbSet<Catalog> Catalogs { get; set; }
         public DbSet<HistoryItem> HistoryItems { get; set; }
+        public DbSet<Board> Boards { get; set; }
 
       
     }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SharedServiceService } from '../../services/shared-service.service';
+import { SharedService } from '../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ export class AddListComponent {
   @Input() list: any;
   listForm: FormGroup;
 
-  constructor(private sharedService: SharedServiceService, private apiService: ApiService){
+  constructor(private sharedService: SharedService, private apiService: ApiService){
     this.listForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(15)]),
       cardsId: new FormControl([])

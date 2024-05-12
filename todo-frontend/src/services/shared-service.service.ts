@@ -4,15 +4,18 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class SharedServiceService {
+export class SharedService {
   
   private isVisibleHistory  = new BehaviorSubject<boolean>(false);
   private isVisibleCard = new BehaviorSubject<boolean>(false);
   private isVisibleCreateList = new BehaviorSubject<boolean>(false);
   private isVisibleEditCard = new BehaviorSubject<boolean>(false);
+  private isVisibleCreateBoard = new BehaviorSubject<boolean>(false);
+  private isVisibleBoard = new BehaviorSubject<boolean>(false);
   private isChooseCardHistory = new BehaviorSubject<boolean>(false)
   private isEditableList = new BehaviorSubject<boolean>(false);
   private isEditableCard = new BehaviorSubject<boolean>(false);
+  
   
   private list = new BehaviorSubject<number | null>(null);
   list$ = this.list.asObservable();
@@ -25,8 +28,12 @@ export class SharedServiceService {
 
   private history = new BehaviorSubject<any | null>(null);
   history$ = this.history.asObservable();
-  
 
+  private board = new BehaviorSubject<any | null>(null);
+  board$ = this.board.asObservable();
+  
+  isVisibleBoard$ = this.isVisibleBoard.asObservable()
+  isVisibleCreateBoard$ = this.isVisibleCreateBoard.asObservable();
   isVisibleHistory$ = this.isVisibleHistory.asObservable();
   isVisibleCard$ = this.isVisibleCard.asObservable();
   isVisibleCreateList$ = this.isVisibleCreateList.asObservable();
@@ -34,6 +41,14 @@ export class SharedServiceService {
   isChooseCardHistory$ = this.isChooseCardHistory.asObservable();
   isEditableList$ = this.isEditableList.asObservable();
   isEditableCard$ = this.isEditableCard.asObservable();
+
+toggleisisVisibleBoard(){
+  this.isVisibleBoard.next(!this.isVisibleBoard.value)
+}
+
+toggleisVisibleCreateBoard(){
+  this.isVisibleCreateBoard.next(!this.isVisibleCreateBoard.value)
+}
 
 toggleisEditableCard(){
   this.isEditableCard.next(!this.isEditableCard.value)
@@ -94,6 +109,14 @@ toggleisEditableCard(){
 
   getHistory(){
     return this.history.getValue(); 
+  }
+
+  setBoard(data:any){
+    this.board.next(data);
+  }
+
+  getBoard(){
+    return this.board.getValue();
   }
 
   constructor() { }

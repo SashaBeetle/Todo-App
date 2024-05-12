@@ -1,5 +1,5 @@
 import { Component,Input, Output} from '@angular/core';
-import { SharedServiceService } from '../../services/shared-service.service';
+import { SharedService } from '../../services/shared-service.service';
 import { CommonModule } from '@angular/common';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 
@@ -14,7 +14,7 @@ import {ScrollPanelModule} from 'primeng/scrollpanel';
 })
 export class HistoryComponentComponent {
 
-  constructor(private sharedService: SharedServiceService){ }
+  constructor(private sharedService: SharedService){ }
 
   @Input() isVisible: boolean = false;
   @Output() history: any;
