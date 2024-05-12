@@ -11,10 +11,12 @@ namespace todo_backend.WEB.Mapping
             CreateMap<Card, CardDTO>();
             CreateMap<HistoryItem, HistoryItemDTO>();
             CreateMap<Catalog, CatalogDTO>();
+            CreateMap<Board, BoardDTO>();
 
             CreateMap<CardDTO, Card>();
             CreateMap<HistoryItemDTO, HistoryItem>();
             CreateMap<CatalogDTO, Catalog>();
+            CreateMap<BoardDTO, Board>();
         }
     }
 }

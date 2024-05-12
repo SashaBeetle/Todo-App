@@ -1,5 +1,5 @@
 import { Component, Input, Output, SimpleChanges } from '@angular/core';
-import { SharedServiceService } from '../../services/shared-service.service';
+import { SharedService } from '../../services/shared-service.service';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class OpenCardComponent {
 
-  constructor(private sharedService: SharedServiceService, private apiService: ApiService){}
+  constructor(private sharedService: SharedService, private apiService: ApiService){}
   @Input() isChoose: boolean = false;
   @Input() isVisible: boolean = true;
   @Input() card: any;

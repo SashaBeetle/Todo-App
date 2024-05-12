@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { SharedServiceService } from '../../services/shared-service.service';
+import { SharedService } from '../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { PriorityConstants } from '../../Constants/priorityConstants';
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-card.component.scss'
 })
 export class AddCardComponent {
-  constructor(private sharedService: SharedServiceService, private apiService: ApiService){
+  constructor(private sharedService: SharedService, private apiService: ApiService){
     this.cardForm = new FormGroup({
       title: new FormControl("New Card", [Validators.required, Validators.maxLength(12)]),
       description: new FormControl("", [Validators.required, Validators.maxLength(256)]),

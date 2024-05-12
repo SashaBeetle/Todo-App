@@ -1,7 +1,7 @@
-import { Component, EventEmitter, input, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CardComponentComponent } from '../card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
-import { SharedServiceService } from '../../services/shared-service.service';
+import { SharedService } from '../../services/shared-service.service';
 import { ApiService } from '../../services/api.service';
 import { AddCardComponent } from '../add-card/add-card.component';
 import { OpenCardComponent } from '../open-card/open-card.component';
@@ -28,7 +28,7 @@ export class ListComponentComponent implements OnChanges {
 
 
   constructor(
-    private sharedService: SharedServiceService,
+    private sharedService: SharedService,
     private apiService: ApiService
   ){}
 
@@ -80,7 +80,7 @@ export class ListComponentComponent implements OnChanges {
 
   }
   
-  async ngOnInit(){
+  ngOnInit(){
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
