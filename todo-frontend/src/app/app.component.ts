@@ -8,6 +8,7 @@ import { AddCardComponent } from '../components/add-card/add-card.component';
 import { OpenCardComponent } from '../components/open-card/open-card.component';
 import { MenuComponent } from '../components/menu/menu.component';
 import { BoardComponent } from '../components/board/board.component';
+import { SharedService } from '../services/shared-service.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,15 @@ import { BoardComponent } from '../components/board/board.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  constructor(private sharedService: SharedService){}
   title = 'To Do';
 
   @Input() isVisible: boolean = false;
+
+  ngOnInit(){
+    this.sharedService.isVisibleBoard$.subscribe(value => {
+      this.isVisible = value; 
+    });
+
+  }
 }

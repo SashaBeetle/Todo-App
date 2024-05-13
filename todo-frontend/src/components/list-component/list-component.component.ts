@@ -60,17 +60,7 @@ export class ListComponentComponent implements OnChanges {
     })
   }
 
-  sortDataByTitle(data: any[]): any[] {
-    return data.sort((a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) {
-        return -1;
-      } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-  }
+  
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data']) {
@@ -85,12 +75,13 @@ export class ListComponentComponent implements OnChanges {
       this.isVisible = value; 
     });
 
-    this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
-      console.log(res); 
-      this.data = res;
-      this.sortDataByTitle(this.data);
-      
-    }); 
+    this.apiService.getDataById("https://localhost:7247/api/catalog/ForBoard", this.sharedService.getBoard().id).subscribe(res =>{
+        console.log(res); 
+        this.data = res;
+        this.sortDataByTitle(this.data);
+        this.sharedService.setLists(this.data)
+      }); 
+    console.log('INIT')
   }
 
   ngDoCheck(): void {
@@ -99,9 +90,19 @@ export class ListComponentComponent implements OnChanges {
       console.log('List',this.isAddListVisible)
     }else{      
       this.isAddListVisible = true;
-    }
-    
-    
+    }  
+  }
+
+  sortDataByTitle(data: any[]): any[] {
+    return data.sort((a, b) => {
+      if (a.title.toLowerCase() < b.title.toLowerCase()) {
+        return -1;
+      } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 }
 

@@ -26,6 +26,7 @@ export class AddCardComponent {
   @Input() isVisible: boolean = false;
   @Input() isEditable: boolean = false;
 
+
   priority: any = PriorityConstants.priority;
   list: any;
   lists: any;
@@ -86,16 +87,17 @@ export class AddCardComponent {
     this.sharedService.isEditableCard$.subscribe(value => {
       this.isEditable = value; 
     });
-
-    this.apiService.getData("https://localhost:7247/api/catalog").subscribe(res =>{
+    debugger;
+    this.apiService.getData(`https://localhost:7247/api/catalog/ForBoard/${this.sharedService.getBoard().id}`).subscribe(res =>{
       this.lists = res;  
     })  
   }
 
-  ngDoCheck(): void {
+  ngDoCheck() {
    if(this.isVisible){
     this.card = this.sharedService.getCard();
    }
+
   }
 }
   

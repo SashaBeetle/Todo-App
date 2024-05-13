@@ -22,14 +22,23 @@ export class MenuComponent {
   
   }
   @Input() isVisible = false;
-
-
+  @Input() lists: any;
   boards: any;
 
 
+  onOpenBoard(board: any){
+    this.sharedService.toggleisVisibleBoard();
+    this.sharedService.setBoard(board);
+  }
 
   onCreateBoard(){
     this.sharedService.toggleisVisibleCreateBoard();
+  }
+
+  onEditBoard(board: any){
+    this.sharedService.toggleisEditableBoard();
+    this.sharedService.toggleisVisibleCreateBoard();
+    this.sharedService.setBoard(board);
   }
 
   onDeleteBoard(boardId: number){
@@ -46,6 +55,8 @@ export class MenuComponent {
     this.sharedService.isVisibleCreateBoard$.subscribe(value => {
       this.isVisible = value; 
     });
+
+
 
     this.apiService.getData("https://localhost:7247/api/Boards").subscribe(res =>{
       console.log(res); 
@@ -65,5 +76,5 @@ export class MenuComponent {
         return 0;
       }
     });
-  }
+  }  
 }
