@@ -1,8 +1,11 @@
 import { CommonModule, JsonPipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SharedService } from '../../services/shared-service.service';
 import { ApiService } from '../../services/api.service';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../app/ngrx/board/board.reducer';
+import { selectBoard } from '../../app/ngrx/board/board.selectors';
 
 @Component({
   selector: 'app-add-board',
@@ -15,6 +18,8 @@ import { ApiService } from '../../services/api.service';
   styleUrl: './add-board.component.scss'
 })
 export class AddBoardComponent {
+  private readonly store:Store<BoardState> = inject(Store);
+
   constructor(private sharedService: SharedService, private apiService: ApiService){
     this.boardForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(12)]),
@@ -23,7 +28,7 @@ export class AddBoardComponent {
   }
   @Input() boards : any;
   @Input() isEditable = false;
-  @Input() board: any;
+  currentBoard: any;
   boardForm: FormGroup;
 
 
@@ -44,11 +49,9 @@ export class AddBoardComponent {
 
   onSubmitEditBoard(){
     if(this.boardForm.valid){ 
-      
-      this.apiService.patchData(`https://localhost:7247/api/Boards/${this.sharedService.getBoard().id}?title=${this.boardForm.get('title')?.value}`, 1) 
+      this.apiService.patchData(`https://localhost:7247/api/Boards/${this.currentBoard.id}?title=${this.boardForm.get('title')?.value}`, 1) 
         .subscribe(response => {
-          this.board = this.sharedService.getBoard();
-          this.board.title = this.boardForm.get('title')?.value;
+          this.currentBoard.title = this.boardForm.get('title')?.value;
           console.log('Form submitted successfully!', response);
         }, error => {
           console.error('Error submitting form:', error);
@@ -70,6 +73,10 @@ export class AddBoardComponent {
     this.sharedService.isEditableBoard$.subscribe(value => {
       this.isEditable = value;
     })
+
+    this.store.select(selectBoard).subscribe(board => {
+      this.currentBoard = board;
+    });
 
 
     

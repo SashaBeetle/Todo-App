@@ -1,4 +1,4 @@
-import { Component, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { SharedService } from '../../services/shared-service.service';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
