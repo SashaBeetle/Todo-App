@@ -1,34 +1,41 @@
-import { Component, ComponentRef, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, inject, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { SharedService } from '../../services/shared-service.service';
 import { AddBoardComponent } from '../add-board/add-board.component';
-import { BoardComponent } from '../board/board.component';
+import { Store } from '@ngrx/store';
+import { CommonModule } from '@angular/common';
+import * as PostActions from '../../app/ngrx/board/board.actions'
+import { BoardState } from '../../app/ngrx/board/board.reducer';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
   imports: [
-    AddBoardComponent
+    AddBoardComponent,
+    CommonModule
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
+  private readonly store:Store<BoardState> = inject(Store)
+
   constructor(
     private apiService: ApiService,
     private sharedService: SharedService,
-
   ){
   
   }
   @Input() isVisible = false;
   @Input() lists: any;
   boards: any;
+  board: any;
 
 
   onOpenBoard(board: any){
     this.sharedService.toggleisVisibleBoard();
-    this.sharedService.setBoard(board);
+    this.store.dispatch(PostActions.AddBoard({board: board}));
   }
 
   onCreateBoard(){
@@ -38,7 +45,7 @@ export class MenuComponent {
   onEditBoard(board: any){
     this.sharedService.toggleisEditableBoard();
     this.sharedService.toggleisVisibleCreateBoard();
-    this.sharedService.setBoard(board);
+    this.store.dispatch(PostActions.AddBoard({board: board}));
   }
 
   onDeleteBoard(boardId: number){
@@ -51,12 +58,10 @@ export class MenuComponent {
     })
   }
 
-  ngOnInit(){
+  ngOnInit(): void{
     this.sharedService.isVisibleCreateBoard$.subscribe(value => {
       this.isVisible = value; 
     });
-
-
 
     this.apiService.getData("https://localhost:7247/api/Boards").subscribe(res =>{
       console.log(res); 
@@ -64,6 +69,7 @@ export class MenuComponent {
       this.sortDataByTitle(this.boards);
     }); 
   }
+
 
 
   sortDataByTitle(data: any[]): any[] {
@@ -77,4 +83,9 @@ export class MenuComponent {
       }
     });
   }  
+
+
+
+
+
 }

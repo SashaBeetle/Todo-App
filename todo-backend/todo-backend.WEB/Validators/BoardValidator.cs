@@ -8,8 +8,8 @@ namespace todo_backend.WEB.Validators
         public BoardValidator()
         {
             RuleFor(c => c.Title).NotEmpty()
-               .WithMessage("Catalog name is required")
-               .MaximumLength(15).WithMessage("Catalog title cannot exceed 15 characters");
+               .WithMessage("Board name is required")
+               .MaximumLength(15).WithMessage("Board title cannot exceed 15 characters");
         }
     }
 }

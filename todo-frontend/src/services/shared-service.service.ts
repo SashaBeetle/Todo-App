@@ -120,9 +120,7 @@ toggleisEditableCard(){
     return this.history.getValue(); 
   }
 
-  setBoard(data:any){
-    this.board.next(data);
-  }
+
 
   getBoard(){
     return this.board.getValue();
