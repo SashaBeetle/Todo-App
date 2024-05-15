@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 export class CardComponentComponent {
   @Input() cardId: any;
   @Input() list: any;
-  @Input() data: any;
+  @Input() lists: any;
   @Input() history:any;
 
   sharedData: any;
@@ -30,7 +30,7 @@ export class CardComponentComponent {
   onClickOpenCard() {
     this.sharedService.toggleIsVisibleCard();
     this.sharedService.setCard(this.card);
-    this.sharedService.setData(this.data);
+    this.sharedService.setData(this.lists);
     this.sharedService.setList(this.list);
 
     this.apiService.getData(`https://localhost:7247/api/HistoryItem/ForCard${this.card.id}`)

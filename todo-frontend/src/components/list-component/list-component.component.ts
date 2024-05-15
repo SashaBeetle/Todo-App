@@ -19,10 +19,11 @@ import { OpenCardComponent } from '../open-card/open-card.component';
   templateUrl: './list-component.component.html',
   styleUrl: './list-component.component.scss'
 })
-export class ListComponentComponent implements OnChanges {
+export class ListComponentComponent{
 
   @Input() isVisible: boolean = false;
-  @Output() data: any;
+  @Output() lists: any;
+  @Input() currentBoard: any;
 
   isAddListVisible: boolean = true;
 
@@ -50,42 +51,38 @@ export class ListComponentComponent implements OnChanges {
   }
 
   onClickDeleteList(listId: number){
+    debugger;
+    console.log()
     this.apiService.deleteDataById("https://localhost:7247/api/catalog",listId).subscribe(res=>{
       console.log('ListN:', listId);
-      const index = this.data.findIndex((item: { id: number; }) => item.id === listId);
+      const index = this.lists.findIndex((item: { id: number; }) => item.id === listId);
         if (index !== -1) {
-          this.data.splice(index, 1);
-          console.log(this.data);
+          this.lists.splice(index, 1);
+          console.log(this.lists);
         }
     })
   }
 
   
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['data']) {
-      console.log('Data updated:', this.data);
-    }
-    console.log('Works');
-
-  }
-  
   ngOnInit(){
+    // this.data = this.currentBoard;
+    console.log('ng', this.lists)
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
 
-    this.apiService.getDataById("https://localhost:7247/api/catalog/ForBoard", this.sharedService.getBoard().id).subscribe(res =>{
-        console.log(res); 
-        this.data = res;
-        this.sortDataByTitle(this.data);
-        this.sharedService.setLists(this.data)
+    this.apiService.getDataById("https://localhost:7247/api/catalog/ForBoard", this.currentBoard.id).subscribe(res =>{
+        this.lists = res;
+        console.log('t', this.lists)
+        this.sortDataByTitle(this.lists);
+        this.sharedService.setLists(this.lists)
       }); 
-    console.log('INIT')
+
+
   }
 
   ngDoCheck(): void {
-    if(this.data.length == 4){
+    if(this.lists.length == 4){
       this.isAddListVisible = false;
       console.log('List',this.isAddListVisible)
     }else{      

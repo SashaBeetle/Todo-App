@@ -1,9 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { SharedService } from '../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { PriorityConstants } from '../../Constants/priorityConstants';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../app/ngrx/board/board.reducer';
 
 @Component({
   selector: 'app-add-card',
@@ -13,6 +15,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-card.component.scss'
 })
 export class AddCardComponent {
+  private readonly store:Store<BoardState> = inject(Store);
+
   constructor(private sharedService: SharedService, private apiService: ApiService){
     this.cardForm = new FormGroup({
       title: new FormControl("New Card", [Validators.required, Validators.maxLength(12)]),
@@ -25,7 +29,7 @@ export class AddCardComponent {
 
   @Input() isVisible: boolean = false;
   @Input() isEditable: boolean = false;
-
+  @Input() currentBoard: any;
 
   priority: any = PriorityConstants.priority;
   list: any;
@@ -87,8 +91,8 @@ export class AddCardComponent {
     this.sharedService.isEditableCard$.subscribe(value => {
       this.isEditable = value; 
     });
-    debugger;
-    this.apiService.getData(`https://localhost:7247/api/catalog/ForBoard/${this.sharedService.getBoard().id}`).subscribe(res =>{
+    
+    this.apiService.getData(`https://localhost:7247/api/catalog/ForBoard/${this.currentBoard.id}`).subscribe(res =>{
       this.lists = res;  
     })  
   }
