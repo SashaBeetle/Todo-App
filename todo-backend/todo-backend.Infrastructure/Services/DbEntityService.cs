@@ -92,18 +92,14 @@ namespace todo_backend.Infrastructure.Services
             await SaveChanges();
         }
 
-        public async Task DeleteCatalogFromBoard(int catalogId)
+        public async Task DeleteCatalogFromBoard(Catalog catalog, int boardId)
         {
-            var boards = await _dbcontext.Boards.ToListAsync();
-
-            foreach (var board in boards)
+            Board board = await _dbcontext.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
+            foreach(var catalogId in board.CatalogsId)
             {
-                var catalog = board.CatalogsId.FirstOrDefault(c => c == catalogId);
-                if (catalog != null && catalog != 0)
-                {
-                    board.CatalogsId.Remove(catalog);
+                if (catalogId == catalog.Id)
+                    board.CatalogsId.Remove(catalog.Id);
                     break;
-                }
             }
 
             await SaveChanges();

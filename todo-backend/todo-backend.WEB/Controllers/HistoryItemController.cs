@@ -12,16 +12,19 @@ namespace todo_backend.WEB.Controllers
     {
         private readonly IDbEntityService<HistoryItem> _historyItemService;
         private readonly IDbEntityService<Card> _cardService;
+        private readonly IDbEntityService<Board> _boardService;
         private readonly IMapper _mapper;
 
         public HistoryItemController(
             IDbEntityService<HistoryItem> historyItemService,
             IDbEntityService<Card> cardService,
+            IDbEntityService<Board> boardService,
             IMapper mapper)
         {
             _historyItemService = historyItemService;
             _cardService = cardService;
             _mapper = mapper;
+            _boardService = boardService;
         }
 
         [HttpGet]
@@ -44,6 +47,19 @@ namespace todo_backend.WEB.Controllers
             List<HistoryItem> historyItems = await _historyItemService.GetAll().Where(h => h.CardId == id).ToListAsync();
 
             return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
-        } 
+        }
+
+        [HttpGet("ForBoard{id}")]
+        public async Task<IActionResult> GetHistoryItemForBoard(int id)
+        {
+            Board board = await _boardService.GetById(id);
+
+            if (board == null)
+                return NotFound();
+
+            List<HistoryItem> historyItems = await _historyItemService.GetAll().Where(h => h.BoardId == id).ToListAsync();
+
+            return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace todo_backend.Infrastructure.Interfaces
 
         Task Delete(T entity);
         Task DeleteCardFromCatalogs(int id);
-        Task DeleteCatalogFromBoard(int id);
+        Task DeleteCatalogFromBoard(Catalog catalog, int boardId);
         Task AddCardToCatalog(Catalog catalog, int cardId);
         IQueryable<T> GetAll();
     }
