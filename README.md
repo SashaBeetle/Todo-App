@@ -7,6 +7,10 @@
 * [NuGet packages](https://learn.microsoft.com/uk-ua/nuget/) - type of software package used in the Microsoft .NET ecosystem, containing compiled code and other resources, and are used by developers to easily add functionality to their projects and share code between teams.
 * [Tailwind](https://tailwindui.com/) - beautifully designed, expertly crafted components and templates, built by the makers of Tailwind CSS.
 * [Angular](https://angular.io/) - it is powerful tool for building web applications.
+* [NgRx](https://ngrx.io/) - NgRx Store provides reactive state management for Angular apps inspired by Redux. Unify the events in your application and derive state using RxJS.
+* [MSTest](https://learn.microsoft.com/uk-ua/dotnet/core/testing/unit-testing-with-mstest) - unit testing framework for .NET developers that allows them to write and execute automated tests to ensure the correctness and reliability of their code.
+* [Docker](https://www.docker.com/) - helps developers build, share, run, and verify applications anywhere — without tedious environment configuration or management.
+
 ## How to run Backend
 Open your system terminal and run commands:
 ```sh
@@ -28,6 +32,12 @@ In `To Do\todo-backend\todo-backend.WEB\appsettings.json` in `"ConnectionStrings
     "TodoDatabase": "ConnectionString"
   }
 ```
+after that add your database into Docker in `docker-compose.yml` like this:
+```sh
+ - POSTGRES_DB={YOUR-DATABASE}
+ - POSTGRES_PASSWORD={YOUR-PASSWORD}
+ - POSTGRES_USER={YOUR-USERNAME}
+```
 It is Necessary to add the CORS for project.
 In `To Do\todo-backend\todo-backend.WEB\program.cs` in `builder.Services.AddCors` add CORS `policy.WithOrigins("http://localhost:0000", "http://google.com")` CORS should look like this:
 ```sh
@@ -36,7 +46,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "CorsPolicy",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247")
+                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247", "http://localhost:7080", "http://localhost:7081")
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                       });
