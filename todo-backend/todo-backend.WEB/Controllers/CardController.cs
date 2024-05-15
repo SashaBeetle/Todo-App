@@ -32,7 +32,7 @@ namespace todo_backend.WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCard(CardDTO cardDto, int listId)
+        public async Task<IActionResult> CreateCard(CardDTO cardDto, int listId, int boardId)
         {
             Card card = _mapper.Map<Card>(cardDto);
             card.DueDate = card.DueDate.ToUniversalTime();
@@ -43,7 +43,8 @@ namespace todo_backend.WEB.Controllers
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Card ◉ {card.Title} created",
-                CardId = createdCard.Id
+                CardId = createdCard.Id,
+                BoardId = boardId
             });
 
             Catalog existedCatalog = await _catalogService.GetById(listId);
@@ -57,7 +58,7 @@ namespace todo_backend.WEB.Controllers
         }
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCard(int id)
+        public async Task<IActionResult> DeleteCard(int id, int boardId)
         {
             Card? card = await _cardService.GetById(id);
 
@@ -70,14 +71,15 @@ namespace todo_backend.WEB.Controllers
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Card ◉ {card.Title} deleted",
-                CardId = card.Id
+                CardId = card.Id,
+                BoardId = boardId
             });
 
             return NoContent();
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateCard(CardDTO cardDto)
+        public async Task<IActionResult> UpdateCard(CardDTO cardDto, int boardId)
         {
             Card card = _mapper.Map<Card>(cardDto);
             card.DueDate = card.DueDate.ToUniversalTime();
@@ -87,7 +89,8 @@ namespace todo_backend.WEB.Controllers
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Card ◉ {card.Title} updated",
-                CardId = card.Id
+                CardId = card.Id,
+                BoardId = boardId
             });
 
             return Ok(_mapper.Map<CardDTO>(card));

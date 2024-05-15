@@ -15,19 +15,33 @@ namespace todo_backend.WEB.Controllers
         IDbEntityService<Board> _boardService;
         IDbEntityService<Catalog> _catalogService;
         IDbEntityService<Card> _cardService;
+        IDbEntityService<HistoryItem> _historyItemService;
         IMapper _mapper;
-        public BoardController(IDbEntityService<Board> boardService, IMapper mapper, IDbEntityService<Catalog> catalogService, IDbEntityService<Card> cardService)
+        public BoardController(
+            IDbEntityService<Board> boardService, 
+            IMapper mapper, 
+            IDbEntityService<Catalog> catalogService, 
+            IDbEntityService<Card> cardService,
+            IDbEntityService<HistoryItem> historyItemService
+            )
         {
             _boardService = boardService;
             _mapper = mapper;
             _catalogService = catalogService;
             _cardService = cardService;
+            _historyItemService = historyItemService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateBoard(BoardDTO boardDto)
         {
             Board createdBoard = await _boardService.Create(_mapper.Map<Board>(boardDto));
+
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Board ◉ {createdBoard.Title} created",
+                BoardId = createdBoard.Id
+            });
 
             BoardDTO createdBoardDto = _mapper.Map<BoardDTO>(createdBoard);
             return CreatedAtAction(nameof(GetBoardById), new { id = createdBoardDto.Id }, createdBoardDto);
@@ -60,17 +74,20 @@ namespace todo_backend.WEB.Controllers
             {
                 Catalog catalog = await _catalogService.GetById(el);
 
-
-                foreach (var cardId in catalog.CardsId)
+                if (catalog != null)
                 {
-                    Card card = await _cardService.GetById(cardId);
+                    foreach (var cardId in catalog.CardsId)
+                    {
+                        Card card = await _cardService.GetById(cardId);
 
-                    if (card != null)
-                        await _cardService.Delete(card);
+                        if (card != null)
+                            await _cardService.Delete(card);
+                    }
+
+                    await _catalogService.Delete(catalog);
+
                 }
 
-                if (catalog != null)
-                    await _catalogService.Delete(catalog);
             }
 
             await _boardService.Delete(board);
@@ -85,7 +102,15 @@ namespace todo_backend.WEB.Controllers
             if (board == null)
                 return NotFound();
 
+            await _historyItemService.Create(new HistoryItem()
+            {
+                EventDescription = $"Board title updated from ◉ {board.Title} to ◉ {title}",
+                BoardId = board.Id
+            });
+
             board.Title = title;
+
+            
             await _boardService.Update(board);
 
             return NoContent();

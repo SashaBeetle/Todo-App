@@ -25,7 +25,7 @@ export class HeaderComponentComponent implements OnInit {
     this.sharedService.setHistory(this.history);
     console.log(this.currentBoard)
     
-    this.apiService.getData(`https://localhost:7247/api/HistoryItem`)
+    this.apiService.getData(`https://localhost:7247/api/HistoryItem/ForBoard${this.currentBoard.id}`)
     .subscribe(response => {
       this.history = response;
       this.sharedService.setHistory(response);

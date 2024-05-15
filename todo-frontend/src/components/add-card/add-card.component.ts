@@ -42,7 +42,7 @@ export class AddCardComponent {
       const formData = this.cardForm.value;
       const jsonData = JSON.stringify(formData);
       
-      this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${formData.listId}`, jsonData) //
+      this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${formData.listId}&boardId=${this.currentBoard.id}`, jsonData) //
         .subscribe(response => {
           this.cardForm.value.id = response.id;
           this.sharedService.getList().cardsId.push(response.id)
@@ -65,7 +65,7 @@ export class AddCardComponent {
       this.card.priority = this.cardForm.get('priority')?.value;
   
   
-      this.apiService.patchData(`https://localhost:7247/api/cards`, this.card)
+      this.apiService.patchData(`https://localhost:7247/api/cards?boardId=2`, this.card)
         .subscribe(response => {
           console.log('Form submitted successfully!');
         }, error => {

@@ -51,10 +51,10 @@ export class ListComponentComponent{
   }
 
   onClickDeleteList(listId: number){
-    debugger;
     console.log()
-    this.apiService.deleteDataById("https://localhost:7247/api/catalog",listId).subscribe(res=>{
+    this.apiService.deleteDataByIdManual(`https://localhost:7247/api/catalog/${listId}?boardId=${this.currentBoard.id}`).subscribe(res=>{
       console.log('ListN:', listId);
+      console.log(`https://localhost:7247/api/catalog/${listId}?boardId=${this.currentBoard.id}`)
       const index = this.lists.findIndex((item: { id: number; }) => item.id === listId);
         if (index !== -1) {
           this.lists.splice(index, 1);
@@ -65,7 +65,6 @@ export class ListComponentComponent{
 
   
   ngOnInit(){
-    // this.data = this.currentBoard;
     console.log('ng', this.lists)
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 

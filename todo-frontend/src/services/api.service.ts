@@ -42,6 +42,10 @@ export class ApiService {
     return this.http.delete(`${url}/${id}`);
   }
 
+  deleteDataByIdManual(url: string) {
+    return this.http.delete(`${url}`);
+  }
+
   patchData(url: string, data: any) {
     return this.http.patch(url, data);
   }

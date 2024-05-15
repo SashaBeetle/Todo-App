@@ -47,6 +47,7 @@ namespace todo_backend.WEB.Controllers
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Catalog ◉ {createdCatalog.Title} created",
+                BoardId = BoardId
             });
 
             CatalogDTO createdCatalogDto = _mapper.Map<CatalogDTO>(createdCatalog);
@@ -54,14 +55,13 @@ namespace todo_backend.WEB.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCatalog(int id)
+        public async Task<IActionResult> DeleteCatalog(int id, int boardId)
         {
             Catalog? catalog = await _catalogService.GetById(id);
 
             if (catalog == null)
                 return NotFound();
 
-            await _catalogService.DeleteCatalogFromBoard(id);
 
             foreach (var cardId in catalog.CardsId)
             {
@@ -71,10 +71,14 @@ namespace todo_backend.WEB.Controllers
                     await _cardService.Delete(card);
             }
 
+
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Catalog ◉ {catalog.Title} deleted",
+                BoardId = boardId
             });
+
+            await _catalogService.DeleteCatalogFromBoard(catalog, boardId);
 
             await _catalogService.Delete(catalog);
 
@@ -121,7 +125,7 @@ namespace todo_backend.WEB.Controllers
             return Ok(_mapper.Map<List<CatalogDTO>>(catalogs));
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateCatalog(int id, string title)
+        public async Task<IActionResult> UpdateCatalog(int id, string title, int boardId)
         {
             Catalog? catalog = await _catalogService.GetById(id);
             
@@ -131,24 +135,20 @@ namespace todo_backend.WEB.Controllers
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Catalog ◉ {catalog.Title} renamed to ◉ {title}",
+                BoardId = boardId
             });
 
 
             catalog.Title = title;
             Catalog updatedCatalog = await _catalogService.Update(catalog);
 
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Catalog ◉ {catalog.Title} renamed to ◉ {updatedCatalog.Title}",
-            });
-
             return Ok(_mapper.Map<CatalogDTO>(updatedCatalog));
         }
 
         [HttpPatch("MoveCard")]
-        public async Task<IActionResult> MoveCardBetweenCatalogs(int catalogId_1, int catalogId_2, int cardId)
+        public async Task<IActionResult> MoveCardBetweenCatalogs(int catalogId_1, int catalogId_2, int cardId, int boardId)
         {
-            await _moveCardService.MoveCard(cardId, catalogId_1, catalogId_2);
+            await _moveCardService.MoveCard(cardId, catalogId_1, catalogId_2, boardId);
 
             return Ok();
         }

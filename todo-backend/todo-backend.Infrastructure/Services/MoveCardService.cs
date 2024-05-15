@@ -23,7 +23,7 @@ namespace todo_backend.Infrastructure.Services
             _cardService = cardService;
             _historyItemService = historyItemService;
         }
-        public async Task MoveCard(int cardId, int catalogId_1, int catalogId_2)
+        public async Task MoveCard(int cardId, int catalogId_1, int catalogId_2, int boardId)
         {
             Catalog Catalog1 = await _catalogService.GetById(catalogId_1);
             Catalog Catalog2 = await _catalogService.GetById(catalogId_2);
@@ -39,7 +39,8 @@ namespace todo_backend.Infrastructure.Services
                 await _historyItemService.Create(new HistoryItem()
                 {
                     EventDescription = $"Card ◉ {card.Title} moved from ◉ {Catalog1.Title} to ◉ {Catalog2.Title}",
-                    CardId = card.Id
+                    CardId = card.Id,
+                    BoardId = boardId
                 });
 
 
