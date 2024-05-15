@@ -13,13 +13,16 @@ import { CommonModule } from '@angular/common';
 })
 export class AddListComponent {
   
-  @Input() data: any;
+  @Input() lists: any;
   @Input() editable: boolean = false;
   @Input() list: any;
   @Input() board: any;
   listForm: FormGroup;
 
-  constructor(private sharedService: SharedService, private apiService: ApiService){
+  constructor(
+    private sharedService: SharedService, 
+    private apiService: ApiService)
+    {
     this.listForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(15)]),
       cardsId: new FormControl([])
@@ -36,10 +39,10 @@ export class AddListComponent {
   onSubmitCreateList(){
     if(this.listForm.valid){
       const jsonData = JSON.stringify(this.listForm.value);
-      this.apiService.postData(`https://localhost:7247/api/catalog?BoardId=${this.sharedService.getBoard().id}`, jsonData) 
+      this.apiService.postData(`https://localhost:7247/api/catalog?BoardId=${this.board.id}`, jsonData) 
         .subscribe(response => {
           this.listForm.value.id = response.id;
-          this.data.push(this.listForm.value)
+          this.lists.push(this.listForm.value)
           console.log('Form submitted successfully!', jsonData);
         }, error => {
           console.error('Error submitting form:', error, jsonData);

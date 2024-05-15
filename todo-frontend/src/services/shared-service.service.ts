@@ -30,9 +30,6 @@ export class SharedService {
   private history = new BehaviorSubject<any | null>(null);
   history$ = this.history.asObservable();
 
-  private board = new BehaviorSubject<any | null>(null);
-  board$ = this.board.asObservable();
-
   private lists = new BehaviorSubject<any | null>(null);
   lists$ = this.lists.asObservable();
   
@@ -120,18 +117,12 @@ toggleisEditableCard(){
     return this.history.getValue(); 
   }
 
-
-
-  getBoard(){
-    return this.board.getValue();
-  }
-
   setLists(data:any){
     this.lists.next(data);
   }
 
   getLists(){
-    return this.board.getValue();
+    return this.lists.getValue();
   }
 
   constructor() { }

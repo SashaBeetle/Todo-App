@@ -41,5 +41,7 @@ ngOnInit(){
   this.store.select(selectBoard).subscribe(board => {
     this.currentBoard = board;
   });
+
+  console.log('board', this.currentBoard)
 }
 }

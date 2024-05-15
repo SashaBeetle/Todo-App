@@ -1,8 +1,8 @@
 
 @if(isCardVisible){
-    <app-add-card></app-add-card>
+    <app-add-card [currentBoard]="currentBoard"></app-add-card>
 }
 <app-open-card></app-open-card>
 <app-header-component [currentBoard]="currentBoard"></app-header-component>
-<app-list-component></app-list-component>
+<app-list-component [currentBoard]="currentBoard"></app-list-component>
 

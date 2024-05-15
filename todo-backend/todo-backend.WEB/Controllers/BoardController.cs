@@ -60,11 +60,12 @@ namespace todo_backend.WEB.Controllers
             {
                 Catalog catalog = await _catalogService.GetById(el);
 
-                foreach (var cardId in catalog.CardsId)
-                {
-                    Card card = await _cardService.GetById(cardId);
-                    await _cardService.Delete(card);
-                }
+                
+                //foreach (var cardId in catalog.CardsId)
+                //{
+                //    Card card = await _cardService.GetById(cardId);
+                //    await _cardService.Delete(card);
+                //}
 
                 if (catalog != null)
                     await _catalogService.Delete(catalog);
