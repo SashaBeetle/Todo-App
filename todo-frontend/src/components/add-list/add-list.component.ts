@@ -55,7 +55,7 @@ export class AddListComponent {
       this.list = this.sharedService.getList();
       this.list.title = this.listForm.get('title')?.value;
   
-      this.apiService.patchData(`https://localhost:7247/api/catalog/${this.list.id}?title=${this.list.title}`,1)
+      this.apiService.patchData(`https://localhost:7247/api/catalog/${this.list.id}?title=${this.list.title}&boardId=${this.board.id}`,1)
         .subscribe(response => {
           console.log('Patch request successful!', response);
         }, error => {
@@ -72,6 +72,8 @@ export class AddListComponent {
     this.sharedService.isEditableList$.subscribe(value => {
       this.editable = value; 
     });
+
+    console.log('b',this.board)
   }
   
 }

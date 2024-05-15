@@ -1,8 +1,11 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, inject, Input, Output } from '@angular/core';
 import { SharedService } from '../../services/shared-service.service';
 import { OpenCardComponent } from '../open-card/open-card.component';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../app/ngrx/board/board.reducer';
+import { selectBoard } from '../../app/ngrx/board/board.selectors';
 
 @Component({
   selector: 'app-card-component',
@@ -12,10 +15,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './card-component.component.scss'
 })
 export class CardComponentComponent {
+  private readonly store:Store<BoardState> = inject(Store);
+
   @Input() cardId: any;
   @Input() list: any;
   @Input() lists: any;
   @Input() history:any;
+  currentBoard: any;
 
   sharedData: any;
   card: any;
@@ -49,13 +55,13 @@ export class CardComponentComponent {
   }
 
   onClickDelete(){
-    this.apiService.deleteDataById(`https://localhost:7247/api/cards`, this.cardId).subscribe(res=>{
+    this.apiService.deleteDataByIdManual(`https://localhost:7247/api/cards/${this.cardId}?boardId=${this.currentBoard.id}`,).subscribe(res=>{
       this.removeFromList(this.cardId)
     })
   }
 
   onClickPatch(anotherList: any){
-    this.apiService.patchData(`https://localhost:7247/api/catalog/MoveCard?catalogId_1=${this.list.id}&catalogId_2=${anotherList.id}&cardId=${this.cardId}`, 1)//json into(cardId, catalogId, catalogId)
+    this.apiService.patchData(`https://localhost:7247/api/catalog/MoveCard?catalogId_1=${this.list.id}&catalogId_2=${anotherList.id}&cardId=${this.cardId}&boardId=${this.currentBoard.id}`, 1)
       .subscribe(response => {
         this.swapCard(this.cardId, anotherList);
         console.log('Patch request successful!', response);
@@ -76,6 +82,10 @@ export class CardComponentComponent {
   ngOnInit(){
       this.apiService.getData(`https://localhost:7247/api/cards/${this.cardId}`).subscribe(res =>{
         this.card = res;
+      });
+
+      this.store.select(selectBoard).subscribe(board => {
+        this.currentBoard = board;
       });
     }
 
