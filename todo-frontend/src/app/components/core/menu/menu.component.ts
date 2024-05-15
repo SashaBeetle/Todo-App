@@ -1,11 +1,11 @@
 import { Component, ComponentRef, inject, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { ApiService } from '../../services/api.service';
-import { SharedService } from '../../services/shared-service.service';
-import { AddBoardComponent } from '../add-board/add-board.component';
+import { ApiService } from '../../../../services/api.service';
+import { SharedService } from '../../../../services/shared-service.service';
+import { AddBoardComponent } from '../../features/board/add-board/add-board.component';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
-import * as PostActions from '../../app/ngrx/board/board.actions'
-import { BoardState } from '../../app/ngrx/board/board.reducer';
+import * as PostActions from '../../../ngrx/board/board.actions'
+import { BoardState } from '../../../ngrx/board/board.reducer';
 
 @Component({
   selector: 'app-menu',

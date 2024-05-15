@@ -18,6 +18,8 @@ services:
         - POSTGRES_DB=todo
         - POSTGRES_PASSWORD=sasha2012
         - POSTGRES_USER=postgres
+        - POSTGRES_HOST=localhost
+        - NODE_ENV=development 
     volumes:
         - ./.containers/products-db:/var/lib/postgresql/data
     ports:

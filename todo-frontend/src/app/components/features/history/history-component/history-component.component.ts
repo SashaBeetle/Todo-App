@@ -1,5 +1,5 @@
 import { Component,Input, Output} from '@angular/core';
-import { SharedService } from '../../services/shared-service.service';
+import { SharedService } from '../../../../../services/shared-service.service';
 import { CommonModule } from '@angular/common';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 

@@ -1,11 +1,11 @@
 import { Component, inject, Input, Output } from '@angular/core';
-import { SharedService } from '../../services/shared-service.service';
+import { SharedService } from '../../../../../services/shared-service.service';
 import { OpenCardComponent } from '../open-card/open-card.component';
-import { ApiService } from '../../services/api.service';
+import { ApiService } from '../../../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { BoardState } from '../../app/ngrx/board/board.reducer';
-import { selectBoard } from '../../app/ngrx/board/board.selectors';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
 
 @Component({
   selector: 'app-card-component',
