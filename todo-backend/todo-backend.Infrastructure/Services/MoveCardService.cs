@@ -42,8 +42,6 @@ namespace todo_backend.Infrastructure.Services
                     CardId = card.Id,
                     BoardId = boardId
                 });
-
-
             }
             else
             {
