@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  todo-backend.web:
+    image: ${DOCKER_REGISTRY-}todobackendweb
+    container_name: todo-backend.web
+    build:
+      context: .
+      dockerfile: todo-backend.WEB/Dockerfile
+    ports:
+      - "7080:7080"
+      - "7081:7081"
+    
+  todo-backend.database:
+    image: ${DOCKER_REGISTRY-}postgres
+    container_name: todo-backend.database
+    environment:
+        - POSTGRES_DB=todo
+        - POSTGRES_PASSWORD=sasha2012
+        - POSTGRES_USER=postgres
+    volumes:
+        - ./.containers/products-db:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+     
