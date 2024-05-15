@@ -101,6 +101,9 @@ namespace todo_backend.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BoardId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("CardId")
                         .HasColumnType("integer");
 

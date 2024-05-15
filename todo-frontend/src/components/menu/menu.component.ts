@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import * as PostActions from '../../app/ngrx/board/board.actions'
 import { BoardState } from '../../app/ngrx/board/board.reducer';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-menu',

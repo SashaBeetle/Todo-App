@@ -13,7 +13,7 @@ using todo_backend.Infrastructure;
 namespace todo_backend.Infrastructure.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20240512092611_AddBoard")]
+    [Migration("20240515081843_AddBoard")]
     partial class AddBoard
     {
         /// <inheritdoc />
@@ -103,6 +103,9 @@ namespace todo_backend.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BoardId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("CardId")
                         .HasColumnType("integer");

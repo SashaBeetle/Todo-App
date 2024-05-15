@@ -1,5 +1,5 @@
 <div class="flex gap-8 m-5">
-    @for (list of data; track data.title) {
+    @for (list of lists; track lists.title) {
       <div class="w-96 h-70">
         <div class="mb-2 flex-row border-title border-solid">
           <div class="flex mr-auto font-bold text-lg items-center text-left">{{list.title}}</div>
@@ -33,7 +33,7 @@
 
         <div class="flex-row">
             @for(card of list.cardsId; track card.title ){
-                <app-card-component [cardId]="card" [list]="list" [data]="data"> </app-card-component>
+                <app-card-component [cardId]="card" [list]="list" [lists]="lists"> </app-card-component>
             }
         </div>
         
@@ -42,7 +42,7 @@
     }
     
         @if(isVisible){
-            <app-add-list [data]="data"></app-add-list>
+            <app-add-list [lists]="lists" [board]="currentBoard"></app-add-list>
         }@else {
             @if(isAddListVisible){
                 <div class="mb-2 h-11 flex-row w-80 border-title border-solid">
