@@ -1,11 +1,11 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SharedService } from '../../services/shared-service.service';
-import { ApiService } from '../../services/api.service';
+import { SharedService } from '../../../../../services/shared-service.service';
+import { ApiService } from '../../../../../services/api.service';
 import { Store } from '@ngrx/store';
-import { BoardState } from '../../app/ngrx/board/board.reducer';
-import { selectBoard } from '../../app/ngrx/board/board.selectors';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
 
 @Component({
   selector: 'app-add-board',

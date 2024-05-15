@@ -1,14 +1,14 @@
 import { Component, inject, Input, Output } from '@angular/core';
-import { AddCardComponent } from '../add-card/add-card.component';
-import { OpenCardComponent } from '../open-card/open-card.component';
+import { AddCardComponent } from '../../card/add-card/add-card.component';
+import { OpenCardComponent } from '../../card/open-card/open-card.component';
 import { HeaderComponentComponent } from '../header-component/header-component.component';
-import { ListComponentComponent } from '../list-component/list-component.component';
-import { SharedService } from '../../services/shared-service.service';
+import { ListComponentComponent } from '../../list/list-component/list-component.component';
+import { SharedService } from '../../../../../services/shared-service.service';
 import { select, Store } from '@ngrx/store';
-import { BoardState } from '../../app/ngrx/board/board.reducer';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
 import { CommonModule } from '@angular/common';
-import * as PostActions from '../../app/ngrx/board/board.actions'
-import { selectBoard } from '../../app/ngrx/board/board.selectors';
+import * as PostActions from '../../../../ngrx/board/board.actions'
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
 
 @Component({
   selector: 'app-board',

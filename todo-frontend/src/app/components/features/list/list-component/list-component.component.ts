@@ -1,10 +1,10 @@
 import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { CardComponentComponent } from '../card-component/card-component.component';
+import { CardComponentComponent } from '../../card/card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
-import { SharedService } from '../../services/shared-service.service';
-import { ApiService } from '../../services/api.service';
-import { AddCardComponent } from '../add-card/add-card.component';
-import { OpenCardComponent } from '../open-card/open-card.component';
+import { SharedService } from '../../../../../services/shared-service.service';
+import { ApiService } from '../../../../../services/api.service';
+import { AddCardComponent } from '../../card/add-card/add-card.component';
+import { OpenCardComponent } from '../../card/open-card/open-card.component';
 
 
 @Component({

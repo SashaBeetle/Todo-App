@@ -1,10 +1,10 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { HistoryComponentComponent } from '../history-component/history-component.component';
-import { SharedService } from '../../services/shared-service.service';
-import { ApiService } from '../../services/api.service';
+import { HistoryComponentComponent } from '../../history/history-component/history-component.component';
+import { SharedService } from '../../../../../services/shared-service.service';
+import { ApiService } from '../../../../../services/api.service';
 import { Store } from '@ngrx/store';
-import { BoardState } from '../../app/ngrx/board/board.reducer';
-import { selectBoard } from '../../app/ngrx/board/board.selectors';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
 import { CommonModule } from '@angular/common';
 
 @Component({
