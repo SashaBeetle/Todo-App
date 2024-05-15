@@ -12,6 +12,12 @@ namespace todo_backend.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "BoardId",
+                table: "HistoryItems",
+                type: "integer",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "Boards",
                 columns: table => new
@@ -32,6 +38,10 @@ namespace todo_backend.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Boards");
+
+            migrationBuilder.DropColumn(
+                name: "BoardId",
+                table: "HistoryItems");
         }
     }
 }
