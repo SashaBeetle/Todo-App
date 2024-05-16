@@ -44,13 +44,10 @@ export class MenuComponent {
 
   onEditBoard(board: any){
     this.isVisible = true;
-    console.log(this.isVisible)
     this.board = board
     this.sharedService.toggleisEditableBoard();
     this.sharedService.toggleisVisibleCreateBoard();
-    console.log(this.isVisible)
-
-    // this.store.dispatch(PostActions.AddCurrentBoard({currentBoard: board}));
+    this.store.dispatch(PostActions.AddCurrentBoard({currentBoard: board}));
   }
 
   onDeleteBoard(boardId: number){
@@ -64,6 +61,10 @@ export class MenuComponent {
   }
 
   ngOnInit(): void{
+    this.sharedService.isVisibleCreateBoard$.subscribe(value => {
+      this.isVisible = value; 
+    });
+    
     this.store.dispatch(PostActions.getBoardsTest())
     
     this.store.select(selectBoards).subscribe(boards => {
@@ -73,9 +74,7 @@ export class MenuComponent {
 
 
 
-    this.sharedService.isVisibleCreateBoard$.subscribe(value => {
-      this.isVisible = value; 
-    });
+    
 
   }
 
