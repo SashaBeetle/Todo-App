@@ -1,11 +1,13 @@
 import { CommonModule, JsonPipe } from '@angular/common';
 import { Component, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SharedService } from '../../../../../services/shared-service.service';
-import { ApiService } from '../../../../../services/api.service';
+import { SharedService } from '../../../../services/shared-service.service';
+import { ApiService } from '../../../../services/api.service';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
 import { selectBoard } from '../../../../ngrx/board/board.selectors';
+import * as PostActions from '../../../../ngrx/board/board.actions'
+
 
 @Component({
   selector: 'app-add-board',
@@ -29,7 +31,7 @@ export class AddBoardComponent {
   @Input() boards : any;
   @Input() isEditable = false;
   @Output() boardsChange: any;
-  currentBoard: any;
+  @Input() currentBoard: any;
   boardForm: FormGroup;
 
 
@@ -64,11 +66,14 @@ export class AddBoardComponent {
         
         this.sharedService.toggleisVisibleCreateBoard();
         this.sharedService.toggleisEditableBoard();
+        this.store.dispatch(PostActions.getBoardsTest())
     }    
   }
 
   onClick(){
     this.sharedService.toggleisVisibleCreateBoard();
+    console.log(this.isEditable)
+
     if(this.isEditable){
       this.sharedService.toggleisEditableBoard();
     }
@@ -79,9 +84,9 @@ export class AddBoardComponent {
       this.isEditable = value;
     })
 
-    this.store.select(selectBoard).subscribe(board => {
-      this.currentBoard = board;
-    });
+    // this.store.select(selectBoard).subscribe(board => {
+    //   this.currentBoard = board;
+    // });
 
     this.boardsChange = this.boards
 

@@ -9,16 +9,19 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { BOARD_FEATURE_KEY, boardReducers } from './ngrx/board/board.reducer';
+import * as boardEffects from './ngrx/board/board.effects'
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), 
     provideClientHydration(), 
     provideHttpClient(), 
+    provideEffects(
+      boardEffects
+    ), 
     provideStore({
       [boardReducers.name]: boardReducers.reducer,
     }), 
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), autoPause: true, trace: false,traceLimit:75 }), 
-    provideEffects(), 
     provideRouterStore()]
 };

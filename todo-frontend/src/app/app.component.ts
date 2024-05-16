@@ -8,7 +8,7 @@ import { AddCardComponent } from './components/features/card/add-card/add-card.c
 import { OpenCardComponent } from './components/features/card/open-card/open-card.component';
 import { MenuComponent } from './components/core/menu/menu.component';
 import { BoardComponent } from './components/features/board/board/board.component';
-import { SharedService } from '../services/shared-service.service';
+import { SharedService } from './services/shared-service.service';
 
 @Component({
   selector: 'app-root',

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { SharedService } from '../../../../../services/shared-service.service';
+import { SharedService } from '../../../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../../../../services/api.service';
+import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
