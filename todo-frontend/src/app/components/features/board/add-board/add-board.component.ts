@@ -59,14 +59,12 @@ export class AddBoardComponent {
       this.apiService.patchData(`https://localhost:7247/api/Boards/${this.currentBoard.id}?title=${this.boardForm.get('title')?.value}`, 1) 
         .subscribe(response => {
           const currentIndex = this.boards.findIndex((a: { title: any; }) => a.title === this.currentBoard.title);
-          
           this.boards[currentIndex].title = this.boardForm.get('title')?.value;
           console.log('Succ');
           console.log('Form submitted successfully!', response);
         }, error => {
           console.error('Error submitting form:', error);
         });
-        
         this.sharedService.toggleisVisibleCreateBoard();
         this.sharedService.toggleisEditableBoard();
         this.store.dispatch(PostActions.getBoardsTest())
@@ -87,13 +85,6 @@ export class AddBoardComponent {
       this.isEditable = value;
     })
 
-    // this.store.select(selectBoard).subscribe(board => {
-    //   this.currentBoard = board;
-    // });
-
     this.boardsChange = this.boards
-
-
-    
   }
 }

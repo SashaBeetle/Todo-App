@@ -42,6 +42,10 @@ export class MenuComponent {
     this.sharedService.toggleisVisibleCreateBoard();
   }
 
+  onRefresh(){
+    this.store.dispatch(PostActions.getBoardsTest())
+  }
+
   onEditBoard(board: any){
     this.isVisible = true;
     this.board = board
@@ -55,7 +59,6 @@ export class MenuComponent {
       const index = this.boards.findIndex((item: { id: number; }) => item.id === boardId);
         if (index !== -1) {
           this.boards.splice(index, 1);
-          console.log(this.boards);
         }
     })
   }
@@ -70,12 +73,8 @@ export class MenuComponent {
     this.store.select(selectBoards).subscribe(boards => {
       this.boards = boards;
     });
-    this.sortDataByTitle(this.boards)
-
-
-
     
-
+    this.sortDataByTitle(this.boards)
   }
 
   sortDataByTitle(data: any[]): any[] {
