@@ -1,6 +1,6 @@
 import { Component, Input, Output } from '@angular/core';
-import { SharedService } from '../../../../../services/shared-service.service';
-import { ApiService } from '../../../../../services/api.service';
+import { SharedService } from '../../../../services/shared-service.service';
+import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -2,9 +2,14 @@
 
 
 <div class="m-5">
-    <div class=" mb-4 border-b-2 border-solid">
-        <h1 class="mb-4 text-4xl font-bold">Boards</h1>
+    <div class=" flex mb-4 items-center justify-between border-b-2 border-solid">
+        <h1 class=" text-4xl font-bold">Boards</h1>
+        <button (click)="onRefresh()" class="flex gap-2 text-white border-solid m-5 items-center text-sm justify-end font-bold rounded focus:outline-none  hover:bg-gray-100">
+            <svg width="35px" height="35px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13.5A7.5 7.5 0 1 1 11.5 6H20m0 0-3-3m3 3-3 3"/></svg>        
+        </button> 
     </div>
+
+    
    
     <div class="grid justify-center xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-2 xl:max-w-full max-w-screen-xl">
 		@for(board of boards; track boards.title){
@@ -43,7 +48,7 @@
         
        
         @if(isVisible){
-            <app-add-board [boards]="boards"></app-add-board>
+            <app-add-board [currentBoard]="board" [boards]="boards"></app-add-board>
 
         }@else {
             <div (click)="onCreateBoard()" class="flex dottet-border justify-center items-center bg-white rounded-lg p-4 m-2 hover:bg-gray-100">

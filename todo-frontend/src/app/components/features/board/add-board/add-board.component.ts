@@ -1,11 +1,12 @@
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SharedService } from '../../../../../services/shared-service.service';
-import { ApiService } from '../../../../../services/api.service';
+import { SharedService } from '../../../../services/shared-service.service';
+import { ApiService } from '../../../../services/api.service';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
-import { selectBoard } from '../../../../ngrx/board/board.selectors';
+import * as PostActions from '../../../../ngrx/board/board.actions'
+
 
 @Component({
   selector: 'app-add-board',
@@ -20,16 +21,19 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
 export class AddBoardComponent {
   private readonly store:Store<BoardState> = inject(Store);
 
-  constructor(private sharedService: SharedService, private apiService: ApiService){
+  constructor(
+    private sharedService: SharedService, 
+    private apiService: ApiService)
+    {
     this.boardForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(12)]),
       catalogsId: new FormControl([])
-    })
-  }
+      })
+    }
   @Input() boards : any;
   @Input() isEditable = false;
   @Output() boardsChange: any;
-  currentBoard: any;
+  @Input() currentBoard: any;
   boardForm: FormGroup;
 
 
@@ -45,6 +49,8 @@ export class AddBoardComponent {
           console.error('Error submitting form:', error, jsonData);
         });
         this.sharedService.toggleisVisibleCreateBoard();
+        this.store.dispatch(PostActions.getBoardsTest())
+
     }    
   }
 
@@ -52,23 +58,23 @@ export class AddBoardComponent {
     if(this.boardForm.valid){ 
       this.apiService.patchData(`https://localhost:7247/api/Boards/${this.currentBoard.id}?title=${this.boardForm.get('title')?.value}`, 1) 
         .subscribe(response => {
-          debugger;
           const currentIndex = this.boards.findIndex((a: { title: any; }) => a.title === this.currentBoard.title);
-          
           this.boards[currentIndex].title = this.boardForm.get('title')?.value;
           console.log('Succ');
           console.log('Form submitted successfully!', response);
         }, error => {
           console.error('Error submitting form:', error);
         });
-        
         this.sharedService.toggleisVisibleCreateBoard();
         this.sharedService.toggleisEditableBoard();
+        this.store.dispatch(PostActions.getBoardsTest())
     }    
   }
 
   onClick(){
     this.sharedService.toggleisVisibleCreateBoard();
+    console.log(this.isEditable)
+
     if(this.isEditable){
       this.sharedService.toggleisEditableBoard();
     }
@@ -79,13 +85,6 @@ export class AddBoardComponent {
       this.isEditable = value;
     })
 
-    this.store.select(selectBoard).subscribe(board => {
-      this.currentBoard = board;
-    });
-
     this.boardsChange = this.boards
-
-
-    
   }
 }
