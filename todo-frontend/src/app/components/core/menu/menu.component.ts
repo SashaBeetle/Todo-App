@@ -1,5 +1,4 @@
 import { Component, inject, Input } from '@angular/core';
-import { ApiService } from '../../../services/api.service';
 import { AddBoardComponent } from '../../features/board/add-board/add-board.component';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
@@ -22,7 +21,6 @@ export class MenuComponent {
   private readonly store:Store<BoardState> = inject(Store)
 
   constructor(
-    private apiService: ApiService,
     private sharedService: SharedService,
   ){
   
@@ -43,7 +41,7 @@ export class MenuComponent {
   }
 
   onRefresh(){
-    this.store.dispatch(PostActions.getBoardsTest())
+    this.store.dispatch(PostActions.getBoardsApi())
   }
 
   onEditBoard(board: any){
@@ -55,12 +53,7 @@ export class MenuComponent {
   }
 
   onDeleteBoard(boardId: number){
-    this.apiService.deleteDataById("https://localhost:7247/api/Boards",boardId).subscribe(res=>{
-      const index = this.boards.findIndex((item: { id: number; }) => item.id === boardId);
-        if (index !== -1) {
-          this.boards.splice(index, 1);
-        }
-    })
+    this.store.dispatch(PostActions.deleteBoardApi({boardId: boardId}))
   }
 
   ngOnInit(): void{
@@ -68,7 +61,7 @@ export class MenuComponent {
       this.isVisible = value; 
     });
     
-    this.store.dispatch(PostActions.getBoardsTest())
+    this.store.dispatch(PostActions.getBoardsApi())
     
     this.store.select(selectBoards).subscribe(boards => {
       this.boards = boards;
@@ -88,13 +81,4 @@ export class MenuComponent {
       }
     });
   }
-
-
-
-  
-
-
-
-
-
 }

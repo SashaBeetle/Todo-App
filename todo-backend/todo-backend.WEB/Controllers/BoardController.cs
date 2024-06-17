@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using todo_backend.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using todo_backend.Infrastructure.Interfaces;
@@ -31,7 +30,6 @@ namespace todo_backend.WEB.Controllers
             _cardService = cardService;
             _historyItemService = historyItemService;
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateBoard(BoardDTO boardDto)
         {
@@ -109,8 +107,7 @@ namespace todo_backend.WEB.Controllers
             });
 
             board.Title = title;
-
-            
+ 
             await _boardService.Update(board);
 
             return NoContent();

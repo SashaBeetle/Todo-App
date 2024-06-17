@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace todo_backend.Infrastructure.Services
+﻿namespace todo_backend.Infrastructure.Services
 {
     public class DeleteEntityFromListService
     {
-        public List<int> DeleteEntitysFromList(List<int> list, int id)
+        public List<int> DeleteEntitysFromList(List<int> list)
         {
             foreach (var item in list)
             {

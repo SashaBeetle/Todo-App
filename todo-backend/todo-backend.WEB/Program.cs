@@ -19,10 +19,8 @@ builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.AddControllers()
     .AddFluentValidation(x => { 
-
     x.ImplicitlyValidateChildProperties = true;
     x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-
     });
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -101,7 +101,6 @@ export class AddCardComponent {
    if(this.isVisible){
     this.card = this.sharedService.getCard();
    }
-
   }
 }
   

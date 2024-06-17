@@ -20,7 +20,7 @@ export class HeaderComponentComponent{
   @Input() history: any;
   @Input() currentBoard: any;
   
-  onClick() {
+  onClickOpenHistory() {
     this.sharedService.toggleIsVisibleHistory();
     this.sharedService.setHistory(this.history);
     

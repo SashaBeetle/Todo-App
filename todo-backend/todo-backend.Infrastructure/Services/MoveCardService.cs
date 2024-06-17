@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using todo_backend.Domain.Models;
+﻿using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 
 namespace todo_backend.Infrastructure.Services
@@ -23,32 +18,70 @@ namespace todo_backend.Infrastructure.Services
             _cardService = cardService;
             _historyItemService = historyItemService;
         }
-        public async Task MoveCard(int cardId, int catalogId_1, int catalogId_2, int boardId)
+        public async Task MoveCard(int cardId, int sourceCatalogId, int destinationCatalogId, int boardId)
         {
-            Catalog Catalog1 = await _catalogService.GetById(catalogId_1);
-            Catalog Catalog2 = await _catalogService.GetById(catalogId_2);
+            var sourceCatalog = await GetCatalogById(sourceCatalogId);
+            var destinationCatalog = await GetCatalogById(destinationCatalogId);
 
-            if (Catalog1 == null || Catalog2 == null)
-                throw new Exception("Catalog not found");
+            EnsureCatalogExists(sourceCatalog, "Source catalog not found");
+            EnsureCatalogExists(destinationCatalog, "Destination catalog not found");
 
-            if (Catalog1.CardsId.Contains(cardId))
+            var card = await GetCardById(cardId);
+            MoveCardBetweenCatalogs(cardId, sourceCatalog, destinationCatalog);
+            await LogHistoryItem(card, sourceCatalog, destinationCatalog, boardId);
+
+            await UpdateCatalogs(sourceCatalog, destinationCatalog);
+        }
+
+        private async Task<Catalog> GetCatalogById(int catalogId)
+        {
+            return await _catalogService.GetById(catalogId);
+        }
+
+        private async Task<Card> GetCardById(int cardId)
+        {
+            var card = await _cardService.GetById(cardId);
+            if (card == null)
             {
-                Catalog1.CardsId.Remove(cardId);
-                Catalog2.CardsId.Add(cardId);
-                Card card = await _cardService.GetById(cardId);
-                await _historyItemService.Create(new HistoryItem()
-                {
-                    EventDescription = $"Card ◉ {card.Title} moved from ◉ {Catalog1.Title} to ◉ {Catalog2.Title}",
-                    CardId = card.Id,
-                    BoardId = boardId
-                });
+                throw new ArgumentException("Card not found");
             }
-            else
+            return card;
+        }
+
+        private void EnsureCatalogExists(Catalog catalog, string errorMessage)
+        {
+            if (catalog == null)
             {
-                throw new Exception("Card not found in catalog");
+                throw new ArgumentException(errorMessage);
             }
-            await _catalogService.Update(Catalog1);
-            await _catalogService.Update(Catalog2);
+        }
+
+        private void MoveCardBetweenCatalogs(int cardId, Catalog sourceCatalog, Catalog destinationCatalog)
+        {
+            if (!sourceCatalog.CardsId.Contains(cardId))
+            {
+                throw new ArgumentException("Card not found in source catalog");
+            }
+
+            sourceCatalog.CardsId.Remove(cardId);
+            destinationCatalog.CardsId.Add(cardId);
+        }
+
+        private async Task LogHistoryItem(Card card, Catalog sourceCatalog, Catalog destinationCatalog, int boardId)
+        {
+            var historyItem = new HistoryItem
+            {
+                EventDescription = $"Card ◉ {card.Title} moved from ◉ {sourceCatalog.Title} to ◉ {destinationCatalog.Title}",
+                CardId = card.Id,
+                BoardId = boardId
+            };
+            await _historyItemService.Create(historyItem);
+        }
+
+        private async Task UpdateCatalogs(Catalog sourceCatalog, Catalog destinationCatalog)
+        {
+            await _catalogService.Update(sourceCatalog);
+            await _catalogService.Update(destinationCatalog);
         }
     }
 }

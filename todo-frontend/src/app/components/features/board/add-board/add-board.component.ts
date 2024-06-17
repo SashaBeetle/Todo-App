@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SharedService } from '../../../../services/shared-service.service';
-import { ApiService } from '../../../../services/api.service';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
 import * as PostActions from '../../../../ngrx/board/board.actions'
@@ -20,10 +19,10 @@ import * as PostActions from '../../../../ngrx/board/board.actions'
 })
 export class AddBoardComponent {
   private readonly store:Store<BoardState> = inject(Store);
-
+  
   constructor(
-    private sharedService: SharedService, 
-    private apiService: ApiService)
+    private sharedService: SharedService
+  )
     {
     this.boardForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(12)]),
@@ -40,34 +39,17 @@ export class AddBoardComponent {
   onSubmitCreateBoard(){
     if(this.boardForm.valid){ 
       const jsonData = JSON.stringify(this.boardForm.value);
-      this.apiService.postData('https://localhost:7247/api/Boards', jsonData) 
-        .subscribe(response => {
-          this.boardForm.value.id = response.id;
-          this.boards.push(this.boardForm.value)
-          console.log('Form submitted successfully!', jsonData);
-        }, error => {
-          console.error('Error submitting form:', error, jsonData);
-        });
-        this.sharedService.toggleisVisibleCreateBoard();
-        this.store.dispatch(PostActions.getBoardsTest())
-
+      this.store.dispatch(PostActions.addBoardApi({board: jsonData}))
+      this.sharedService.toggleisVisibleCreateBoard();
     }    
   }
 
   onSubmitEditBoard(){
     if(this.boardForm.valid){ 
-      this.apiService.patchData(`https://localhost:7247/api/Boards/${this.currentBoard.id}?title=${this.boardForm.get('title')?.value}`, 1) 
-        .subscribe(response => {
-          const currentIndex = this.boards.findIndex((a: { title: any; }) => a.title === this.currentBoard.title);
-          this.boards[currentIndex].title = this.boardForm.get('title')?.value;
-          console.log('Succ');
-          console.log('Form submitted successfully!', response);
-        }, error => {
-          console.error('Error submitting form:', error);
-        });
-        this.sharedService.toggleisVisibleCreateBoard();
-        this.sharedService.toggleisEditableBoard();
-        this.store.dispatch(PostActions.getBoardsTest())
+      this.store.dispatch(PostActions.changeBoardApi({boardId: this.currentBoard.id, boardTitle: this.boardForm.get('title')?.value}))
+
+      this.sharedService.toggleisVisibleCreateBoard();
+      this.sharedService.toggleisEditableBoard();
     }    
   }
 

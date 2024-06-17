@@ -19,9 +19,9 @@ export const boardReducers = createFeature({
   name: BOARD_FEATURE_KEY,
   reducer: createReducer(
     initialState,
-    on(BoardActions.getBoards, state => ({...state})),
+    on(BoardActions.getState, state => ({...state})),
     on(BoardActions.AddCurrentBoard, (state, {currentBoard} ) => ({...state, currentBoard: currentBoard})),
-    on(BoardActions.AddBoards, (state, {boards}) => ({...state, boards: boards}))
+    on(BoardActions.AddBoards, (state, {boards}) => ({...state, boards: boards})),
   )
 });
     
