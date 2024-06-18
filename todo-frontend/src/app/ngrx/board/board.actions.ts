@@ -4,16 +4,20 @@ export const getState = createAction('[Board] Get State');
 
 export const getBoardsApi = createAction('[Board API] Get Boards');
 
-export const addBoardApi = createAction(
-    '[Board API] Add Board',
+export const getBoardApi = createAction(
+    '[Board API] Get Board',
+    props<{boardId: number}>());
+
+export const postBoardApi = createAction(
+    '[Board API] Post Board',
     props<{ board: any}>());
 
 export const deleteBoardApi = createAction(
     '[Board API] Delete Board',
     props<{ boardId: number}>());
 
-export const changeBoardApi = createAction(
-    '[Board API] Change Board',
+export const patchBoardApi = createAction(
+    '[Board API] Patch Board',
     props<{ boardId: number, boardTitle: string }>());
 
 export const AddCurrentBoard = createAction(

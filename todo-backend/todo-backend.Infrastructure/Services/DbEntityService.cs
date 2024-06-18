@@ -97,9 +97,11 @@ namespace todo_backend.Infrastructure.Services
             Board board = await _dbcontext.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
             foreach(var catalogId in board.CatalogsId)
             {
-                if (catalogId == catalog.Id)
+                if (catalogId == catalog.Id){
                     board.CatalogsId.Remove(catalog.Id);
                     break;
+                }
+                    
             }
 
             await SaveChanges();

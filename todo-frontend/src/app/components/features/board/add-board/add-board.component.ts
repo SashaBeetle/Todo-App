@@ -39,14 +39,14 @@ export class AddBoardComponent {
   onSubmitCreateBoard(){
     if(this.boardForm.valid){ 
       const jsonData = JSON.stringify(this.boardForm.value);
-      this.store.dispatch(PostActions.addBoardApi({board: jsonData}))
+      this.store.dispatch(PostActions.postBoardApi({board: jsonData}))
       this.sharedService.toggleisVisibleCreateBoard();
     }    
   }
 
   onSubmitEditBoard(){
     if(this.boardForm.valid){ 
-      this.store.dispatch(PostActions.changeBoardApi({boardId: this.currentBoard.id, boardTitle: this.boardForm.get('title')?.value}))
+      this.store.dispatch(PostActions.patchBoardApi({boardId: this.currentBoard.id, boardTitle: this.boardForm.get('title')?.value}))
 
       this.sharedService.toggleisVisibleCreateBoard();
       this.sharedService.toggleisEditableBoard();

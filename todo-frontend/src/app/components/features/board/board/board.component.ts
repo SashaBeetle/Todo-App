@@ -25,9 +25,7 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
 export class BoardComponent {
   private readonly store:Store<BoardState> = inject(Store);
 
-  constructor(private sharedService: SharedService){
-
-}
+  constructor(private sharedService: SharedService){}
 
 @Input() isCardVisible: boolean = false;
 @Output() currentBoard: any;
