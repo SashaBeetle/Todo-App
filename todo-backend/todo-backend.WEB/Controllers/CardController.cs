@@ -12,43 +12,34 @@ namespace todo_backend.WEB.Controllers
     public class CardController : ControllerBase
     {
         private readonly IDbEntityService<Card> _cardService;
-        private readonly IDbEntityService<Catalog> _catalogService;
+        private readonly ICardRepository _cardRepository;
         private readonly IDbEntityService<HistoryItem> _historyItemService;
         private readonly IMapper _mapper;
 
         public CardController(
             IDbEntityService<Card> cardService, 
-            IDbEntityService<Catalog> catalogService,
+            ICardRepository cardRepository,
             IDbEntityService<HistoryItem> historyItemService, 
             IMapper mapper
             )
         {
             _cardService = cardService;
-            _catalogService = catalogService;
+            _cardRepository = cardRepository;
             _historyItemService = historyItemService;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCard(CardDTO cardDto, int listId, int boardId)
+        public async Task<IActionResult> CreateCard(CardDTO cardDto, int boardId)
         {
-            Card card = _mapper.Map<Card>(cardDto);
-            card.DueDate = card.DueDate.ToUniversalTime();
-
-
-            Card createdCard = await _cardService.Create(card);
+            Card createdCard = await _cardRepository.CreateCardAsync(_mapper.Map<Card>(cardDto));
 
             await _historyItemService.Create(new HistoryItem()
             {
-                EventDescription = $"Card ◉ {card.Title} created",
+                EventDescription = $"Card ◉ {createdCard.Title} created",
                 CardId = createdCard.Id,
                 BoardId = boardId
             });
-
-            Catalog existedCatalog = await _catalogService.GetById(listId);
-
-            await _cardService.AddCardToCatalog(existedCatalog, createdCard.Id);
-
 
             CardDTO createdCardDto = _mapper.Map<CardDTO>(createdCard);
 
@@ -56,49 +47,28 @@ namespace todo_backend.WEB.Controllers
         }
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCard(int id, int boardId)
+        public async Task<IActionResult> DeleteCard(int id)
         {
-            Card? card = await _cardService.GetById(id);
-
-            if (card == null)
-                return NotFound();
-
-            await _cardService.DeleteCardFromCatalogs(id);
-            await _cardService.Delete(card);
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Card ◉ {card.Title} deleted",
-                CardId = card.Id,
-                BoardId = boardId
-            });
+            await _cardRepository.DeleteCardByIdAsync(id);
 
             return NoContent();
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateCard(CardDTO cardDto, int boardId)
+        public async Task<IActionResult> UpdateCard(CardDTO cardDto)
         {
             Card card = _mapper.Map<Card>(cardDto);
             card.DueDate = card.DueDate.ToUniversalTime();
 
-            await _cardService.Update(card);
+            Card updatedCard = await _cardRepository.UpdateCardAsync(card);
 
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Card ◉ {card.Title} updated",
-                CardId = card.Id,
-                BoardId = boardId
-            });
-
-            return Ok(_mapper.Map<CardDTO>(card));
+            return Ok(_mapper.Map<CardDTO>(updatedCard));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllCards()
         {
-            List<Card> cards = await _cardService.GetAll().ToListAsync();
-
+            IList<Card> cards = await _cardRepository.GetCardsAsync();
 
             return Ok(_mapper.Map<List<CardDTO>>(cards));
         }
@@ -106,7 +76,7 @@ namespace todo_backend.WEB.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCardById(int id)
         {
-            Card? card = await _cardService.GetById(id);
+            Card card = await _cardRepository.GetCardByIdAsync(id);
 
             if (card == null)
                 return NotFound();

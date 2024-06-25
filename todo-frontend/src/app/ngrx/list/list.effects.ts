@@ -15,7 +15,7 @@ export const deleteList = createEffect(
         return actions$.pipe(
             ofType(ListActions.deleteListApi),
             switchMap(action =>
-                apiService.deleteDataByIdManual(`https://localhost:7247/api/catalog/${action.listId}?boardId=${action.boardId}`).pipe( 
+                apiService.deleteDataByIdManual(`https://localhost:7247/api/catalog/${action.listId}`).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )

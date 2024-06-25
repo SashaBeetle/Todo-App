@@ -11,35 +11,17 @@ namespace todo_backend.WEB.Controllers
     [ApiController]
     public class BoardController : ControllerBase
     {
-        IDbEntityService<Board> _boardService;
-        IDbEntityService<Catalog> _catalogService;
-        IDbEntityService<Card> _cardService;
-        IDbEntityService<HistoryItem> _historyItemService;
-        IMapper _mapper;
-        public BoardController(
-            IDbEntityService<Board> boardService, 
-            IMapper mapper, 
-            IDbEntityService<Catalog> catalogService, 
-            IDbEntityService<Card> cardService,
-            IDbEntityService<HistoryItem> historyItemService
-            )
+        private readonly IBoardRepository _boardRepository;
+        private readonly IMapper _mapper;
+        public BoardController( IBoardRepository boardRepository,IMapper mapper)
         {
-            _boardService = boardService;
+            _boardRepository = boardRepository;
             _mapper = mapper;
-            _catalogService = catalogService;
-            _cardService = cardService;
-            _historyItemService = historyItemService;
         }
         [HttpPost]
         public async Task<IActionResult> CreateBoard(BoardDTO boardDto)
         {
-            Board createdBoard = await _boardService.Create(_mapper.Map<Board>(boardDto));
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Board ◉ {createdBoard.Title} created",
-                BoardId = createdBoard.Id
-            });
+            Board createdBoard = await _boardRepository.CreateBoardAsync(_mapper.Map<Board>(boardDto));
 
             BoardDTO createdBoardDto = _mapper.Map<BoardDTO>(createdBoard);
             return CreatedAtAction(nameof(GetBoardById), new { id = createdBoardDto.Id }, createdBoardDto);
@@ -47,13 +29,18 @@ namespace todo_backend.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBoards()
         {
-            List<Board> boards = await _boardService.GetAll().ToListAsync();
+            IList<Board> boards = await _boardRepository.GetBoardsAsync();
+
+            if(boards == null)
+                return NotFound();
+
             return Ok(_mapper.Map<List<BoardDTO>>(boards));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBoardById(int id)
         {
-            Board board = await _boardService.GetById(id);
+            Board board = await _boardRepository.GetBoardByIdAsync(id);
+
             if (board == null)
                 return NotFound();
 
@@ -62,53 +49,17 @@ namespace todo_backend.WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBoard(int id)
         {
-            Board? board = await _boardService.GetById(id);
-
-            if (board == null)
-                return NotFound();
-
-
-            foreach (var el in board.CatalogsId)
-            {
-                Catalog catalog = await _catalogService.GetById(el);
-
-                if (catalog != null)
-                {
-                    foreach (var cardId in catalog.CardsId)
-                    {
-                        Card card = await _cardService.GetById(cardId);
-
-                        if (card != null)
-                            await _cardService.Delete(card);
-                    }
-
-                    await _catalogService.Delete(catalog);
-
-                }
-
-            }
-
-            await _boardService.Delete(board);
+            await _boardRepository.DeleteBoardAsync(id);
 
             return NoContent();
         }
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateBoard(int id, string title)
         {
-            Board board = await _boardService.GetById(id);
+            Board board = await _boardRepository.UpdateBoardAsync(id, title);
             
             if (board == null)
                 return NotFound();
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Board title updated from ◉ {board.Title} to ◉ {title}",
-                BoardId = board.Id
-            });
-
-            board.Title = title;
- 
-            await _boardService.Update(board);
 
             return NoContent();
         }

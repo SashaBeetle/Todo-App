@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 using todo_backend.WEB.Mapping.DTOs;
@@ -12,42 +10,29 @@ namespace todo_backend.WEB.Controllers
     [ApiController]
     public class CatalogController : ControllerBase
     {
-        private readonly IDbEntityService<Catalog> _catalogService;
-        private readonly IDbEntityService<Card> _cardService;
+        private readonly ICatalogRepository _catalogRepository;
         private readonly IDbEntityService<HistoryItem> _historyItemService;
-        private readonly IDbEntityService<Board> _boardService;
-        private readonly IMoveCardService _moveCardService;
         private readonly IMapper _mapper;
 
         public CatalogController(
-            IDbEntityService<Catalog> catalogService, 
-            IMoveCardService moveCardService, 
-            IDbEntityService<Card> cardService,
+            ICatalogRepository catalogRepository,
             IDbEntityService<HistoryItem> historyItemService,
-            IDbEntityService<Board> boardService,
             IMapper mapper
             )
         {
-            _moveCardService = moveCardService;
-            _catalogService = catalogService;
-            _cardService = cardService;
+            _catalogRepository = catalogRepository;
             _historyItemService = historyItemService;
             _mapper = mapper;
-            _boardService = boardService;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCatalog(CatalogDTO catalogDto, [Required] int BoardId)
+        public async Task<IActionResult> CreateCatalog(CatalogDTO catalogDto)
         {
-            Catalog createdCatalog = await _catalogService.Create(_mapper.Map<Catalog>(catalogDto));
-
-            Board board = await _boardService.GetById(BoardId);
-            board.CatalogsId.Add(createdCatalog.Id);
-            await _boardService.Update(board);
+            Catalog? createdCatalog = await _catalogRepository.CreateCatalogAsync(_mapper.Map<Catalog>(catalogDto));
 
             await _historyItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Catalog ◉ {createdCatalog.Title} created",
-                BoardId = BoardId
+                BoardId = createdCatalog.BoardId
             });
 
             CatalogDTO createdCatalogDto = _mapper.Map<CatalogDTO>(createdCatalog);
@@ -55,34 +40,9 @@ namespace todo_backend.WEB.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCatalog(int id, int boardId)
+        public async Task<IActionResult> DeleteCatalog(int id)
         {
-            Catalog? catalog = await _catalogService.GetById(id);
-
-            if (catalog == null)
-                return NotFound();
-
-
-            foreach (var cardId in catalog.CardsId)
-            {
-                Card? card = await _cardService.GetById(cardId);
-
-                if (card != null)
-                    await _cardService.Delete(card);
-            }
-
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Catalog ◉ {catalog.Title} deleted",
-                BoardId = boardId
-            });
-
-            await _catalogService.DeleteCatalogFromBoard(catalog, boardId);
-
-            await _catalogService.Delete(catalog);
-
-            
+            await _catalogRepository.DeleteCatalogAsync(id);  
 
             return NoContent();
         }
@@ -90,68 +50,36 @@ namespace todo_backend.WEB.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCatalogs()
         {
-            List<Catalog> catalogs = await _catalogService.GetAll().ToListAsync();
+            IList<Catalog> catalogs = await _catalogRepository.GetCatalogsAsync();
 
-            
             return Ok(_mapper.Map<List<CatalogDTO>>(catalogs));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCatalogsById(int id)
         {
-            Catalog? catalog = await _catalogService.GetById(id);
+            Catalog? catalog = await _catalogRepository.GetCatalogAsync(id);
 
             if (catalog == null)
                 return NotFound();
 
             return Ok(_mapper.Map<CatalogDTO>(catalog));
         }
-        [HttpGet("ForBoard/{id}")]
-        public async Task<IActionResult> GetCatalogsByBoardId(int id)
-        {
-            Board board = await _boardService.GetById(id);
-
-            if (board == null)
-                return NotFound();
-
-            List<Catalog> catalogs = new List<Catalog>();
-
-            foreach (var catalogId in board.CatalogsId)
-            {
-                Catalog catalog =  await _catalogService.GetById(catalogId);
-                catalogs.Add(catalog);
-            }
-
-            return Ok(_mapper.Map<List<CatalogDTO>>(catalogs));
-        }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateCatalog(int id, string title, int boardId)
+        public async Task<IActionResult> UpdateCatalog(int id, string title)
         {
-            Catalog? catalog = await _catalogService.GetById(id);
+            Catalog? updatedCatalog = await _catalogRepository.UpdateCatalogAsync(id, title);
             
-            if (catalog == null)
+            if (updatedCatalog == null)
                 return NotFound();
 
             await _historyItemService.Create(new HistoryItem()
             {
-                EventDescription = $"Catalog ◉ {catalog.Title} renamed to ◉ {title}",
-                BoardId = boardId
+                EventDescription = $"Catalog ◉ {updatedCatalog.Title} renamed to ◉ {title}",
+                BoardId = updatedCatalog.BoardId
             });
-
-
-            catalog.Title = title;
-            Catalog updatedCatalog = await _catalogService.Update(catalog);
 
             return Ok(_mapper.Map<CatalogDTO>(updatedCatalog));
         }
-
-        [HttpPatch("MoveCard")]
-        public async Task<IActionResult> MoveCardBetweenCatalogs(int catalogId_1, int catalogId_2, int cardId, int boardId)
-        {
-            await _moveCardService.MoveCard(cardId, catalogId_1, catalogId_2, boardId);
-
-            return Ok();
-        }
-
     }
 }

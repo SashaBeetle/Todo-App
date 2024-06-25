@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace todo_backend.Domain.Models
+﻿namespace todo_backend.Domain.Models
 {
     public class Card : Dbitem
     {
@@ -12,5 +6,7 @@ namespace todo_backend.Domain.Models
         public string Description { get; set; }
         public string Priority { get; set; }
         public DateTime DueDate { get; set; }
+        public int CatalogId { get; set; }
+        public Catalog? Catalog { get; set; }
     }
 }

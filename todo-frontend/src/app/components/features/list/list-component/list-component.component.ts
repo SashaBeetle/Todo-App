@@ -63,22 +63,16 @@ export class ListComponentComponent{
 
   
   ngOnInit(){
+    this.lists = this.currentBoard.catalogs
+    this.sortDataByTitle(this.lists);
+    this.sharedService.setLists(this.lists)
     console.log('ng', this.lists)
+
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
 
-    // this.store.select(selectBoard).subscribe(board => {
-    //   this.currentBoard = board;
-    // });
-
-    // this.apiService.getDataById("https://localhost:7247/api/catalog/ForBoard", this.currentBoard.id).subscribe(res =>{
-    //     this.lists = res;
-    //     this.sortDataByTitle(this.lists);
-    //     this.sharedService.setLists(this.lists)
-    //   }); 
-
-
+    console.log("currentBoard: ", this.currentBoard )
   }
 
   ngDoCheck(): void {

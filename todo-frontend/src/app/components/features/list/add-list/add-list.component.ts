@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input, Input } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -29,7 +29,6 @@ export class AddListComponent {
     {
     this.listForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(15)]),
-      cardsId: new FormControl([])
     })
   }
 
@@ -42,7 +41,10 @@ export class AddListComponent {
 
   onSubmitCreateList(){
     if(this.listForm.valid){
-      const jsonData = JSON.stringify(this.listForm.value);
+      const formData = this.listForm.value;
+      formData['boardId'] = this.board.id;
+      const jsonData = JSON.stringify(formData);
+
       this.store.dispatch(PostActions.postListApi({ boardId: this.board.id, list: jsonData }))
     }    
   }

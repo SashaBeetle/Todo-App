@@ -4,7 +4,7 @@
             <input placeholder="Enter title..." class="center h-8 w-full px-3 py-2 rounded-md" formControlName="title">
             <div class="text-red-400 text-sm" *ngIf="boardForm.controls['title'].invalid && (boardForm.controls['title'].touched || boardForm.controls['title'].dirty)">
                 <span *ngIf="boardForm.controls['title'].errors?.['required']"> * Required</span>
-                <span *ngIf="boardForm.controls['title'].errors?.['maxlength']">* Too long</span>
+                <span *ngIf="boardForm.controls['title'].errors?.['maxlength']"> * Too long</span>
             </div>
         </div>
         <div class="flex w-6/12 justify-between items-center flex-col ml-4">
