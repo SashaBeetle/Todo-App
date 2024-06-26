@@ -1,14 +1,13 @@
-import { Component, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, inject, input, Input, Output } from '@angular/core';
 import { CardComponentComponent } from '../../card/card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
 import { SharedService } from '../../../../services/shared-service.service';
-import { ApiService } from '../../../../services/api.service';
 import { AddCardComponent } from '../../card/add-card/add-card.component';
 import { OpenCardComponent } from '../../card/open-card/open-card.component';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
 import * as PostActions from '../../../../ngrx/list/list.actions'
-import { selectBoard } from '../../../../ngrx/board/board.selectors';
+import {checkListLength } from '../../../../utils/list.utilities'
 
 
 
@@ -31,14 +30,12 @@ export class ListComponentComponent{
   @Output() lists: any;
   @Input() currentBoard: any;
 
-  isAddListVisible: boolean = true;
+  @Input() isAddListVisible: boolean = false;
 
 
   constructor(
     private sharedService: SharedService,
-    private apiService: ApiService
   ){}
-
 
 
   onClickEdit(list: any) {
@@ -57,31 +54,27 @@ export class ListComponentComponent{
   }
 
   onClickDeleteList(listId: number){
-    console.log()
     this.store.dispatch(PostActions.deleteListApi({listId: listId, boardId: this.currentBoard.id}))
+
+    this.sharedService.toggleisAddListVisible(checkListLength((this.currentBoard.catalogs).length - 1))
   }
 
-  
   ngOnInit(){
     this.lists = this.currentBoard.catalogs
-    this.sortDataByTitle(this.lists);
+    console.log('Catalogs:', this.currentBoard.catalogs)
+  
+
     this.sharedService.setLists(this.lists)
-    console.log('ng', this.lists)
+
+    this.sharedService.isAddListVisible$.subscribe(value => {
+      this.isAddListVisible = value;
+    })
 
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
 
-    console.log("currentBoard: ", this.currentBoard )
-  }
-
-  ngDoCheck(): void {
-    if(this.lists.length == 4){
-      this.isAddListVisible = false;
-      console.log('List',this.isAddListVisible)
-    }else{      
-      this.isAddListVisible = true;
-    }  
+    this.isAddListVisible = checkListLength(this.currentBoard.catalogs.length)
   }
 
   sortDataByTitle(data: any[]): any[] {

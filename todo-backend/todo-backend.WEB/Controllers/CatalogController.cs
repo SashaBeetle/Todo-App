@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 using todo_backend.WEB.Mapping.DTOs;
@@ -66,7 +67,7 @@ namespace todo_backend.WEB.Controllers
             return Ok(_mapper.Map<CatalogDTO>(catalog));
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateCatalog(int id, string title)
+        public async Task<IActionResult> UpdateCatalog(int id, [Required] string title)
         {
             Catalog? updatedCatalog = await _catalogRepository.UpdateCatalogAsync(id, title);
             

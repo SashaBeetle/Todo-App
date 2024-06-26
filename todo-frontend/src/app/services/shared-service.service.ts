@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class SharedService {
   
+  private isAddListVisible = new BehaviorSubject<boolean>(false);
   private isVisibleHistory  = new BehaviorSubject<boolean>(false);
   private isVisibleCard = new BehaviorSubject<boolean>(false);
   private isVisibleCreateList = new BehaviorSubject<boolean>(false);
@@ -16,7 +17,6 @@ export class SharedService {
   private isEditableList = new BehaviorSubject<boolean>(false);
   private isEditableCard = new BehaviorSubject<boolean>(false);
   private isEditableBoard = new BehaviorSubject<boolean>(false);
-  
   
   private list = new BehaviorSubject<number | null>(null);
   list$ = this.list.asObservable();
@@ -33,7 +33,8 @@ export class SharedService {
   private lists = new BehaviorSubject<any | null>(null);
   lists$ = this.lists.asObservable();
   
-  isVisibleBoard$ = this.isVisibleBoard.asObservable()
+  isAddListVisible$ = this.isAddListVisible.asObservable();
+  isVisibleBoard$ = this.isVisibleBoard.asObservable();
   isVisibleCreateBoard$ = this.isVisibleCreateBoard.asObservable();
   isVisibleHistory$ = this.isVisibleHistory.asObservable();
   isVisibleCard$ = this.isVisibleCard.asObservable();
@@ -43,6 +44,10 @@ export class SharedService {
   isEditableList$ = this.isEditableList.asObservable();
   isEditableCard$ = this.isEditableCard.asObservable();
   isEditableBoard$ = this.isEditableBoard.asObservable();
+
+toggleisAddListVisible(bool: boolean){
+  this.isAddListVisible.next(bool)
+}
 
 toggleisEditableBoard(){
   this.isEditableBoard.next(!this.isEditableBoard.value)

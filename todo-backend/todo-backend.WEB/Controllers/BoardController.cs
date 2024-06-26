@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using todo_backend.Domain.Models;
+﻿using todo_backend.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using todo_backend.Infrastructure.Interfaces;
 using todo_backend.WEB.Mapping.DTOs;
 using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace todo_backend.WEB.Controllers
 {
@@ -54,7 +54,7 @@ namespace todo_backend.WEB.Controllers
             return NoContent();
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateBoard(int id, string title)
+        public async Task<IActionResult> UpdateBoard(int id, [Required] string title)
         {
             Board board = await _boardRepository.UpdateBoardAsync(id, title);
             

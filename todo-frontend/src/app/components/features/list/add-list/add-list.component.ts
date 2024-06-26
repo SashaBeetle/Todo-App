@@ -1,10 +1,12 @@
-import { Component, inject, input, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
 import * as PostActions from '../../../../ngrx/list/list.actions'
+import {checkListLength } from '../../../../utils/list.utilities'
+
 
 
 @Component({
@@ -46,18 +48,20 @@ export class AddListComponent {
       const jsonData = JSON.stringify(formData);
 
       this.store.dispatch(PostActions.postListApi({ boardId: this.board.id, list: jsonData }))
+
+      this.sharedService.toggleisAddListVisible(checkListLength(this.lists.length))
+      console.warn(this.lists.length)
     }    
   }
 
   onSubmitEditList(){
     if(this.listForm.valid){
       this.list = this.sharedService.getList();
-      this.list.title = this.listForm.get('title')?.value;
-      
+            
       this.store.dispatch(PostActions.patchListApi({
-        listId: this.list.id,
+        list: this.list,
         boardId: this.board.id,
-        listTitle: this.listForm.get('title')?.value
+        newListTitle: this.listForm.get('title')?.value
       }))
   
       this.sharedService.toggleisEditableList();

@@ -1,10 +1,9 @@
 <div class="flex gap-8 m-5">
-    @for (list of lists; track lists.title) {
+    @for (list of currentBoard.catalogs; track lists.id) {
       <div class="w-96 h-70">
         <div class="mb-2 flex-row border-title border-solid">
           <div class="flex mr-auto font-bold text-lg items-center text-left">{{list.title}}</div>
-            <div class="flex font-bold items-center text-lg">{{list.cardsId.length}}</div>
-          
+            <div class="flex font-bold items-center text-lg">{{list.cards.length}}</div>
             <button class="right-0 relative ml-4 text-sm focus:outline-none group">
               <div class="flex items-center justify-between w-10 h-10 rounded ">
                   <svg class="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,27 +35,19 @@
                 <app-card-component  [cardId]="card" [list]="list" [lists]="lists"> </app-card-component>
             }
         </div>
-        
-
       </div>
     }
-    
-        @if(isVisible){
-            <app-add-list [lists]="lists" [board]="currentBoard"></app-add-list>
-        }@else if(isAddListVisible){
-            
-                <div class="mb-2 h-11 flex-row w-80 border-title border-solid">
-                    <div class="flex mr-auto font-bold text-lg items-center text-left">Add @if(lists.length > 0){ another } list</div>
-                    <button (click)="onClickAddList()" class="right-0 relative ml-4 text-sm focus:outline-none group">
-                        <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1z" fill="#0D0D0D"/></svg>
-                    </button>  
-                </div>
-            
-        }
 
-    
-
-
+    @if(isVisible){
+        <app-add-list [lists]="lists" [board]="currentBoard"></app-add-list>
+    }@else if(isAddListVisible){
+            <div class="mb-2 h-11 flex-row w-80 border-title border-solid">
+                <div class="flex mr-auto font-bold text-lg items-center text-left">Add @if(lists.length > 0){ another } list</div>
+                <button (click)="onClickAddList()" class="right-0 relative ml-4 text-sm focus:outline-none group">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1z" fill="#0D0D0D"/></svg>
+                </button>  
+            </div>   
+    }
 </div>
 
   
