@@ -1,6 +1,6 @@
 @if(isVisible){
-    <div>
-        <div (click)="onClick()" class="fixed bg-black opacity-25 w-full h-full z-10"></div>
+    <div class="z-20">
+        <div (click)="onClick()" class="fixed inset-0 bg-black opacity-25 w-full h-full"></div>
     
         <div class="fixed addcard_page rounded-xl" >
             <div class="flex items-center rounded-t-xl justify-end addcard_header ">
@@ -65,10 +65,7 @@
                                 Priority
                             </div>
                             
-            
-                            <span class="text-black">
-                                {{card.priority}}
-                            </span>
+                            <app-banner [card]="card"></app-banner>
                         </div>
                         
                         <div class="flex-row">

@@ -12,7 +12,10 @@ import {checkListLength } from '../../../../utils/list.utilities'
 @Component({
   selector: 'app-add-list',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+     CommonModule
+    ],
   templateUrl: './add-list.component.html',
   styleUrl: './add-list.component.scss'
 })

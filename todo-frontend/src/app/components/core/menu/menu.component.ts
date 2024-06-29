@@ -31,9 +31,9 @@ export class MenuComponent {
   board: any;
 
 
-  onOpenBoard(board: any){
+  onOpenBoard(board: any){ 
     this.sharedService.toggleisVisibleBoard();
-    this.store.dispatch(PostActions.AddCurrentBoard({currentBoard: board}));
+    this.store.dispatch(PostActions.getBoardApi({boardId: board.id}))
   }
 
   onCreateBoard(){

@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
 import * as PostActions from '../../../../ngrx/list/list.actions'
 import {checkListLength } from '../../../../utils/list.utilities'
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
 
 
 
@@ -28,7 +29,7 @@ export class ListComponentComponent{
 
   @Input() isVisible: boolean = false;
   @Output() lists: any;
-  @Input() currentBoard: any;
+  @Output() currentBoard: any;
 
   @Input() isAddListVisible: boolean = false;
 
@@ -60,11 +61,6 @@ export class ListComponentComponent{
   }
 
   ngOnInit(){
-    this.lists = this.currentBoard.catalogs
-    console.log('Catalogs:', this.currentBoard.catalogs)
-  
-
-    this.sharedService.setLists(this.lists)
 
     this.sharedService.isAddListVisible$.subscribe(value => {
       this.isAddListVisible = value;
@@ -74,7 +70,13 @@ export class ListComponentComponent{
       this.isVisible = value; 
     });
 
-    this.isAddListVisible = checkListLength(this.currentBoard.catalogs.length)
+    this.store.select(selectBoard).subscribe(board => {
+      this.currentBoard = board;
+      this.isAddListVisible = checkListLength(board.catalogs.length)
+    });
+
+
+    
   }
 
   sortDataByTitle(data: any[]): any[] {

@@ -6,11 +6,16 @@ import { PriorityConstants } from '../../../../constants/priorityConstants';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
+import * as PostActions from '../../../../ngrx/card/card.actions'
+
 
 @Component({
   selector: 'app-add-card',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule, 
+    CommonModule
+  ],
   templateUrl: './add-card.component.html',
   styleUrl: './add-card.component.scss'
 })
@@ -18,39 +23,22 @@ export class AddCardComponent {
   private readonly store:Store<BoardState> = inject(Store);
 
   constructor(private sharedService: SharedService, private apiService: ApiService){
-    this.cardForm = new FormGroup({
-      title: new FormControl("New Card", [Validators.required, Validators.maxLength(12)]),
-      description: new FormControl("", [Validators.required, Validators.maxLength(256)]),
-      priority: new FormControl("", [Validators.required]),
-      DueDate: new FormControl("", Validators.required),
-      listId: new FormControl('', Validators.required)
-    })
+    this.cardForm = new FormGroup({})
   }
 
   @Input() isVisible: boolean = false;
   @Input() isEditable: boolean = false;
   @Input() currentBoard: any;
+  @Input() currentList: any;
 
   priority: any = PriorityConstants.priority;
-  list: any;
   lists: any;
   card: any;
   cardForm: FormGroup;
 
   onCreate(){
     if(this.cardForm.valid){
-      const formData = this.cardForm.value;
-      const jsonData = JSON.stringify(formData);
-      
-      this.apiService.postData('https://localhost:7247/api/cards'+`?listId=${formData.listId}&boardId=${this.currentBoard.id}`, jsonData) //
-        .subscribe(response => {
-          this.cardForm.value.id = response.id;
-          this.sharedService.getList().cardsId.push(response.id)
-          console.log('Form submitted successfully!', jsonData);
-        }, error => {
-          console.error('Error submitting form:', error, jsonData);
-        });
-        
+      this.store.dispatch(PostActions.postCardApi({card: this.cardForm.value, boardId: this.currentBoard.id}))
   
       this.onClick();
     }
@@ -92,15 +80,25 @@ export class AddCardComponent {
       this.isEditable = value; 
     });
     
-    this.apiService.getData(`https://localhost:7247/api/catalog/ForBoard/${this.currentBoard.id}`).subscribe(res =>{
-      this.lists = res;  
-    })  
-  }
+    this.lists = this.currentBoard.catalogs;
 
-  ngDoCheck() {
-   if(this.isVisible){
-    this.card = this.sharedService.getCard();
-   }
+    if(this.isEditable){
+      this.cardForm = new FormGroup({
+        title: new FormControl(this.card.title, [Validators.required, Validators.maxLength(12)]),
+        description: new FormControl(this.card.description, [Validators.required, Validators.maxLength(256)]),
+        priority: new FormControl(this.card.priority, [Validators.required]),
+        DueDate: new FormControl(this.card.dueDate, Validators.required),
+        catalogId: new FormControl(this.card.catalogId, Validators.required)
+      })
+    }else{
+      this.cardForm = new FormGroup({
+        title: new FormControl("New Card", [Validators.required, Validators.maxLength(12)]),
+        description: new FormControl("", [Validators.required, Validators.maxLength(256)]),
+        priority: new FormControl("", [Validators.required]),
+        DueDate: new FormControl('', Validators.required),
+        catalogId: new FormControl('', Validators.required)
+      })
+    }
   }
 }
   

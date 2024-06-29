@@ -11,6 +11,7 @@ import { provideRouterStore } from '@ngrx/router-store';
 import { boardReducers } from './ngrx/board/board.reducer';
 import * as boardEffects from './ngrx/board/board.effects'
 import * as listEffects from './ngrx/list/list.effects'
+import * as cardEffects from './ngrx/card/card.effects'
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(), 
     provideEffects(
       boardEffects,
-      listEffects
+      listEffects,
+      cardEffects
     ), 
     provideStore({
       [boardReducers.name]: boardReducers.reducer,

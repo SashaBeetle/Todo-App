@@ -5,29 +5,35 @@ import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
-import { selectBoard } from '../../../../ngrx/board/board.selectors';
+import * as PostActions from '../../../../ngrx/card/card.actions'
+import { AddCardComponent } from "../add-card/add-card.component";
+import { BannerComponent } from '../../../core/banner/banner/banner.component';
 
 @Component({
-  selector: 'app-card-component',
-  standalone: true,
-  imports: [OpenCardComponent, CommonModule],
-  templateUrl: './card-component.component.html',
-  styleUrl: './card-component.component.scss'
+    selector: 'app-card-component',
+    standalone: true,
+    templateUrl: './card-component.component.html',
+    styleUrl: './card-component.component.scss',
+    imports: [
+      OpenCardComponent,
+      BannerComponent,
+      CommonModule,
+      AddCardComponent
+    ]
 })
 export class CardComponentComponent {
   private readonly store:Store<BoardState> = inject(Store);
 
-  @Input() cardId: any;
+  @Input() card: any;
   @Input() list: any;
-  @Input() lists: any;
   @Input() history:any;
-  currentBoard: any;
+  @Input() currentBoard: any;
+  @Input() isCardVisible: boolean = false;
+
+  @Output() currentList: any;
 
   sharedData: any;
-  card: any;
     
-
-
   constructor(
     private sharedService: SharedService, 
     private apiService: ApiService,
@@ -36,7 +42,6 @@ export class CardComponentComponent {
   onClickOpenCard() {
     this.sharedService.toggleIsVisibleCard();
     this.sharedService.setCard(this.card);
-    this.sharedService.setData(this.lists);
     this.sharedService.setList(this.list);
 
     this.apiService.getData(`https://localhost:7247/api/HistoryItem/ForCard${this.card.id}`)
@@ -47,55 +52,32 @@ export class CardComponentComponent {
     }, error => {
       console.error('Error Getting data:', error);
     });
+ 
+  }
+  ngOnInit(): void {
+    this.sharedService.isVisibleEditCard$.subscribe(value => {
+      this.isCardVisible = value;
+    });
 
+    this.currentList = this.list;
 
-
-    
-    
+    console.warn(this.currentList)
   }
 
   onClickDelete(){
-    this.apiService.deleteDataByIdManual(`https://localhost:7247/api/cards/${this.cardId}?boardId=${this.currentBoard.id}`,).subscribe(res=>{
-      this.removeFromList(this.cardId)
-    })
+    this.store.dispatch(PostActions.deleteCardApi({cardId: this.card.id, boardId: this.currentBoard.id}))
   }
 
-  onClickPatch(anotherList: any){
-    this.apiService.patchData(`https://localhost:7247/api/catalog/MoveCard?catalogId_1=${this.list.id}&catalogId_2=${anotherList.id}&cardId=${this.cardId}&boardId=${this.currentBoard.id}`, 1)
-      .subscribe(response => {
-        this.swapCard(this.cardId, anotherList);
-        console.log('Patch request successful!', response);
-      }, error => {
-        console.error('Error patching data:', error);
-      });
-
+  onClickPatch(listId: number){
+    this.store.dispatch(PostActions.patchCardApi({card: this.createCardDTO(listId), boardId: this.currentBoard.id}))
   }
 
-  swapCard(card: number, anotherList: any) {
-    this.removeFromList(card);
-    anotherList.cardsId.push(this.cardId);
-    }
-  
+  createCardDTO(newListId: number): any {
+    const updatedCard = {
+      ...this.card,
+      catalogId: newListId
+    };
 
-
-
-  ngOnInit(){
-      this.apiService.getData(`https://localhost:7247/api/cards/${this.cardId}`).subscribe(res =>{
-        this.card = res;
-      });
-
-      this.store.select(selectBoard).subscribe(board => {
-        this.currentBoard = board;
-      });
-    }
-
-removeFromList(cardId: number) {
-  const index = this.list.cardsId.findIndex((item: number) => item === cardId);
-  if (index !== -1) {
-    this.list.cardsId.splice(index, 1);
-  } else {
-    console.warn('Card not found in local list:', cardId);
+    return updatedCard
   }
 }
-}
-

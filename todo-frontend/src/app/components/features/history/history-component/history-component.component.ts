@@ -8,7 +8,10 @@ import {ScrollPanelModule} from 'primeng/scrollpanel';
 @Component({
   selector: 'app-history-component',
   standalone: true,
-  imports: [CommonModule, ScrollPanelModule],
+  imports: [
+    CommonModule,
+    ScrollPanelModule
+    ],
   templateUrl: './history-component.component.html',
   styleUrl: './history-component.component.scss'
 })

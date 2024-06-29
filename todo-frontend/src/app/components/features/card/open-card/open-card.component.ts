@@ -2,11 +2,15 @@ import { Component, Input, Output } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
 import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
+import { BannerComponent } from '../../../core/banner/banner/banner.component';
 
 @Component({
   selector: 'app-open-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    BannerComponent,
+     CommonModule
+    ],
   templateUrl: './open-card.component.html',
   styleUrl: './open-card.component.scss'
 })
@@ -35,27 +39,8 @@ export class OpenCardComponent {
   }
   
   onClickPatch(anotherList: any){
-    this.apiService.patchData(`https://localhost:7247/api/catalog/MoveCard?catalogId_1=${this.list.id}&catalogId_2=${anotherList.id}&cardId=${this.card.id}`, 1)
-      .subscribe(response => {
-        this.swapCard(this.card.id, anotherList);
-        console.log('Patch request successful!', response);
-      }, error => {
-        console.error('Error patching data:', error);
-      });
+    
   }
-
-  swapCard(card: number, anotherList: any) {
-    this.removeFromList(card);
-    anotherList.cardsId.push(this.card.id);
-    }
-    removeFromList(cardId: number) {
-      const index = this.list.cardsId.findIndex((item: number) => item === cardId);
-      if (index !== -1) {
-        this.list.cardsId.splice(index, 1);
-      } else {
-        console.warn('Card not found in local list:', cardId);
-      }
-    }
 
   ngOnInit() {
     this.sharedService.isVisibleCard$.subscribe(value => {
