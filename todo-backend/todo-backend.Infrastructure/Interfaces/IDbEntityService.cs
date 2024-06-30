@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using todo_backend.Domain.Models;
+﻿using todo_backend.Domain.Models;
 
 namespace todo_backend.Infrastructure.Interfaces
 {
@@ -17,9 +12,6 @@ namespace todo_backend.Infrastructure.Interfaces
         Task<T> Update(T entity);
 
         Task Delete(T entity);
-        Task DeleteCardFromCatalogs(int id);
-        Task DeleteCatalogFromBoard(Catalog catalog, int boardId);
-        Task AddCardToCatalog(Catalog catalog, int cardId);
         IQueryable<T> GetAll();
     }
 }

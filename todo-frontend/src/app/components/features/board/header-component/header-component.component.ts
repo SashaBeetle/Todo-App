@@ -1,10 +1,7 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { HistoryComponentComponent } from '../../history/history-component/history-component.component';
 import { SharedService } from '../../../../services/shared-service.service';
 import { ApiService } from '../../../../services/api.service';
-import { Store } from '@ngrx/store';
-import { BoardState } from '../../../../ngrx/board/board.reducer';
-import { selectBoard } from '../../../../ngrx/board/board.selectors';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -20,11 +17,11 @@ export class HeaderComponentComponent{
   @Input() history: any;
   @Input() currentBoard: any;
   
-  onClick() {
+  onClickOpenHistory() {
     this.sharedService.toggleIsVisibleHistory();
     this.sharedService.setHistory(this.history);
     
-    this.apiService.getData(`https://localhost:7247/api/HistoryItem/ForBoard${this.currentBoard.id}`)
+    this.apiService.getData(`https://localhost:7247/api/v1/historyitem/ForBoard${this.currentBoard.id}`)
     .subscribe(response => {
       this.history = response;
       this.sharedService.setHistory(response);

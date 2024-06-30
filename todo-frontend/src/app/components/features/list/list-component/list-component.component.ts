@@ -1,10 +1,15 @@
-import { Component, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, inject, input, Input, Output } from '@angular/core';
 import { CardComponentComponent } from '../../card/card-component/card-component.component';
 import { AddListComponent } from '../add-list/add-list.component';
 import { SharedService } from '../../../../services/shared-service.service';
-import { ApiService } from '../../../../services/api.service';
 import { AddCardComponent } from '../../card/add-card/add-card.component';
 import { OpenCardComponent } from '../../card/open-card/open-card.component';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
+import * as PostActions from '../../../../ngrx/list/list.actions'
+import {checkListLength } from '../../../../utils/list.utilities'
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
+
 
 
 @Component({
@@ -20,19 +25,18 @@ import { OpenCardComponent } from '../../card/open-card/open-card.component';
   styleUrl: './list-component.component.scss'
 })
 export class ListComponentComponent{
+  private readonly store:Store<BoardState> = inject(Store)
 
   @Input() isVisible: boolean = false;
   @Output() lists: any;
-  @Input() currentBoard: any;
+  @Output() currentBoard: any;
 
-  isAddListVisible: boolean = true;
+  @Input() isAddListVisible: boolean = false;
 
 
   constructor(
     private sharedService: SharedService,
-    private apiService: ApiService
   ){}
-
 
 
   onClickEdit(list: any) {
@@ -46,47 +50,33 @@ export class ListComponentComponent{
   }
 
   onClickAddCard(list: any) {
-    this.sharedService.toggleIsVisibleEditCard();
+    this.sharedService.toggleIsVisibleCard();
     this.sharedService.setList(list);
   }
 
   onClickDeleteList(listId: number){
-    console.log()
-    this.apiService.deleteDataByIdManual(`https://localhost:7247/api/catalog/${listId}?boardId=${this.currentBoard.id}`).subscribe(res=>{
-      console.log('ListN:', listId);
-      console.log(`https://localhost:7247/api/catalog/${listId}?boardId=${this.currentBoard.id}`)
-      const index = this.lists.findIndex((item: { id: number; }) => item.id === listId);
-        if (index !== -1) {
-          this.lists.splice(index, 1);
-          console.log(this.lists);
-        }
-    })
+    this.store.dispatch(PostActions.deleteListApi({listId: listId, boardId: this.currentBoard.id}))
+
+    this.sharedService.toggleisAddListVisible(checkListLength((this.currentBoard.catalogs).length - 1))
   }
 
-  
   ngOnInit(){
-    console.log('ng', this.lists)
+
+    this.sharedService.isAddListVisible$.subscribe(value => {
+      this.isAddListVisible = value;
+    })
+
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
 
-    this.apiService.getDataById("https://localhost:7247/api/catalog/ForBoard", this.currentBoard.id).subscribe(res =>{
-        this.lists = res;
-        console.log('t', this.lists)
-        this.sortDataByTitle(this.lists);
-        this.sharedService.setLists(this.lists)
-      }); 
+    this.store.select(selectBoard).subscribe(board => {
+      this.currentBoard = board;
+      this.isAddListVisible = checkListLength(board.catalogs.length)
+    });
 
 
-  }
-
-  ngDoCheck(): void {
-    if(this.lists.length == 4){
-      this.isAddListVisible = false;
-      console.log('List',this.isAddListVisible)
-    }else{      
-      this.isAddListVisible = true;
-    }  
+    
   }
 
   sortDataByTitle(data: any[]): any[] {

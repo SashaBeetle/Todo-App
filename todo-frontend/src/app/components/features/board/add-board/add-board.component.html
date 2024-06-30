@@ -4,11 +4,11 @@
             <input placeholder="Enter title..." class="center h-8 w-full px-3 py-2 rounded-md" formControlName="title">
             <div class="text-red-400 text-sm" *ngIf="boardForm.controls['title'].invalid && (boardForm.controls['title'].touched || boardForm.controls['title'].dirty)">
                 <span *ngIf="boardForm.controls['title'].errors?.['required']"> * Required</span>
-                <span *ngIf="boardForm.controls['title'].errors?.['maxlength']">* Too long</span>
+                <span *ngIf="boardForm.controls['title'].errors?.['maxlength']"> * Too long</span>
             </div>
         </div>
         <div class="flex w-6/12 justify-between items-center flex-col ml-4">
-            <div class="flex  items-center gap-2 ">
+            <div class="flex items-center gap-2 ">
                 @if(!isEditable){
                     <a (click)="onSubmitCreateBoard()" class="p-2 addboard_button addboard_button:hover text-white leading-none rounded font-medium m-1 bg-gray-300 text-xs uppercase hover:bg-gray-400">Create Board</a>
                 }@else{

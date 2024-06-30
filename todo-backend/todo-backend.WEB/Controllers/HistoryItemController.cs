@@ -6,7 +6,7 @@ using todo_backend.Infrastructure.Interfaces;
 
 namespace todo_backend.WEB.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/historyitem")]
     [ApiController]
     public class HistoryItemController : ControllerBase
     {

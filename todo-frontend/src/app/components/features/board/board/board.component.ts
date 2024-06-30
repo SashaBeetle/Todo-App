@@ -4,10 +4,9 @@ import { OpenCardComponent } from '../../card/open-card/open-card.component';
 import { HeaderComponentComponent } from '../header-component/header-component.component';
 import { ListComponentComponent } from '../../list/list-component/list-component.component';
 import { SharedService } from '../../../../services/shared-service.service';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { BoardState } from '../../../../ngrx/board/board.reducer';
 import { CommonModule } from '@angular/common';
-import * as PostActions from '../../../../ngrx/board/board.actions'
 import { selectBoard } from '../../../../ngrx/board/board.selectors';
 
 @Component({
@@ -26,9 +25,7 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
 export class BoardComponent {
   private readonly store:Store<BoardState> = inject(Store);
 
-  constructor(private sharedService: SharedService){
-
-}
+  constructor(private sharedService: SharedService){}
 
 @Input() isCardVisible: boolean = false;
 @Output() currentBoard: any;

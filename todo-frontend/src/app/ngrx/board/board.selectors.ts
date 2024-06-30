@@ -10,5 +10,5 @@ export const selectBoard = createSelector(
 export const selectBoards = createSelector(
   selectFeature,
     (state: BoardState) => state.boards
-)
+);
 

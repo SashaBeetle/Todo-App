@@ -1,18 +1,27 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
+import * as PostActions from '../../../../ngrx/list/list.actions'
+import {checkListLength } from '../../../../utils/list.utilities'
+
+
 
 @Component({
   selector: 'app-add-list',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+     CommonModule
+    ],
   templateUrl: './add-list.component.html',
   styleUrl: './add-list.component.scss'
 })
 export class AddListComponent {
-  
+  private readonly store:Store<BoardState> = inject(Store)
+
   @Input() lists: any;
   @Input() editable: boolean = false;
   @Input() list: any;
@@ -21,11 +30,10 @@ export class AddListComponent {
 
   constructor(
     private sharedService: SharedService, 
-    private apiService: ApiService)
+    )
     {
     this.listForm = new FormGroup({
       title: new FormControl("", [Validators.required, Validators.maxLength(15)]),
-      cardsId: new FormControl([])
     })
   }
 
@@ -38,29 +46,26 @@ export class AddListComponent {
 
   onSubmitCreateList(){
     if(this.listForm.valid){
-      const jsonData = JSON.stringify(this.listForm.value);
-      this.apiService.postData(`https://localhost:7247/api/catalog?BoardId=${this.board.id}`, jsonData) 
-        .subscribe(response => {
-          this.listForm.value.id = response.id;
-          this.lists.push(this.listForm.value)
-          console.log('Form submitted successfully!', jsonData);
-        }, error => {
-          console.error('Error submitting form:', error, jsonData);
-        });
+      const formData = this.listForm.value;
+      formData['boardId'] = this.board.id;
+      const jsonData = JSON.stringify(formData);
+
+      this.store.dispatch(PostActions.postListApi({ boardId: this.board.id, list: jsonData }))
+
+      this.sharedService.toggleisAddListVisible(checkListLength(this.lists.length))
+      console.warn(this.lists.length)
     }    
   }
 
   onSubmitEditList(){
     if(this.listForm.valid){
       this.list = this.sharedService.getList();
-      this.list.title = this.listForm.get('title')?.value;
-  
-      this.apiService.patchData(`https://localhost:7247/api/catalog/${this.list.id}?title=${this.list.title}&boardId=${this.board.id}`,1)
-        .subscribe(response => {
-          console.log('Patch request successful!', response);
-        }, error => {
-          console.error('Error patching data:', error);
-        });
+            
+      this.store.dispatch(PostActions.patchListApi({
+        list: this.list,
+        boardId: this.board.id,
+        newListTitle: this.listForm.get('title')?.value
+      }))
   
       this.sharedService.toggleisEditableList();
       this.sharedService.toggleIsVisibleCreateList();
@@ -72,8 +77,6 @@ export class AddListComponent {
     this.sharedService.isEditableList$.subscribe(value => {
       this.editable = value; 
     });
-
-    console.log('b',this.board)
   }
   
 }

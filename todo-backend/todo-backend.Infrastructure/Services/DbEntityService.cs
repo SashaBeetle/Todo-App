@@ -67,48 +67,7 @@ namespace todo_backend.Infrastructure.Services
         {
             var result = _dbcontext.Set<T>().FirstOrDefault(x => x.Id == id);
 
-            if (result == null)
-            {
-                return null;
-            }
-
             return result;
         }
-
-        public async Task DeleteCardFromCatalogs(int cardId)
-        {
-            var catalogs = await _dbcontext.Catalogs.ToListAsync();
-
-            foreach (var catalog in catalogs)
-            {
-                var card = catalog.CardsId.FirstOrDefault(c => c == cardId);
-                if (card != null && card != 0)
-                {
-                    catalog.CardsId.Remove(card);
-                    break;
-                }
-            }
-
-            await SaveChanges();
-        }
-
-        public async Task DeleteCatalogFromBoard(Catalog catalog, int boardId)
-        {
-            Board board = await _dbcontext.Boards.FirstOrDefaultAsync(x => x.Id == boardId);
-            foreach(var catalogId in board.CatalogsId)
-            {
-                if (catalogId == catalog.Id)
-                    board.CatalogsId.Remove(catalog.Id);
-                    break;
-            }
-
-            await SaveChanges();
-        }
-        public async Task AddCardToCatalog(Catalog catalog, int cardId)
-        {
-            catalog.CardsId.Add(cardId);
-            await SaveChanges();
-        }
-
     }
 }

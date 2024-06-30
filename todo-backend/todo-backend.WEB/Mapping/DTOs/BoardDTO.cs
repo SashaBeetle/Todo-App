@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public List<int> CatalogsId { get; set; }
+        public ICollection<CatalogDTO>? Catalogs { get; set; } = default!;
     }
 }
