@@ -38,4 +38,19 @@
     font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-style: italic;
-  }
+}
+
+.save_button{
+    background-color: #453F5B;
+}
+.save_button:hover{
+    background-color: #3c335e;
+}
+
+.custom_area{
+    resize: none;
+}
+
+textarea::content{
+    padding-left: 10px;
+}

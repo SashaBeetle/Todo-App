@@ -12,7 +12,7 @@ export const setBoards = createEffect(
         return actions$.pipe(
             ofType(BoardActions.getBoardsApi),
             switchMap(() =>
-                apiService.getData("https://localhost:7247/api/Boards/").pipe(
+                apiService.getData("https://localhost:7247/api/v1/boards/").pipe(
                     map(fetchedData => BoardActions.AddBoards({ boards: fetchedData })),
                 )
             )
@@ -29,7 +29,7 @@ export const setBoard = createEffect(
         return actions$.pipe(
             ofType(BoardActions.getBoardApi),
             switchMap(action =>
-                apiService.getDataById("https://localhost:7247/api/Boards", action.boardId).pipe(
+                apiService.getDataById("https://localhost:7247/api/v1/boards", action.boardId).pipe(
                     map(fetchedData => BoardActions.AddCurrentBoard({ currentBoard: fetchedData })),
                 )
             )
@@ -46,7 +46,7 @@ export const addBoard = createEffect(
         return actions$.pipe(
             ofType(BoardActions.postBoardApi),
             switchMap(action => 
-                apiService.postData("https://localhost:7247/api/Boards", action.board).pipe(
+                apiService.postData("https://localhost:7247/api/v1/boards", action.board).pipe(
                     map(() => BoardActions.getBoardsApi())
                 )
             )
@@ -63,7 +63,7 @@ export const deleteBoard = createEffect(
         return actions$.pipe(
             ofType(BoardActions.deleteBoardApi),
             switchMap(action =>
-                apiService.deleteDataById("https://localhost:7247/api/Boards", action.boardId).pipe( 
+                apiService.deleteDataById("https://localhost:7247/api/v1/boards", action.boardId).pipe( 
                     map(() => BoardActions.getBoardsApi())
                 )
             )
@@ -81,7 +81,7 @@ export const changeBoard = createEffect(
         return actions$.pipe(
             ofType(BoardActions.patchBoardApi),
             switchMap(action => 
-                apiService.patchData(`https://localhost:7247/api/Boards/${action.boardId}?title=${action.boardTitle}`, 1).pipe(
+                apiService.patchData(`https://localhost:7247api/v1/boards/${action.boardId}?title=${action.boardTitle}`, 1).pipe(
                     map(() => BoardActions.getBoardsApi())
                 )
             )

@@ -7,7 +7,7 @@ using todo_backend.WEB.Mapping.DTOs;
 
 namespace todo_backend.WEB.Controllers
 {
-    [Route("api/catalog")]
+    [Route("api/v1/catalog")]
     [ApiController]
     public class CatalogController : ControllerBase
     {

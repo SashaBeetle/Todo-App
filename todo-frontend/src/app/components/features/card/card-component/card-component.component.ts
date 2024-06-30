@@ -29,6 +29,7 @@ export class CardComponentComponent {
   @Input() history:any;
   @Input() currentBoard: any;
   @Input() isCardVisible: boolean = false;
+  isOpenCardVisible: boolean = false;
 
   @Output() currentList: any;
 
@@ -40,11 +41,9 @@ export class CardComponentComponent {
   ){}
 
   onClickOpenCard() {
-    this.sharedService.toggleIsVisibleCard();
-    this.sharedService.setCard(this.card);
-    this.sharedService.setList(this.list);
+    this.isOpenCardVisible = true;
 
-    this.apiService.getData(`https://localhost:7247/api/HistoryItem/ForCard${this.card.id}`)
+    this.apiService.getData(`https://localhost:7247/api/v1/historyitem/ForCard${this.card.id}`)
     .subscribe(response => {
       this.history = response;
       this.sharedService.setHistory(response);
@@ -55,13 +54,11 @@ export class CardComponentComponent {
  
   }
   ngOnInit(): void {
-    this.sharedService.isVisibleEditCard$.subscribe(value => {
-      this.isCardVisible = value;
-    });
-
     this.currentList = this.list;
 
-    console.warn(this.currentList)
+    this.sharedService.isVisibleCard$.subscribe(value => {
+      this.isCardVisible = value; 
+    });
   }
 
   onClickDelete(){
@@ -70,6 +67,10 @@ export class CardComponentComponent {
 
   onClickPatch(listId: number){
     this.store.dispatch(PostActions.patchCardApi({card: this.createCardDTO(listId), boardId: this.currentBoard.id}))
+  }
+//
+  handleOutputEvent(value: boolean) {
+    this.isOpenCardVisible = value;
   }
 
   createCardDTO(newListId: number): any {

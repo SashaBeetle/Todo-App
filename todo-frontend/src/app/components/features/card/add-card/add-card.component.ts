@@ -68,7 +68,7 @@ export class AddCardComponent {
   }
 
   onClick() {
-    this.sharedService.toggleIsVisibleEditCard();
+    this.sharedService.toggleIsVisibleCard();
   }
   
   ngOnInit() {

@@ -13,7 +13,7 @@ export const deleteCard = createEffect(
         return actions$.pipe(
             ofType(CardActions.deleteCardApi),
             switchMap(action =>
-                apiService.deleteDataById(`https://localhost:7247/api/cards`, action.cardId).pipe( 
+                apiService.deleteDataById(`https://localhost:7247/api/v1/cards`, action.cardId).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )
@@ -22,7 +22,7 @@ export const deleteCard = createEffect(
     { functional: true }
 )
 
-export const addList = createEffect(
+export const addCard = createEffect(
     () => {
         const actions$ = inject(Actions);
         const apiService = inject(ApiService);
@@ -30,7 +30,7 @@ export const addList = createEffect(
         return actions$.pipe(
             ofType(CardActions.postCardApi),
             switchMap(action =>
-                apiService.postData(`https://localhost:7247/api/cards`, action.card).pipe( 
+                apiService.postData(`https://localhost:7247/api/v1/cards`, action.card).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )
@@ -39,7 +39,7 @@ export const addList = createEffect(
     { functional: true }
 )
 
-export const patchList = createEffect(
+export const patchCard = createEffect(
     () => {
         const actions$ = inject(Actions);
         const apiService = inject(ApiService);
@@ -47,7 +47,7 @@ export const patchList = createEffect(
         return actions$.pipe(
             ofType(CardActions.patchCardApi),
             switchMap(action =>
-                apiService.patchData(`https://localhost:7247/api/cards`, action.card).pipe( 
+                apiService.patchData(`https://localhost:7247/api/v1/cards`, action.card).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )   

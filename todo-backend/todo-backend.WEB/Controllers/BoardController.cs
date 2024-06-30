@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace todo_backend.WEB.Controllers
 {
-    [Route("api/Boards")]
+    [Route("api/v1/boards")]
     [ApiController]
     public class BoardController : ControllerBase
     {

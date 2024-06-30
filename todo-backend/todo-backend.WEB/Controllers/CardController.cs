@@ -7,7 +7,7 @@ using todo_backend.WEB.Mapping.DTOs;
 namespace todo_backend.WEB.Controllers
 {
     [ApiController]
-    [Route("api/cards")]
+    [Route("api/v1/cards")]
     public class CardController : ControllerBase
     {
         private readonly ICardRepository _cardRepository;

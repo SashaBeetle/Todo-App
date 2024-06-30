@@ -50,7 +50,7 @@ export class ListComponentComponent{
   }
 
   onClickAddCard(list: any) {
-    this.sharedService.toggleIsVisibleEditCard();
+    this.sharedService.toggleIsVisibleCard();
     this.sharedService.setList(list);
   }
 

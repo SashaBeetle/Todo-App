@@ -21,7 +21,7 @@ export class HeaderComponentComponent{
     this.sharedService.toggleIsVisibleHistory();
     this.sharedService.setHistory(this.history);
     
-    this.apiService.getData(`https://localhost:7247/api/HistoryItem/ForBoard${this.currentBoard.id}`)
+    this.apiService.getData(`https://localhost:7247/api/v1/historyitem/ForBoard${this.currentBoard.id}`)
     .subscribe(response => {
       this.history = response;
       this.sharedService.setHistory(response);

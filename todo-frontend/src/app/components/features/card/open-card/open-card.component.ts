@@ -1,45 +1,58 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
-import { ApiService } from '../../../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { BannerComponent } from '../../../core/banner/banner/banner.component';
+import { PriorityConstants } from '../../../../constants/priorityConstants';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
+import * as PostActions from '../../../../ngrx/card/card.actions'
 
 @Component({
   selector: 'app-open-card',
   standalone: true,
   imports: [
     BannerComponent,
-     CommonModule
+    CommonModule,
+    ReactiveFormsModule
     ],
   templateUrl: './open-card.component.html',
   styleUrl: './open-card.component.scss'
 })
 export class OpenCardComponent {
+  private readonly store:Store<BoardState> = inject(Store);
 
-  constructor(private sharedService: SharedService, private apiService: ApiService){}
+  constructor(private sharedService: SharedService){
+    this.cardForm = new FormGroup({})
+  }
   @Input() isChoose: boolean = false;
   @Input() isVisible: boolean = true;
+  isEditable: boolean = false
   @Input() card: any;
-  @Input() data: any;
-  @Input() list: any;
-  @Output() history: any;
+  @Input() currentBoard: any;
+  @Input() currentList: any;
+
+  cardForm: FormGroup;
+  history: any;
+  @Output() outputEvent = new EventEmitter<boolean>();
+
+  priority: any = PriorityConstants.priority;
 
   
-  onClick() {
-    this.sharedService.toggleIsVisibleCard();
+  onClickClose() {
+    this.outputEvent.emit(false);
   }
-
 
   onClickEditCard(){
-    this.sharedService.toggleIsVisibleEditCard();
-    this.sharedService.toggleIsVisibleCard();
-    this.sharedService.toggleisEditableCard();
-    this.sharedService.setCard(this.card);
-    this.sharedService.setList(this.list);
+    this.isEditable = !this.isEditable
   }
   
-  onClickPatch(anotherList: any){
-    
+  onClickPatchCard(){
+    if(this.cardForm.valid){
+      this.cardForm.value["id"] = this.card.id
+      this.store.dispatch(PostActions.patchCardApi({card: this.cardForm.value, boardId: this.currentBoard.id}))
+      this.onClickEditCard();
+    }
   }
 
   ngOnInit() {
@@ -51,20 +64,13 @@ export class OpenCardComponent {
       this.isChoose = value;
     })
 
+    this.cardForm = new FormGroup({
+      title: new FormControl(this.card.title, [Validators.required, Validators.maxLength(12)]),
+      description: new FormControl(this.card.description, [Validators.required, Validators.maxLength(256)]),
+      priority: new FormControl(this.card.priority, [Validators.required]),
+      DueDate: new FormControl('', Validators.required),
+      catalogId: new FormControl('', Validators.required)
+    })
 }
-
-
-ngDoCheck(): void {
-  if(this.isVisible){
-    this.card = this.sharedService.getCard();
-    this.data = this.sharedService.getData();
-    this.list = this.sharedService.getList();
-    this.history = this.sharedService.getHistory().slice().reverse();
-  }
-}
-
-
-  
-  
 }
 
