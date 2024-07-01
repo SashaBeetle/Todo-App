@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../../../services/api.service';
@@ -31,6 +31,8 @@ export class AddCardComponent {
   @Input() currentBoard: any;
   @Input() currentList: any;
 
+  @Output() outputEvent = new EventEmitter<boolean>();
+  
   priority: any = PriorityConstants.priority;
   lists: any;
   card: any;
@@ -68,7 +70,7 @@ export class AddCardComponent {
   }
 
   onClick() {
-    this.sharedService.toggleIsVisibleCard();
+    this.outputEvent.emit(false);
   }
   
   ngOnInit() {

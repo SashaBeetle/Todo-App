@@ -17,7 +17,6 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
   standalone: true,
   imports: [
     CardComponentComponent,
-    AddListComponent,
     OpenCardComponent,
     AddCardComponent
   ],
@@ -28,11 +27,10 @@ export class ListComponentComponent{
   private readonly store:Store<BoardState> = inject(Store)
 
   @Input() isVisible: boolean = false;
+  @Input() currentList: any;
   @Output() lists: any;
   @Output() currentBoard: any;
-
-  @Input() isAddListVisible: boolean = false;
-
+  @Output() isAddCardVisible: boolean = false;
 
   constructor(
     private sharedService: SharedService,
@@ -45,38 +43,27 @@ export class ListComponentComponent{
     this.sharedService.setList(list);
   }
 
-  onClickAddList(){
-    this.sharedService.toggleIsVisibleCreateList();
-  }
-
   onClickAddCard(list: any) {
     this.sharedService.toggleIsVisibleCard();
     this.sharedService.setList(list);
+    this.isAddCardVisible = true;
   }
 
   onClickDeleteList(listId: number){
     this.store.dispatch(PostActions.deleteListApi({listId: listId, boardId: this.currentBoard.id}))
-
     this.sharedService.toggleisAddListVisible(checkListLength((this.currentBoard.catalogs).length - 1))
   }
 
   ngOnInit(){
-
-    this.sharedService.isAddListVisible$.subscribe(value => {
-      this.isAddListVisible = value;
-    })
-
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
     });
 
     this.store.select(selectBoard).subscribe(board => {
       this.currentBoard = board;
-      this.isAddListVisible = checkListLength(board.catalogs.length)
     });
 
-
-    
+    console.warn('T', this.currentList)
   }
 
   sortDataByTitle(data: any[]): any[] {

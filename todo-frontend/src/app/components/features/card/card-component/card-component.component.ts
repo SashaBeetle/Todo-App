@@ -30,7 +30,7 @@ export class CardComponentComponent {
   @Input() currentBoard: any;
   @Input() isCardVisible: boolean = false;
   isOpenCardVisible: boolean = false;
-
+  
   @Output() currentList: any;
 
   sharedData: any;
@@ -68,7 +68,7 @@ export class CardComponentComponent {
   onClickPatch(listId: number){
     this.store.dispatch(PostActions.patchCardApi({card: this.createCardDTO(listId), boardId: this.currentBoard.id}))
   }
-//
+
   handleOutputEvent(value: boolean) {
     this.isOpenCardVisible = value;
   }

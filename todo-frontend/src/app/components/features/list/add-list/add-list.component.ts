@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -28,6 +28,8 @@ export class AddListComponent {
   @Input() board: any;
   listForm: FormGroup;
 
+  @Output() outputEvent = new EventEmitter<boolean>();
+
   constructor(
     private sharedService: SharedService, 
     )
@@ -41,7 +43,7 @@ export class AddListComponent {
     if(this.editable){
       this.sharedService.toggleisEditableList();
     }
-    this.sharedService.toggleIsVisibleCreateList();
+    this.outputEvent.emit(false);
   }
 
   onSubmitCreateList(){
@@ -54,6 +56,7 @@ export class AddListComponent {
 
       this.sharedService.toggleisAddListVisible(checkListLength(this.lists.length))
       console.warn(this.lists.length)
+      this.outputEvent.emit(false);
     }    
   }
 

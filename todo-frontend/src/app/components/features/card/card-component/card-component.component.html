@@ -58,5 +58,5 @@
 }
 
 @if(isCardVisible){
-  <app-add-card [currentBoard]="currentBoard" [currentList]="currentList" ></app-add-card>
+  <app-add-card (outputEvent)="handleOutputEvent($event)" [currentBoard]="currentBoard" [currentList]="currentList" ></app-add-card>
 }
