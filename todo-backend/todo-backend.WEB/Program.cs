@@ -9,7 +9,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "CorsPolicy",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247")
+                          policy.WithOrigins("http://localhost:4200", "http://localhost:7247", "http://localhost:7080", "http://localhost:7081")
                           .AllowAnyMethod()
                           .AllowAnyHeader();
                       });
@@ -19,10 +19,8 @@ builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.AddControllers()
     .AddFluentValidation(x => { 
-
     x.ImplicitlyValidateChildProperties = true;
     x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-
     });
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));

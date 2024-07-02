@@ -5,7 +5,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
 @NgModule({
   imports: [
     HttpClientModule,
-    ScrollPanelModule
+    ScrollPanelModule,
   ],
   providers: [
     provideHttpClient(withFetch()),

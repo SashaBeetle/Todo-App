@@ -1,4 +1,6 @@
-﻿namespace todo_backend.WEB.Mapping.DTOs
+﻿using todo_backend.Domain.Models;
+
+namespace todo_backend.WEB.Mapping.DTOs
 {
     public class CardDTO
     {
@@ -7,5 +9,6 @@
         public string Description { get; set; }
         public string Priority { get; set; }
         public DateTime DueDate { get; set; }
+        public int CatalogId { get; set; }
     }
 }

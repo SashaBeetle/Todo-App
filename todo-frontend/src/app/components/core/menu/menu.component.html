@@ -1,0 +1,65 @@
+<ng-container #boardContainer></ng-container>
+
+
+<div class="m-5">
+    <div class=" flex mb-4 items-center justify-between border-b-2 border-solid">
+        <h1 class=" text-4xl font-bold">Boards</h1>
+        <button (click)="onRefresh()" class="flex gap-2 text-white border-solid m-5 items-center text-sm justify-end font-bold rounded focus:outline-none  hover:bg-gray-100">
+            <svg width="35px" height="35px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13.5A7.5 7.5 0 1 1 11.5 6H20m0 0-3-3m3 3-3 3"/></svg>        
+        </button> 
+    </div>
+
+    
+   
+    <div class="grid justify-center xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-2 xl:max-w-full max-w-screen-xl">
+		@for(board of boards; track boards.title){
+        <div class="flex bg-gray-200 rounded-lg p-4 m-2">
+            <div class="w-64 bg-gray-400 rounded-lg"></div>
+			<div class="flex w-6/12 justify-between items-center flex-col ml-4">
+                <div class="w-full flex justify-end">
+                    <button class="relative ml-4 flex justify-end text-sm focus:outline-none group ">
+                        <div class="flex justify-end items-start w-10 h-10 ">
+                            <svg class="w-5 h-5 hover:bg-gray-300 rounded-full " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </div>
+                        <div class="absolute z-10 right-0 font-bold flex-col rounded-lg items-start hidden w-40 mt-1 pb-1 bg-white border border-white-800 shadow-xl group-focus:flex">
+                        <a (click)="onEditBoard(board)" class="w-full px-4 py-2 text-left rounded-t-lg hover:bg-gray-100 flex items-center">
+                            <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /> <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                            Edit
+                        </a>
+                        <a (click)="onDeleteBoard(board.id)" class="text-red-500 font-bold w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center">
+                            <svg class="mr-2" fill="red" width="15px" height="15px"  viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path d="M767 336H233q-12 0-21 9t-9 21l38 505q1 13 12 21.5t30 8.5h434q18 0 29-8.5t13-21.5l38-505q0-12-9-21t-21-9zM344 841q-10 0-18-9t-8-21l-26-386q0-12 9-20.5t21-8.5 21 8.5 9 20.5l18 386q0 12-7.5 21t-18.5 9zm182-31q0 13-7.5 22t-18.5 9-18.5-9-7.5-22l-4-385q0-12 9-20.5t21-8.5 21 8.5 9 20.5zm156 1q0 12-8 21t-18 9q-11 0-18.5-9t-7.5-21l18-386q0-12 9-20.5t21-8.5 21 8.5 9 20.5zm101-605l-179-30q-12-2-15-15l-8-33q-4-20-14-26-6-3-22-3h-90q-16 0-23 3-10 6-13 26l-8 33q-2 13-15 15l-179 30q-19 3-31.5 14.5T173 249v28q0 9 6.5 15t15.5 6h610q9 0 15.5-6t6.5-15v-28q0-17-12.5-28.5T783 206z"/></svg>
+                            Delete
+                        </a>
+                        </div>
+                    </button>
+                </div>
+                
+
+                <h4 class="text-xl font-semibold">{{board.title}}</h4>
+                <div  class="flex items-center gap-2 ">
+                    <a (click)="onOpenBoard(board)" class="p-2 leading-none rounded font-medium mt-3 bg-gray-300 text-xs uppercase hover:bg-gray-400">Open Board</a>
+                </div>
+			</div>
+		</div>
+        }
+
+        
+       
+        @if(isVisible){
+            <app-add-board [currentBoard]="board" [boards]="boards"></app-add-board>
+
+        }@else {
+            <div (click)="onCreateBoard()" class="flex dottet-border justify-center items-center bg-white rounded-lg p-4 m-2 hover:bg-gray-100">
+                <div class="flex flex-col justify-center items-center">
+                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1z" fill="#0D0D0D"/></svg>
+                    <h4 class="text-xl font-semibold">Add new board</h4>
+                </div>
+            </div>
+        }
+        
+        
+	</div>
+</div>
+

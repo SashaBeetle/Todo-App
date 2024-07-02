@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public List<int> CardsId { get; set; }
+        public int BoardId { get; set; }
+        public ICollection<CardDTO>? Cards { get; set; }
     }
 }
