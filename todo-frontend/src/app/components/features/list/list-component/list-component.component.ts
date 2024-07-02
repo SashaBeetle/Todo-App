@@ -26,6 +26,7 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
 export class ListComponentComponent{
   private readonly store:Store<BoardState> = inject(Store)
 
+  isCardVisible: boolean = false;
   @Input() isVisible: boolean = false;
   @Input() currentList: any;
   @Output() lists: any;
@@ -43,15 +44,17 @@ export class ListComponentComponent{
     this.sharedService.setList(list);
   }
 
-  onClickAddCard(list: any) {
-    this.sharedService.toggleIsVisibleCard();
-    this.sharedService.setList(list);
-    this.isAddCardVisible = true;
+  onClickAddCard() {
+    this.isCardVisible = true;
   }
 
   onClickDeleteList(listId: number){
     this.store.dispatch(PostActions.deleteListApi({listId: listId, boardId: this.currentBoard.id}))
     this.sharedService.toggleisAddListVisible(checkListLength((this.currentBoard.catalogs).length - 1))
+  }
+
+  handleOutputAddCardEvent(value: boolean) {
+    this.isCardVisible = value;
   }
 
   ngOnInit(){

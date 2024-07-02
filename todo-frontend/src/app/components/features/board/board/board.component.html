@@ -1,8 +1,8 @@
 <app-header-component [currentBoard]="currentBoard"></app-header-component>
 
-<div class="flex gap-8 m-5">
+<div class="flex gap-8 m-5 ">
     @for (list of currentBoard.catalogs; track list.id){
-        <app-list-component [currentList]="list"></app-list-component>
+        <app-list-component [currentList]="list" class="app-list-component"></app-list-component>
     }
 
     @if(isAddListVisibleComponent){

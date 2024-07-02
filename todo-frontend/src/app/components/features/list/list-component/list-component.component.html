@@ -1,4 +1,4 @@
-<div class="w-96 h-70">
+<div class="">
   <div class="mb-2 flex-row border-title border-solid">
     <div class="flex mr-auto font-bold h-10 text-lg items-center text-left">{{currentList.title}}</div>
       <div class="flex font-bold items-center text-lg">{{currentList.cards.length}}</div>
@@ -21,7 +21,7 @@
       </button>  
   </div>
   
-  <a (click)="onClickAddCard(currentList)" class=" mb-2 flex dottet-border items-center justify-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium rounded hover:bg-gray-100">
+  <a (click)="onClickAddCard()" class=" mb-2 flex dottet-border items-center justify-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium rounded hover:bg-gray-100">
       <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
       </svg>
@@ -34,3 +34,7 @@
       }
   </div>
 </div>
+
+@if(isCardVisible){
+  <app-add-card (outputEvent)="handleOutputAddCardEvent($event)" [currentBoard]="currentBoard" [currentList]="currentList" ></app-add-card>
+}

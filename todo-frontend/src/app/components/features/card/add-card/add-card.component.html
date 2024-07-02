@@ -1,11 +1,11 @@
-<div (click)="onClick()" class="fixed inset-0 w-full h-full bg-black opacity-25 z-10"></div>
+<div (click)="onClickClose()" class="fixed inset-0 w-full h-full bg-black opacity-25 z-10"></div>
 
 <form [formGroup]="cardForm" class="z-30">
     <div>
 
         <div class="fixed addcard_page rounded-xl" >
             <div class="flex items-center rounded-t-xl justify-end addcard_header ">
-                <a (click)="onClick()"><svg class="mr-5" fill="#FFFFFF" width="20px" height="20px" viewBox="0 0 24 24" id="cross" data-name="Flat Line" xmlns="http://www.w3.org/2000/svg"><path id="primary" d="M19,19,5,5M19,5,5,19" style="fill: white; stroke: rgb(255, 255, 255); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg></a>
+                <a (click)="onClickClose()"><svg class="mr-5" fill="#FFFFFF" width="20px" height="20px" viewBox="0 0 24 24" id="cross" data-name="Flat Line" xmlns="http://www.w3.org/2000/svg"><path id="primary" d="M19,19,5,5M19,5,5,19" style="fill: white; stroke: rgb(255, 255, 255); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg></a>
             </div>
 
             <div class="flex-row card_container mt-7 items-baseline ml-5">
@@ -65,12 +65,13 @@
 
                     <div class="flex items-center sm:col-span-3 w-2/3">
                         <div class="mt-2">
-                        <select id="country" place name="country" autocomplete="country-name" class="block w-34 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" formControlName="priority">
-                            @for(item of priority; track item){
-                                <option [value]="item">{{item}}</option>
-                            }  
-                        </select>
+                            <select id="country" place name="country" autocomplete="country-name" class="block w-34 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" formControlName="priority">
+                                @for(item of priority; track item){
+                                    <option [value]="item">{{item}}</option>
+                                }  
+                            </select>
                         </div>
+
                         <div class="text-red-400 ml-2" *ngIf="cardForm.controls['priority'].invalid && (cardForm.invalid || cardForm.controls['priority'].touched || cardForm.controls['priority'].dirty)">
                             <span *ngIf="cardForm.controls['priority'].errors?.['required']"> * Required</span>
                         </div>
@@ -85,6 +86,7 @@
                             <span *ngIf="cardForm.controls['description'].errors?.['maxlength']">* Description is too long</span>
                         </div>
                     </div>
+
                     <div class="col-span-full mr-10">
                         <div class="mt-2">
                         <textarea  placeholder="Write some information..."  name="about" rows="3" class="custom_area w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" formControlName="description"></textarea>
@@ -93,17 +95,11 @@
                 </div>
 
                 <div class="flex mt-3 justify-center gap-3">
-                    @if(isEditable) {
-                        <button (click)="onUpdate()" class="flex gap-2 w-2/3 border-button border-solid addcard_button text-white items-center justify-center text-sm rounded focus:outline-none">
-                            <span class="m-2">Save</span>
-                        </button> 
-                    }@else {
-                        <button (click)="onCreate()" class="flex gap-2 w-2/3 border-button border-solid addcard_button text-white items-center justify-center text-sm rounded focus:outline-none">
-                            <span class="m-2">Save</span>
-                        </button>
-                    }
-                    
-                    <button (click)="onClick()" class="flex gap-2 w-2/3 mr-10 border-button border-solid items-center text-sm justify-center rounded focus:outline-none  hover:bg-gray-200">
+                    <button (click)="onCreate()" class="flex gap-2 w-2/3 border-button border-solid addcard_button text-white items-center justify-center text-sm rounded focus:outline-none">
+                        <span class="m-2">Save</span>
+                    </button>
+
+                    <button (click)="onClickClose()" class="flex gap-2 w-2/3 mr-10 border-button border-solid items-center text-sm justify-center rounded focus:outline-none  hover:bg-gray-200">
                         <span class="m-2">Cancel</span>
                     </button> 
                 </div> 

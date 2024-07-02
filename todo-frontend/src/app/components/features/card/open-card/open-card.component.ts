@@ -26,7 +26,6 @@ export class OpenCardComponent {
     this.cardForm = new FormGroup({})
   }
   @Input() isChoose: boolean = false;
-  @Input() isVisible: boolean = true;
   isEditable: boolean = false
   @Input() card: any;
   @Input() currentBoard: any;
@@ -56,10 +55,6 @@ export class OpenCardComponent {
   }
 
   ngOnInit() {
-    this.sharedService.isVisibleCard$.subscribe(value => {
-      this.isVisible = value; 
-    });
-
     this.sharedService.isChooseCardHistory$.subscribe(value =>{
       this.isChoose = value;
     })

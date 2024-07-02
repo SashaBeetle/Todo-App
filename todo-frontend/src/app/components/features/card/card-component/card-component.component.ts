@@ -28,7 +28,6 @@ export class CardComponentComponent {
   @Input() list: any;
   @Input() history:any;
   @Input() currentBoard: any;
-  @Input() isCardVisible: boolean = false;
   isOpenCardVisible: boolean = false;
   
   @Output() currentList: any;
@@ -55,10 +54,6 @@ export class CardComponentComponent {
   }
   ngOnInit(): void {
     this.currentList = this.list;
-
-    this.sharedService.isVisibleCard$.subscribe(value => {
-      this.isCardVisible = value; 
-    });
   }
 
   onClickDelete(){
@@ -72,6 +67,8 @@ export class CardComponentComponent {
   handleOutputEvent(value: boolean) {
     this.isOpenCardVisible = value;
   }
+
+ 
 
   createCardDTO(newListId: number): any {
     const updatedCard = {
