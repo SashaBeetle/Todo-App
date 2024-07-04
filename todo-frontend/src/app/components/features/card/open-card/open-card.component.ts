@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { SharedService } from '../../../../services/shared-service.service';
+import { ApiService } from "../../../../services/api.service";
 import { CommonModule } from '@angular/common';
 import { BannerComponent } from '../../../core/banner/banner/banner.component';
 import { PriorityConstants } from '../../../../constants/priorityConstants';
@@ -22,7 +23,7 @@ import * as PostActions from '../../../../ngrx/card/card.actions'
 export class OpenCardComponent {
   private readonly store:Store<BoardState> = inject(Store);
 
-  constructor(private sharedService: SharedService){
+  constructor(private sharedService: SharedService, private apiService: ApiService){
     this.cardForm = new FormGroup({})
   }
   @Input() isChoose: boolean = false;
@@ -66,6 +67,15 @@ export class OpenCardComponent {
       DueDate: new FormControl('', Validators.required),
       catalogId: new FormControl('', Validators.required)
     })
+
+    this.apiService.getDataById(`https://localhost:7247/api/v1/historyitems/card`, this.card.id)
+    .subscribe(response => {
+      this.history = response;
+      this.history = this.history.slice().reverse();
+      console.log('Get request successful!', this.history);
+    }, error => {
+      console.error('Error Getting data:', error);
+    });
 }
 }
 

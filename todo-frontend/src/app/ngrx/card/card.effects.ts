@@ -30,7 +30,7 @@ export const addCard = createEffect(
         return actions$.pipe(
             ofType(CardActions.postCardApi),
             switchMap(action =>
-                apiService.postData(`https://localhost:7247/api/v1/cards`, action.card).pipe( 
+                apiService.postData(`https://localhost:7247/api/v1/cards?boardId=${action.boardId}`, action.card).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )

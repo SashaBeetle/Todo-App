@@ -1,6 +1,5 @@
 import { Component, inject, input, Input, Output } from '@angular/core';
 import { CardComponentComponent } from '../../card/card-component/card-component.component';
-import { AddListComponent } from '../add-list/add-list.component';
 import { SharedService } from '../../../../services/shared-service.service';
 import { AddCardComponent } from '../../card/add-card/add-card.component';
 import { OpenCardComponent } from '../../card/open-card/open-card.component';
@@ -64,20 +63,6 @@ export class ListComponentComponent{
 
     this.store.select(selectBoard).subscribe(board => {
       this.currentBoard = board;
-    });
-
-    console.warn('T', this.currentList)
-  }
-
-  sortDataByTitle(data: any[]): any[] {
-    return data.sort((a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) {
-        return -1;
-      } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
-        return 1;
-      } else {
-        return 0;
-      }
     });
   }
 }

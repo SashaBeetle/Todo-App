@@ -40,17 +40,7 @@ export class CardComponentComponent {
   ){}
 
   onClickOpenCard() {
-    this.isOpenCardVisible = true;
-
-    this.apiService.getData(`https://localhost:7247/api/v1/historyitem/ForCard${this.card.id}`)
-    .subscribe(response => {
-      this.history = response;
-      this.sharedService.setHistory(response);
-      console.log('Get request successful!', this.history);
-    }, error => {
-      console.error('Error Getting data:', error);
-    });
- 
+    this.isOpenCardVisible = true; 
   }
   ngOnInit(): void {
     this.currentList = this.list;

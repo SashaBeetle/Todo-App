@@ -66,19 +66,5 @@ export class MenuComponent {
     this.store.select(selectBoards).subscribe(boards => {
       this.boards = boards;
     });
-    
-    this.sortDataByTitle(this.boards)
-  }
-
-  sortDataByTitle(data: any[]): any[] {
-    return data.sort((a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) {
-        return -1;
-      } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
   }
 }

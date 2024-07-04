@@ -37,7 +37,20 @@ namespace todo_backend.Infrastructure
                     .HasForeignKey(c => c.BoardId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
+            modelBuilder.Entity<HistoryItem>(entity =>
+            {
+                entity.HasOne(h => h.Card)
+                  .WithMany(c => c.HistoryItems)
+                 .HasForeignKey(h => h.CardId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(h => h.Board)
+                 .WithMany(b => b.HistoryItems)
+                 .HasForeignKey(h => h.BoardId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
         }
 
     }

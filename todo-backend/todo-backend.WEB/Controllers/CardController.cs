@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 using todo_backend.WEB.Mapping.DTOs;
@@ -27,7 +28,7 @@ namespace todo_backend.WEB.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateCard(CardDTO cardDto)
+        public async Task<IActionResult> CreateCard(CardDTO cardDto, [Required] int boardId)
         {
             cardDto.DueDate = cardDto.DueDate.ToUniversalTime();
 
@@ -37,7 +38,7 @@ namespace todo_backend.WEB.Controllers
             {
                 EventDescription = $"Card ◉ {createdCard.Title} created",
                 CardId = createdCard.Id,
-                //BoardId = boardId
+                BoardId = boardId
             });
 
             CardDTO createdCardDto = _mapper.Map<CardDTO>(createdCard);

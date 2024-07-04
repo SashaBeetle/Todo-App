@@ -1,65 +1,54 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
+using todo_backend.WEB.Mapping.DTOs;
+
 
 namespace todo_backend.WEB.Controllers
 {
-    [Route("api/v1/historyitem")]
+    [Route("api/v1/historyitems")]
     [ApiController]
     public class HistoryItemController : ControllerBase
     {
-        private readonly IDbEntityService<HistoryItem> _historyItemService;
-        private readonly IDbEntityService<Card> _cardService;
-        private readonly IDbEntityService<Board> _boardService;
+        private readonly IHistoryItemRepository _historyItemRepository;
         private readonly IMapper _mapper;
 
-        public HistoryItemController(
-            IDbEntityService<HistoryItem> historyItemService,
-            IDbEntityService<Card> cardService,
-            IDbEntityService<Board> boardService,
-            IMapper mapper)
+        public HistoryItemController(IHistoryItemRepository historyRepository, IMapper mapper)
         {
-            _historyItemService = historyItemService;
-            _cardService = cardService;
+            _historyItemRepository = historyRepository;
             _mapper = mapper;
-            _boardService = boardService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllHistoryItems()
         {
-            List<HistoryItem> historyItems = await _historyItemService.GetAll().ToListAsync();
-
-           
-            return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
+            IList<HistoryItem> historyItems = await _historyItemRepository.GetHistoryItemsAsync();
+  
+            return Ok(_mapper.Map<List<HistoryItemDTO>>(historyItems));
         }
 
-        [HttpGet("ForCard{id}")]
+        [HttpGet("card/{id}")]
         public async Task<IActionResult> GetAllHistoryItemsForCard(int id)
         {
-            Card card = await _cardService.GetById(id);
+            IList<HistoryItem> historyItemsForCard = await _historyItemRepository.GetHistoryItemsForCardByIdAsync(id);
 
-            if (card == null)
+            if (historyItemsForCard == null)
                 return NotFound();
 
-            List<HistoryItem> historyItems = await _historyItemService.GetAll().Where(h => h.CardId == id).ToListAsync();
-
-            return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
+            return Ok(_mapper.Map<List<HistoryItemDTO>>(historyItemsForCard));
         }
 
-        [HttpGet("ForBoard{id}")]
+        [HttpGet("board/{id}")]
         public async Task<IActionResult> GetHistoryItemForBoard(int id)
         {
-            Board board = await _boardService.GetById(id);
+            IList<HistoryItem> historyItemsForCard = await _historyItemRepository.GetHistoryItemsForBoardByIdAsync(id);
 
-            if (board == null)
+            if (historyItemsForCard == null)
                 return NotFound();
 
-            List<HistoryItem> historyItems = await _historyItemService.GetAll().Where(h => h.BoardId == id).ToListAsync();
-
-            return Ok(_mapper.Map<List<HistoryItem>>(historyItems));
+            return Ok(_mapper.Map<List<HistoryItemDTO>>(historyItemsForCard));
         }
     }
 }
