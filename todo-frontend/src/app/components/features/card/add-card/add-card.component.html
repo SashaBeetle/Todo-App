@@ -1,9 +1,8 @@
-<div (click)="onClickClose()" class="fixed inset-0 w-full h-full bg-black opacity-25 z-10"></div>
+<div (click)="onClickClose()" class="fixed inset-0 w-full h-full bg-black opacity-25 z-20"></div>
 
-<form [formGroup]="cardForm" class="z-30">
-    <div>
-
-        <div class="fixed addcard_page rounded-xl" >
+<form [formGroup]="cardForm">
+    <div class="overlay">
+        <div class="addcard_page rounded-xl z-50" >
             <div class="flex items-center rounded-t-xl justify-end addcard_header ">
                 <a (click)="onClickClose()"><svg class="mr-5" fill="#FFFFFF" width="20px" height="20px" viewBox="0 0 24 24" id="cross" data-name="Flat Line" xmlns="http://www.w3.org/2000/svg"><path id="primary" d="M19,19,5,5M19,5,5,19" style="fill: white; stroke: rgb(255, 255, 255); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg></a>
             </div>
@@ -94,7 +93,7 @@
                     </div>            
                 </div>
 
-                <div class="flex mt-3 justify-center gap-3">
+                <div class="flex mt-3 mb-3 justify-center gap-3">
                     <button (click)="onCreate()" class="flex gap-2 w-2/3 border-button border-solid addcard_button text-white items-center justify-center text-sm rounded focus:outline-none">
                         <span class="m-2">Save</span>
                     </button>
