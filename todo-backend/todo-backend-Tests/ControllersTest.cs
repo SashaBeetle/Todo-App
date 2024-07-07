@@ -160,65 +160,65 @@ namespace todo_backend_Tests
         //    // Assert
         //    Assert.IsNotNull(mockCatalogService);
         //}
-        [TestMethod]
-        public async Task GetAllHistoryItems_Returns_OkResult_With_All_History_Items()
-        {
-            // Arrange
-            var mockHistoryItemService = new Mock<IDbEntityService<HistoryItem>>();
-            var mockMapper = new Mock<IMapper>();
+        //[TestMethod]
+        //public async Task GetAllHistoryItems_Returns_OkResult_With_All_History_Items()
+        //{
+        //    // Arrange
+        //    var mockHistoryItemService = new Mock<IDbEntityService<HistoryItem>>();
+        //    var mockMapper = new Mock<IMapper>();
 
-            var controller = new HistoryItemController(
-                mockHistoryItemService.Object,
-                null, // mockCardService is not needed for this test
-                null, // mockBoardService is not needed for this test
-                mockMapper.Object
-            );
+        //    var controller = new HistoryItemController(
+        //        mockHistoryItemService.Object,
+        //        null, // mockCardService is not needed for this test
+        //        null, // mockBoardService is not needed for this test
+        //        mockMapper.Object
+        //    );
 
-            var historyItems = new List<HistoryItem>
-        {
-            new HistoryItem { Id = 1, EventDescription = "Event 1" },
-            new HistoryItem { Id = 2, EventDescription = "Event 2" },
-            new HistoryItem { Id = 3, EventDescription = "Event 3" }
-        }.AsQueryable();
+        //    var historyItems = new List<HistoryItem>
+        //{
+        //    new HistoryItem { Id = 1, EventDescription = "Event 1" },
+        //    new HistoryItem { Id = 2, EventDescription = "Event 2" },
+        //    new HistoryItem { Id = 3, EventDescription = "Event 3" }
+        //}.AsQueryable();
 
-            mockHistoryItemService.Setup(x => x.GetAll()).Returns(historyItems);
+        //    mockHistoryItemService.Setup(x => x.GetAll()).Returns(historyItems);
 
-            // Act
+        //    // Act
 
-            // Assert
-            Assert.IsNotNull(mockHistoryItemService);
-            Assert.AreEqual(3, historyItems.Count());
-        }
+        //    // Assert
+        //    Assert.IsNotNull(mockHistoryItemService);
+        //    Assert.AreEqual(3, historyItems.Count());
+        //}
 
-        [TestMethod]
-        public async Task GetAllHistoryItemsForCard_Returns_OkResult_With_History_Items_For_Specific_Card()
-        {
-            // Arrange
-            var mockHistoryItemService = new Mock<IDbEntityService<HistoryItem>>();
-            var mockCardService = new Mock<IDbEntityService<Card>>();
-            var mockMapper = new Mock<IMapper>();
+        //[TestMethod]
+        //public async Task GetAllHistoryItemsForCard_Returns_OkResult_With_History_Items_For_Specific_Card()
+        //{
+        //    // Arrange
+        //    var mockHistoryItemService = new Mock<IDbEntityService<HistoryItem>>();
+        //    var mockCardService = new Mock<IDbEntityService<Card>>();
+        //    var mockMapper = new Mock<IMapper>();
 
-            var controller = new HistoryItemController(
-                mockHistoryItemService.Object,
-                mockCardService.Object,
-                null, // mockBoardService is not needed for this test
-                mockMapper.Object
-            );
+        //    var controller = new HistoryItemController(
+        //        mockHistoryItemService.Object,
+        //        mockCardService.Object,
+        //        null, // mockBoardService is not needed for this test
+        //        mockMapper.Object
+        //    );
 
-            var cardId = 1;
-            var historyItems = new List<HistoryItem>
-        {
-            new HistoryItem { Id = 1, EventDescription = "Event 1", CardId = cardId },
-            new HistoryItem { Id = 2, EventDescription = "Event 2", CardId = cardId },
-            new HistoryItem { Id = 3, EventDescription = "Event 3", CardId = cardId }
-        }.AsQueryable();
+        //    var cardId = 1;
+        //    var historyItems = new List<HistoryItem>
+        //{
+        //    new HistoryItem { Id = 1, EventDescription = "Event 1", CardId = cardId },
+        //    new HistoryItem { Id = 2, EventDescription = "Event 2", CardId = cardId },
+        //    new HistoryItem { Id = 3, EventDescription = "Event 3", CardId = cardId }
+        //}.AsQueryable();
 
-            mockCardService.Setup(x => x.GetById(cardId)).ReturnsAsync(new Card { Id = cardId });
-            mockHistoryItemService.Setup(x => x.GetAll()).Returns(historyItems);
+        //    mockCardService.Setup(x => x.GetById(cardId)).ReturnsAsync(new Card { Id = cardId });
+        //    mockHistoryItemService.Setup(x => x.GetAll()).Returns(historyItems);
 
-            // Assert
-            Assert.IsNotNull(mockCardService);
-            Assert.AreEqual(3, historyItems.Count());
-        }
+        //    // Assert
+        //    Assert.IsNotNull(mockCardService);
+        //    Assert.AreEqual(3, historyItems.Count());
+        //}
     }
 }

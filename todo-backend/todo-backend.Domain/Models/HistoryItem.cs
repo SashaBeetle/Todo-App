@@ -12,8 +12,11 @@ namespace todo_backend.Domain.Models
         public string EventDescription { get; set; }
         public int? CardId { get; set; }
         public int? BoardId { get; set; }
+        public Card? Card { get; set; }
+        public Board? Board { get; set; }
         public HistoryItem() {
             Timesetup = DateTime.UtcNow;
         }
+
     }
 }

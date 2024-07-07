@@ -7,6 +7,7 @@
         public string Priority { get; set; }
         public DateTime DueDate { get; set; }
         public int CatalogId { get; set; }
+        public ICollection<HistoryItem>? HistoryItems { get; set; }
         public Catalog? Catalog { get; set; }
     }
 }

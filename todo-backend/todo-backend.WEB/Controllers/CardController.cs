@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using todo_backend.Domain.Models;
 using todo_backend.Infrastructure.Interfaces;
 using todo_backend.WEB.Mapping.DTOs;
@@ -11,17 +12,11 @@ namespace todo_backend.WEB.Controllers
     public class CardController : ControllerBase
     {
         private readonly ICardRepository _cardRepository;
-        private readonly IDbEntityService<HistoryItem> _historyItemService;
         private readonly IMapper _mapper;
 
-        public CardController(
-            ICardRepository cardRepository,
-            IDbEntityService<HistoryItem> historyItemService, 
-            IMapper mapper
-            )
+        public CardController(ICardRepository cardRepository, IMapper mapper)
         {
             _cardRepository = cardRepository;
-            _historyItemService = historyItemService;
             _mapper = mapper;
         }
 
@@ -32,13 +27,6 @@ namespace todo_backend.WEB.Controllers
             cardDto.DueDate = cardDto.DueDate.ToUniversalTime();
 
             Card createdCard = await _cardRepository.CreateCardAsync(_mapper.Map<Card>(cardDto));
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Card ◉ {createdCard.Title} created",
-                CardId = createdCard.Id,
-                //BoardId = boardId
-            });
 
             CardDTO createdCardDto = _mapper.Map<CardDTO>(createdCard);
 
@@ -62,7 +50,6 @@ namespace todo_backend.WEB.Controllers
                 return NotFound();
 
             card.DueDate = card.DueDate.ToLocalTime();
-
 
             return Ok(_mapper.Map<CardDTO>(card));
         }

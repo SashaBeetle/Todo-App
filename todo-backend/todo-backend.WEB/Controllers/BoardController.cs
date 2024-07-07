@@ -13,7 +13,7 @@ namespace todo_backend.WEB.Controllers
     {
         private readonly IBoardRepository _boardRepository;
         private readonly IMapper _mapper;
-        public BoardController( IBoardRepository boardRepository,IMapper mapper)
+        public BoardController(IBoardRepository boardRepository, IMapper mapper)
         {
             _boardRepository = boardRepository;
             _mapper = mapper;

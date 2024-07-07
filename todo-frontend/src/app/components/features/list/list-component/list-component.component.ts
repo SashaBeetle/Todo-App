@@ -1,6 +1,5 @@
 import { Component, inject, input, Input, Output } from '@angular/core';
 import { CardComponentComponent } from '../../card/card-component/card-component.component';
-import { AddListComponent } from '../add-list/add-list.component';
 import { SharedService } from '../../../../services/shared-service.service';
 import { AddCardComponent } from '../../card/add-card/add-card.component';
 import { OpenCardComponent } from '../../card/open-card/open-card.component';
@@ -9,6 +8,7 @@ import { BoardState } from '../../../../ngrx/board/board.reducer';
 import * as PostActions from '../../../../ngrx/list/list.actions'
 import {checkListLength } from '../../../../utils/list.utilities'
 import { selectBoard } from '../../../../ngrx/board/board.selectors';
+import { AddListComponent } from '../add-list/add-list.component';
 
 
 
@@ -18,7 +18,8 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
   imports: [
     CardComponentComponent,
     OpenCardComponent,
-    AddCardComponent
+    AddCardComponent,
+    AddListComponent
   ],
   templateUrl: './list-component.component.html',
   styleUrl: './list-component.component.scss'
@@ -27,6 +28,7 @@ export class ListComponentComponent{
   private readonly store:Store<BoardState> = inject(Store)
 
   isCardVisible: boolean = false;
+  isListEditable: boolean = false;
   @Input() isVisible: boolean = false;
   @Input() currentList: any;
   @Output() lists: any;
@@ -38,10 +40,8 @@ export class ListComponentComponent{
   ){}
 
 
-  onClickEdit(list: any) {
-    this.sharedService.toggleIsVisibleCreateList();
-    this.sharedService.toggleisEditableList();
-    this.sharedService.setList(list);
+  onClickEdit() {
+    this.isListEditable = true;
   }
 
   onClickAddCard() {
@@ -57,6 +57,10 @@ export class ListComponentComponent{
     this.isCardVisible = value;
   }
 
+  handleOutputAddListisVisibleEvent(value: boolean) {
+    this.isListEditable = value;
+  }
+
   ngOnInit(){
     this.sharedService.isVisibleCreateList$.subscribe(value => {
       this.isVisible = value; 
@@ -64,20 +68,6 @@ export class ListComponentComponent{
 
     this.store.select(selectBoard).subscribe(board => {
       this.currentBoard = board;
-    });
-
-    console.warn('T', this.currentList)
-  }
-
-  sortDataByTitle(data: any[]): any[] {
-    return data.sort((a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) {
-        return -1;
-      } else if (a.title.toLowerCase() > b.title.toLowerCase()) {
-        return 1;
-      } else {
-        return 0;
-      }
     });
   }
 }

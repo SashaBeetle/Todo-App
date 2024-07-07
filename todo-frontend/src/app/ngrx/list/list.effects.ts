@@ -15,7 +15,7 @@ export const deleteList = createEffect(
         return actions$.pipe(
             ofType(ListActions.deleteListApi),
             switchMap(action =>
-                apiService.deleteDataByIdManual(`https://localhost:7247/api/v1/catalog/${action.listId}`).pipe( 
+                apiService.deleteDataByIdManual(`https://localhost:7247/api/v1/catalogs/${action.listId}`).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )
@@ -33,7 +33,7 @@ export const addList = createEffect(
         return actions$.pipe(
             ofType(ListActions.postListApi),
             switchMap(action =>
-                apiService.postData(`https://localhost:7247/api/v1/catalog`, action.list).pipe( 
+                apiService.postData(`https://localhost:7247/api/v1/catalogs`, action.list).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )
@@ -50,7 +50,7 @@ export const patchList = createEffect(
         return actions$.pipe(
             ofType(ListActions.patchListApi),
             switchMap(action =>
-                apiService.patchData(`https://localhost:7247/api/v1/catalog/${action.list.id}?title=${action.newListTitle}`,1).pipe( 
+                apiService.patchData(`https://localhost:7247/api/v1/catalogs/${action.list.id}?title=${action.newListTitle}`,1).pipe( 
                     map(() => BoardActions.getBoardApi({boardId: action.boardId}))
                 )
             )   

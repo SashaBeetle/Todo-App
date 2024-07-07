@@ -4,5 +4,6 @@
     {
         public string Title { get; set; }
         public ICollection<Catalog>? Catalogs { get; set; }
+        public ICollection<HistoryItem>? HistoryItems { get; set; }
     }
 }

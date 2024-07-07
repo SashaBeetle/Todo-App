@@ -7,34 +7,22 @@ using todo_backend.WEB.Mapping.DTOs;
 
 namespace todo_backend.WEB.Controllers
 {
-    [Route("api/v1/catalog")]
+    [Route("api/v1/catalogs")]
     [ApiController]
     public class CatalogController : ControllerBase
     {
         private readonly ICatalogRepository _catalogRepository;
-        private readonly IDbEntityService<HistoryItem> _historyItemService;
         private readonly IMapper _mapper;
 
-        public CatalogController(
-            ICatalogRepository catalogRepository,
-            IDbEntityService<HistoryItem> historyItemService,
-            IMapper mapper
-            )
+        public CatalogController(ICatalogRepository catalogRepository, IMapper mapper)
         {
             _catalogRepository = catalogRepository;
-            _historyItemService = historyItemService;
             _mapper = mapper;
         }
         [HttpPost]
         public async Task<IActionResult> CreateCatalog(CatalogDTO catalogDto)
         {
-            Catalog? createdCatalog = await _catalogRepository.CreateCatalogAsync(_mapper.Map<Catalog>(catalogDto));
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Catalog ◉ {createdCatalog.Title} created",
-                BoardId = createdCatalog.BoardId
-            });
+            Catalog createdCatalog = await _catalogRepository.CreateCatalogAsync(_mapper.Map<Catalog>(catalogDto));
 
             CatalogDTO createdCatalogDto = _mapper.Map<CatalogDTO>(createdCatalog);
             return CreatedAtAction(nameof(GetCatalogsById), new { id = createdCatalogDto.Id }, createdCatalogDto);
@@ -59,7 +47,7 @@ namespace todo_backend.WEB.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCatalogsById(int id)
         {
-            Catalog? catalog = await _catalogRepository.GetCatalogAsync(id);
+            Catalog catalog = await _catalogRepository.GetCatalogAsync(id);
 
             if (catalog == null)
                 return NotFound();
@@ -69,16 +57,10 @@ namespace todo_backend.WEB.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateCatalog(int id, [Required] string title)
         {
-            Catalog? updatedCatalog = await _catalogRepository.UpdateCatalogAsync(id, title);
+            Catalog updatedCatalog = await _catalogRepository.UpdateCatalogAsync(id, title);
             
             if (updatedCatalog == null)
                 return NotFound();
-
-            await _historyItemService.Create(new HistoryItem()
-            {
-                EventDescription = $"Catalog ◉ {updatedCatalog.Title} renamed to ◉ {title}",
-                BoardId = updatedCatalog.BoardId
-            });
 
             return Ok(_mapper.Map<CatalogDTO>(updatedCatalog));
         }

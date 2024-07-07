@@ -6,5 +6,6 @@
         public DateTime Timesetup { get; set; }
         public string EventDescription { get; set; }
         public int? CardId { get; set; }
+        public int? BoardId { get; set;}
     }
 }

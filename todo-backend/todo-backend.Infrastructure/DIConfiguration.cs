@@ -21,6 +21,7 @@ namespace todo_backend.Infrastructure
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<ICatalogRepository, CatalogRepository>();
             services.AddScoped<ICardRepository, CardRepository>();
+            services.AddScoped<IHistoryItemRepository, HistoryItemRepository>();
         }
         public static void RegisterDependencies(this IServiceCollection services, IConfigurationRoot configuration)
         {
