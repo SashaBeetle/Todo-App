@@ -8,18 +8,21 @@ namespace todo_backend.Infrastructure.Repositories
     {
         private readonly TodoDbContext _dbContext;
         private readonly IDbEntityService<Board> _dbBoardService;
-        private readonly IDbEntityService<HistoryItem> _historyItemService;
-        public BoardRepository(TodoDbContext dbContext, IDbEntityService<Board> dbBoardService, IDbEntityService<HistoryItem> historyItemService)
+        private readonly IDbEntityService<HistoryItem> _dbHistoryItemService;
+        public BoardRepository(
+            TodoDbContext dbContext, 
+            IDbEntityService<Board> dbBoardService, 
+            IDbEntityService<HistoryItem> historyItemService)
         {
             _dbContext = dbContext;
             _dbBoardService = dbBoardService;
-            _historyItemService = historyItemService;
+            _dbHistoryItemService = historyItemService;
         }
         public async Task<Board> CreateBoardAsync(Board board)
         {
             Board createdBoard = await _dbBoardService.Create(board);
 
-            await _historyItemService.Create(new HistoryItem()
+            await _dbHistoryItemService.Create(new HistoryItem()
             {
                 EventDescription = $"Board ◉ {createdBoard.Title} created",
                 BoardId = createdBoard.Id
@@ -32,7 +35,14 @@ namespace todo_backend.Infrastructure.Repositories
         {
             Board board = await _dbBoardService.GetById(boardId);
 
+            HistoryItem historyItem = new HistoryItem()
+            {
+                EventDescription = $"Board ◉ {board.Title} deleted",
+                BoardId = board.Id
+            };
+
             await _dbBoardService.Delete(board);
+            await _dbHistoryItemService.Create(historyItem);
         }
 
         public async Task<Board> GetBoardByIdAsync(int boardId)
@@ -59,15 +69,16 @@ namespace todo_backend.Infrastructure.Repositories
         {
             Board board = await _dbBoardService.GetById(id);
 
-            await _historyItemService.Create(new HistoryItem()
+            HistoryItem historyItem = new HistoryItem()
             {
                 EventDescription = $"Board title updated from ◉ {board.Title} to ◉ {boardTitle}",
                 BoardId = board.Id
-            });
+            };
 
             board.Title = boardTitle;
 
             await _dbBoardService.Update(board);
+            await _dbHistoryItemService.Create(historyItem);
 
             return board;
         }

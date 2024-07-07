@@ -1,8 +1,10 @@
-import { Component,EventEmitter,Input, Output} from '@angular/core';
-import { SharedService } from '../../../../services/shared-service.service';
+import { Component,EventEmitter,inject,Input, Output} from '@angular/core';
+import { selectBoard } from '../../../../ngrx/board/board.selectors';
 import { ApiService } from "../../../../services/api.service";
 import { CommonModule } from '@angular/common';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
+import { Store } from '@ngrx/store';
+import { BoardState } from '../../../../ngrx/board/board.reducer';
 
 
 
@@ -17,19 +19,18 @@ import {ScrollPanelModule} from 'primeng/scrollpanel';
   styleUrl: './history-component.component.scss'
 })
 export class HistoryComponentComponent {
+  private readonly store:Store<BoardState> = inject(Store);
 
-  constructor(private sharedService: SharedService, private apiService: ApiService){ }
+  constructor(private apiService: ApiService){ }
 
-  @Input() isVisible: boolean = false;
-  @Output() history: any;
+  history: any;
   showMore: boolean = false;
+  currentBoard: any;
 
   @Output() outputEvent = new EventEmitter<boolean>();
 
 
-  
   onClick() {
-    this.sharedService.toggleIsVisibleHistory();
     this.showMore = false;
     this.outputEvent.emit(false);
   }
@@ -39,11 +40,11 @@ export class HistoryComponentComponent {
   }
   
   ngOnInit() {
-    this.sharedService.isVisibleHistory$.subscribe(value => {
-      this.isVisible = value; 
+    this.store.select(selectBoard).subscribe(board => {
+      this.currentBoard = board;
     });
 
-    this.apiService.getDataById(`https://localhost:7247/api/v1/historyitems/board`, 77)
+    this.apiService.getDataById(`https://localhost:7247/api/v1/historyitems/board`, this.currentBoard.id)
     .subscribe(response => {
       this.history = response;
       this.history = this.history.slice().reverse();

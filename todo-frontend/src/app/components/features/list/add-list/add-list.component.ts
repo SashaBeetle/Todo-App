@@ -41,7 +41,7 @@ export class AddListComponent {
 
   onClick() {
     if(this.editable){
-      this.sharedService.toggleisEditableList();
+      this.editable = false;
     }
     this.outputEvent.emit(false);
   }
@@ -61,25 +61,14 @@ export class AddListComponent {
   }
 
   onSubmitEditList(){
-    if(this.listForm.valid){
-      this.list = this.sharedService.getList();
-            
+    if(this.listForm.valid){            
       this.store.dispatch(PostActions.patchListApi({
         list: this.list,
         boardId: this.board.id,
         newListTitle: this.listForm.get('title')?.value
       }))
-  
-      this.sharedService.toggleisEditableList();
-      this.sharedService.toggleIsVisibleCreateList();
     }
     
-  }
-
-  ngOnInit() {
-    this.sharedService.isEditableList$.subscribe(value => {
-      this.editable = value; 
-    });
   }
   
 }

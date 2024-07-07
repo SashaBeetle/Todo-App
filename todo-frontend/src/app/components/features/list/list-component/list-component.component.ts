@@ -8,6 +8,7 @@ import { BoardState } from '../../../../ngrx/board/board.reducer';
 import * as PostActions from '../../../../ngrx/list/list.actions'
 import {checkListLength } from '../../../../utils/list.utilities'
 import { selectBoard } from '../../../../ngrx/board/board.selectors';
+import { AddListComponent } from '../add-list/add-list.component';
 
 
 
@@ -17,7 +18,8 @@ import { selectBoard } from '../../../../ngrx/board/board.selectors';
   imports: [
     CardComponentComponent,
     OpenCardComponent,
-    AddCardComponent
+    AddCardComponent,
+    AddListComponent
   ],
   templateUrl: './list-component.component.html',
   styleUrl: './list-component.component.scss'
@@ -26,6 +28,7 @@ export class ListComponentComponent{
   private readonly store:Store<BoardState> = inject(Store)
 
   isCardVisible: boolean = false;
+  isListEditable: boolean = false;
   @Input() isVisible: boolean = false;
   @Input() currentList: any;
   @Output() lists: any;
@@ -37,10 +40,8 @@ export class ListComponentComponent{
   ){}
 
 
-  onClickEdit(list: any) {
-    this.sharedService.toggleIsVisibleCreateList();
-    this.sharedService.toggleisEditableList();
-    this.sharedService.setList(list);
+  onClickEdit() {
+    this.isListEditable = true;
   }
 
   onClickAddCard() {
@@ -54,6 +55,10 @@ export class ListComponentComponent{
 
   handleOutputAddCardEvent(value: boolean) {
     this.isCardVisible = value;
+  }
+
+  handleOutputAddListisVisibleEvent(value: boolean) {
+    this.isListEditable = value;
   }
 
   ngOnInit(){
